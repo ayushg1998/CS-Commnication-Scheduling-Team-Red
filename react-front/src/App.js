@@ -4,36 +4,75 @@ import { Nav, NavItem, Navbar } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
 import { LinkContainer } from 'react-router-bootstrap';
+<<<<<<< HEAD
 import Navigation from './components/Navigation';
+=======
+import * as userFunctions from './shared/UserFunctions';
+>>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: false,
+      user: null
     };
   }
 
-  userHasAuthenitcated = authenticated => {
-    this.setState({ isAuthenitcated: authenticated });
+  componentDidMount() {
+    this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
   }
 
+<<<<<<< HEAD
   handleLogout = event => {
     localStorage.removeItem('userToken');
     this.userHasAuthenitcated(false);
     this.props.history.push('/login');
+=======
+  userAuthenticationChanged = () => {
+    this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
+  }
+
+  handleLogout = event => {
+    userFunctions.logout();
+    this.userAuthenticationChanged();
+>>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
   }
 
   render () {
     const childProps = {
-      isAuthenticated: this.state.isAuthenitcated,
-      userHasAuthenitcated: this.userHasAuthenitcated
+      isAuthenticated: this.state.isAuthenticated,
+      userAuthenticationChanged: this.userAuthenticationChanged,
+      user: this.state.user
     };
 
     return (
       <div className="App container">
+<<<<<<< HEAD
         <Navigation />
+=======
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">CS Communication System</Link>
+            </Navbar.Brand>
+          </Navbar.Header>
+            <Nav pullRight>
+              {this.state.isAuthenticated
+                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                : <Fragment>
+                  <LinkContainer to="/register">
+                    <NavItem>Register</NavItem>
+                  </LinkContainer>
+                  <LinkContainer to="/login">
+                    <NavItem>Login</NavItem>
+                  </LinkContainer>
+                </Fragment>
+              }
+            </Nav>
+        </Navbar>
+>>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
         <Routes childProps={childProps} />
       </div>
     );
