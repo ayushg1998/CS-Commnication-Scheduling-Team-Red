@@ -4,6 +4,7 @@ import { Nav, NavItem, Navbar } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
 import { LinkContainer } from 'react-router-bootstrap';
+import Navigation from './components/Navigation';
 
 class App extends Component {
   constructor(props) {
@@ -19,9 +20,9 @@ class App extends Component {
   }
 
   handleLogout = event => {
-    //Clear session when logged out?
-
+    localStorage.removeItem('userToken');
     this.userHasAuthenitcated(false);
+    this.props.history.push('/login');
   }
 
   render () {
@@ -32,26 +33,7 @@ class App extends Component {
 
     return (
       <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">CS Communication System</Link>
-            </Navbar.Brand>
-          </Navbar.Header>
-            <Nav pullRight>
-              {this.state.isAuthenitcated
-                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                : <Fragment>
-                  <LinkContainer to="/register">
-                    <NavItem>Register</NavItem>
-                  </LinkContainer>
-                  <LinkContainer to="/login">
-                    <NavItem>Login</NavItem>
-                  </LinkContainer>
-                </Fragment>
-              }
-            </Nav>
-        </Navbar>
+        <Navigation />
         <Routes childProps={childProps} />
       </div>
     );

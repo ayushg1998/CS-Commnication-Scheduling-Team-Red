@@ -5,6 +5,9 @@ import {
     FormControl,
     ControlLabel
 } from 'react-bootstrap';
+import LoaderButton from '../components/LoaderButton';
+import { register } from './UserFunctions';
+import './Register.css';
 
 export default class Register extends Component {
     constructor(props) {
@@ -20,6 +23,7 @@ export default class Register extends Component {
             password: "",
             confirmPassword: "",
             userType: "",
+            confirmationCode: "",
             newUser: null
         };
     }
@@ -49,9 +53,31 @@ export default class Register extends Component {
     handleSubmit = async event => {
         event.preventDefault();
 
+        const newUser = {
+            cwid: this.state.cwid,
+            fname: this.state.fname,
+            lname: this.state.lname,
+            username: this.state.username,
+            email: this.state.email,
+            password: this.state.password,
+            confirmPassword: this.state.confirmPassword,
+            userType: this.state.userType,
+        };
+
         this.setState({ isLoading: true });
         this.setState({ newUser: "test" });
         this.setState({ isLoading: false });
+
+        register(newUser).then(res => {
+            if (res) {
+                console.log("Received Information");
+                //this.props.userHasAuthenticated(true);
+                this.setState({ isAuthenicated: true });
+                this.props.history.push("/login");
+            } else {
+                console.log("Something went wrong");
+            }
+        })
     }
 
     handleConfirmationSubmit = async event => {
@@ -145,6 +171,27 @@ export default class Register extends Component {
                         onChange={this.handleChange}
                     />
                 </FormGroup>
+
+                <label htmlfor="userType">Register as:</label>
+                <div className="form-check">
+                    <label className="form-check-label">
+                        <input type="radio" 
+                            className="form-check-input"
+                            name="userType"
+                            value="student"
+                        /> Student
+                    </label>
+                </div>
+                <div className="form-check">
+                    <label className="form-check-label">
+                        <input type="radio" 
+                            className="form-check-input"
+                            name="userType"
+                            value="faculty"
+                        /> Faculty
+                    </label>
+                </div>
+
                 <LoaderButton
                     block
                     bsSize="large"
