@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import './Home.css';
 
+/*Previous Home is now named Landing*/
 export default class Home extends Component {
-    render() {
-        return (
-            <div className="Home">
-                <div className="lander">
-                    <h1>CS Communication System</h1>
-                    <p>This is a work in Progress</p>
-                </div>
-            </div>
-        );
-    }
+  render() {
+    const { user } = this.props;
+    return (
+      <div>
+        <h2>Home ({user.userType})</h2>
+        <p>{user.cwid}</p>
+        <p>{user.username}</p>
+        <p>{user.fname + " " + user.lname}</p>
+        <p>{user.email}</p>
+      </div>
+    )
+  }
 }

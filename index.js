@@ -6,10 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
 const port = process.env.PORT || 8080;
-<<<<<<< HEAD
 const cors = require('cors');
-=======
->>>>>>> 8327e1236a7ded42e2fa69053b3f5a07a65f97b6
 
 //HTTP: application/json Content-type headers are automatically made available in req.body
 app.use(bodyParser.json());
@@ -20,10 +17,7 @@ app.use(morgan('dev'));
 //cookie parsing from headers, and available in req.headers.cookie (or req.headers.cookies forgot exact)
 app.use(cookieParser());
 
-<<<<<<< HEAD
-//app.use(cors());
-=======
->>>>>>> 8327e1236a7ded42e2fa69053b3f5a07a65f97b6
+app.use(cors());
 
 // var passport = require('passport');
 // var flash = require('connect-flash');
@@ -75,11 +69,7 @@ app.listen(port, function() {
         //that as well. this is good for now though
         const repository = require('./repository')(connection);
         const loginUsecase = require('./loginUsecase')(repository);
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 8327e1236a7ded42e2fa69053b3f5a07a65f97b6
         app.post('/login', async function(req, res, next) {
             const username = req.body.username;
             const pwd = req.body.password;
@@ -216,15 +206,7 @@ app.listen(port, function() {
             } catch(err) {
                 res.send({success: false, message: err.message });
             }          
-        })
-
-<<<<<<< HEAD
-        
-=======
-        app.get('/hello-world', function(req, res, next) {
-            res.send({success: true, data: 'hello world'});
-        })
->>>>>>> 8327e1236a7ded42e2fa69053b3f5a07a65f97b6
+        })     
     });    
 });
 

@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import './Login.css';
-import { login } from './UserFunctions';
+import { login } from '../shared/UserFunctions';
  
 export default class Login extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            username: "",
-            password: ""
-        };
+        this.state = { username: "", password: "" };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,39 +24,17 @@ export default class Login extends Component {
     }
 
     handleSubmit = event => {
-        // const username = this.state.username;
-        // const password = this.state.password;
-
         event.preventDefault();
+        const {username, password} = this.state;
 
-        const user = {
-            username: this.state.username,
-            password: this.state.password
-        };
-
-        login(user).then(res => {
+        login({username, password}).then(res => {
+            console.log(this.props);
             if (res) {
-                console.log("Received Information");
-                this.props.userHasAuthenticated(true);
+                console.log('logged in');
+                console.log(res);
+                this.props.userAuthenticationChanged();
             }
         })
-
-        // fetch('http://localhost:8080/login', {
-        //     method: 'POST',
-        //     body: JSON.stringify((username, password)),
-        //     headers: {
-        //         'Accept': 'application/json, text/plain, */*',
-        //         'Content-Type': 'application/json'
-        //     }
-        // }).then(res => res.json())
-        // .then(res => {
-        //     if (!res.success) {
-        //         throw new Error(res.message);
-        //     }
-        //     this.props.userHasAuthenticated(true);
-        //     console.log("Hello")
-        //     return res.state;
-        // });
     }
 
     render() {

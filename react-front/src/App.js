@@ -4,30 +4,36 @@ import { Nav, NavItem, Navbar } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
 import { LinkContainer } from 'react-router-bootstrap';
+import * as userFunctions from './shared/UserFunctions';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: false,
+      user: null
     };
   }
 
-  userHasAuthenitcated = authenticated => {
-    this.setState({ isAuthenitcated: authenticated });
+  componentDidMount() {
+    this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
+  }
+
+  userAuthenticationChanged = () => {
+    this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
   }
 
   handleLogout = event => {
-    //Clear session when logged out?
-
-    this.userHasAuthenitcated(false);
+    userFunctions.logout();
+    this.userAuthenticationChanged();
   }
 
   render () {
     const childProps = {
-      isAuthenticated: this.state.isAuthenitcated,
-      userHasAuthenitcated: this.userHasAuthenitcated
+      isAuthenticated: this.state.isAuthenticated,
+      userAuthenticationChanged: this.userAuthenticationChanged,
+      user: this.state.user
     };
 
     return (
@@ -39,7 +45,7 @@ class App extends Component {
             </Navbar.Brand>
           </Navbar.Header>
             <Nav pullRight>
-              {this.state.isAuthenitcated
+              {this.state.isAuthenticated
                 ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
                 : <Fragment>
                   <LinkContainer to="/register">
