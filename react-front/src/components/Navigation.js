@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import * as userFunctions from '../shared/UserFunctions';
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -74,6 +75,14 @@ class Navigation extends React.Component {
             <NavItem path="/register" name="Register" />
             <NavItem path="/login" name="Login" />
           </ul>
+
+          {/* {this.state.isAuthenticated
+                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                : <Fragment>
+                  <NavItem path="/register" name="Register" />  
+                  <NavItem path="/login" name="Login" />
+                </Fragment>
+          } */}
         </div>
       </nav>
     )

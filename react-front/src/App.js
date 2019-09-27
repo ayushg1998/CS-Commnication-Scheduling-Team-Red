@@ -4,11 +4,8 @@ import { Nav, NavItem, Navbar } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
 import { LinkContainer } from 'react-router-bootstrap';
-<<<<<<< HEAD
 import Navigation from './components/Navigation';
-=======
 import * as userFunctions from './shared/UserFunctions';
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
 
 class App extends Component {
   constructor(props) {
@@ -24,12 +21,6 @@ class App extends Component {
     this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
   }
 
-<<<<<<< HEAD
-  handleLogout = event => {
-    localStorage.removeItem('userToken');
-    this.userHasAuthenitcated(false);
-    this.props.history.push('/login');
-=======
   userAuthenticationChanged = () => {
     this.setState({isAuthenticated: userFunctions.isAuthenticated(), user: userFunctions.getUser()});
   }
@@ -37,7 +28,6 @@ class App extends Component {
   handleLogout = event => {
     userFunctions.logout();
     this.userAuthenticationChanged();
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
   }
 
   render () {
@@ -49,9 +39,9 @@ class App extends Component {
 
     return (
       <div className="App container">
-<<<<<<< HEAD
+{/* <<<<<<< HEAD */}
         <Navigation />
-=======
+{/* =======
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
@@ -72,7 +62,7 @@ class App extends Component {
               }
             </Nav>
         </Navbar>
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
+>>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be */}
         <Routes childProps={childProps} />
       </div>
     );

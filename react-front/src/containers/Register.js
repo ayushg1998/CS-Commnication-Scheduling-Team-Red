@@ -6,7 +6,7 @@ import {
     ControlLabel
 } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
-import { register } from './UserFunctions';
+import { register } from '../shared/UserFunctions';
 import './Register.css';
 
 export default class Register extends Component {
@@ -60,8 +60,8 @@ export default class Register extends Component {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
-            userType: this.state.userType,
+            //confirmPassword: this.state.confirmPassword,
+            userType: this.state.userType
         };
 
         this.setState({ isLoading: true });

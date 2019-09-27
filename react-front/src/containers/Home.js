@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 
 /*Previous Home is now named Landing*/
 export default class Home extends Component {
-<<<<<<< HEAD
-    render() {
-        return (
-            <div className="Home">
-                <div className="lander">
-                    <h1>CS Communication System</h1>
-                    <p>Please login or register to continue.</p>
-                </div>
-            </div>
-        );
-    }
-=======
   render() {
     const { user } = this.props;
     return (
@@ -26,5 +14,4 @@ export default class Home extends Component {
       </div>
     )
   }
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
 }

@@ -17,11 +17,7 @@ app.use(morgan('dev'));
 //cookie parsing from headers, and available in req.headers.cookie (or req.headers.cookies forgot exact)
 app.use(cookieParser());
 
-<<<<<<< HEAD
-//app.use(cors());
-=======
 app.use(cors());
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
 
 // var passport = require('passport');
 // var flash = require('connect-flash');
@@ -210,13 +206,7 @@ app.listen(port, function() {
             } catch(err) {
                 res.send({success: false, message: err.message });
             }          
-<<<<<<< HEAD
-        })
-
-        
-=======
         })     
->>>>>>> d7972513a8c8c008eed5b1858ca1c82c65c202be
     });    
 });
 
