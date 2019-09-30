@@ -67,3 +67,16 @@ export const isAuthenticated = () => {
 export const logout = () => {
     localStorage.removeItem('user');
 }
+
+export const createEvent = (eventData) => {
+    return axios
+        .post('/create/event', eventData)
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return res.data;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}

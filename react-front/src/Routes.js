@@ -6,6 +6,7 @@ import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import Register from './containers/Register';
 import Home from './containers/Home';
+import CreateEvent from './containers/CreateEvent';
 import AppliedRoute from './components/AppliedRoute';
 
 export default ({ childProps }) =>
@@ -19,6 +20,7 @@ export default ({ childProps }) =>
                 <AppliedRoute path="/login" exact cProps={childProps} component={Login} />
                 <AppliedRoute path="/dashboard" exact component={Dashboard} />
                 <AppliedRoute path="/register" exact component={Register} props={childProps} />
+                <AppliedRoute path="/createEvent" exact component={CreateEvent} />
                 { /* Catch all unmatched routes */}
                 <AppliedRoute component={NotFound} />
             </Switch>

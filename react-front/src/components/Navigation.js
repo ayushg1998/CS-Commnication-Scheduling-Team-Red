@@ -60,7 +60,10 @@ class Navigation extends React.Component {
             
             <NavItem path="/dashboard" name="Dashboard" />
             <NavItem name="Link 1" disabled="true" />
-            <NavItem name="Link 2" disabled="true" />
+            
+            <NavDropdown name="Events">
+                <a className="dropdown-item" href="/createEvent">Create Event</a>
+            </NavDropdown>
             
             <NavDropdown name="Calendar">
                 <a className="dropdown-item" href="/notfound">Action</a>
