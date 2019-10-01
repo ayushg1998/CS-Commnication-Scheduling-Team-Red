@@ -67,7 +67,6 @@ export default class Register extends Component {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,
-            //confirmPassword: this.state.confirmPassword,
             userType: this.state.userType
         };
 

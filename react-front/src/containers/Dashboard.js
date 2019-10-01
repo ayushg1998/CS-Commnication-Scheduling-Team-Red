@@ -33,6 +33,12 @@ class Dashboard extends Component {
             start: now,
             end: now,
         },
+        {
+            id: 3,
+            title: 'Right now Time Event 2',
+            start: now,
+            end: now,
+        },
         ]
         this.state = {
             events
