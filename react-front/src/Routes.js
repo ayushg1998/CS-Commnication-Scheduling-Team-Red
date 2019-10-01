@@ -8,20 +8,70 @@ import Register from './containers/Register';
 import Home from './containers/Home';
 import CreateEvent from './containers/CreateEvent';
 import AppliedRoute from './components/AppliedRoute';
+import * as authService from './shared/authService';
+import authAwareComponent from './authAwareComponent';
 
-export default ({ childProps }) =>
-    childProps.isAuthenticated ?
-        (
-            /*TODO: have here <Switch>...</Switch>  like below instead*/
-            <Home {...childProps} />
-        ): (
-            <Switch>
-                <AppliedRoute path="/" exact cProps={childProps} component={Landing} />
-                <AppliedRoute path="/login" exact cProps={childProps} component={Login} />
-                <AppliedRoute path="/dashboard" exact component={Dashboard} />
-                <AppliedRoute path="/register" exact component={Register} props={childProps} />
-                <AppliedRoute path="/createEvent" exact component={CreateEvent} />
+class Logout extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        authService.logout();
+    }
+
+    render() {
+        return <div></div>
+    }
+}
+
+const WrappedLogin = authAwareComponent(Login, false);
+const WrappedLanding = authAwareComponent(Landing, false);
+const WrappedRegister = authAwareComponent(Register, false);
+
+const WrappedDashboard = authAwareComponent(Dashboard, true);
+const WrappedCreateEvent = authAwareComponent(CreateEvent, true);
+const WrappedLogout = authAwareComponent(Logout, true);
+
+export default class Route extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            authenticated: authService.isAuthenticated()
+        }
+    }
+  
+    componentDidMount() {
+    // ... that takes care of the subscription...
+        authService.registerAuthStatusChangeListener(this.onAuthStatusChanged);
+    }
+
+    componentWillUnmount() {
+        authService.unregisterAuthStatusChangeListener(this.onAuthStatusChanged);
+    }
+
+    onAuthStatusChanged = () => {
+        this.setState({authenticated: authService.isAuthenticated()});
+    }
+
+    render() {
+        const { authenticated } = this.state;
+
+        return authenticated? (
+            <Switch>       
+                <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
+                <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
+                <AppliedRoute path="/logout" exact component={WrappedLogout} />
                 { /* Catch all unmatched routes */}
                 <AppliedRoute component={NotFound} />
             </Switch>
+            ): (
+                <Switch>
+                    <AppliedRoute path="/" exact component={WrappedLanding} />
+                    <AppliedRoute path="/login" exact component={WrappedLogin} />
+                    <AppliedRoute path="/register" exact component={WrappedRegister} />
+                </Switch>
         );
+    }
+}

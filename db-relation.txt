@@ -22,3 +22,12 @@ Faculty
 cwid
 fname
 lname
+
+Events
+cwid
+eid
+name
+description
+location
+start_time
+end_time

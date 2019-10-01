@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import * as userFunctions from '../shared/UserFunctions';
+import * as authService from '../shared/authService';
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -46,7 +46,7 @@ class NavDropdown extends React.Component {
 }
 
 
-class Navigation extends React.Component {
+class AuthenticatedNavigation extends React.Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,8 +56,7 @@ class Navigation extends React.Component {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            
+          <ul className="navbar-nav mr-auto">            
             <NavItem path="/dashboard" name="Dashboard" />
             <NavItem name="Link 1" disabled="true" />
             
@@ -71,25 +70,60 @@ class Navigation extends React.Component {
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="/notfound">Something else here</a>
             </NavDropdown>
-            
           </ul>
-
           <ul className="navbar-nav ml-auto">
-            <NavItem path="/register" name="Register" />
-            <NavItem path="/login" name="Login" />
+              <NavItem  path="/logout" name="Logout" />            
           </ul>
-
-          {/* {this.state.isAuthenticated
-                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                : <Fragment>
-                  <NavItem path="/register" name="Register" />  
-                  <NavItem path="/login" name="Login" />
-                </Fragment>
-          } */}
         </div>
       </nav>
     )
   }
 }
 
-export default Navigation;
+class UnaunthenticatedNavigation extends React.Component {
+  render() {
+    return (
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a className="navbar-brand" href="/">CS Communication System</a>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav ml-auto">
+          <NavItem path="/register" name="Register" />
+          <NavItem path="/login" name="Login" />
+        </ul>
+      </div>
+    </nav>
+    )
+  }
+}
+
+export default class Navigation extends React.Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+          authenticated: authService.isAuthenticated()
+      }
+    }
+
+    componentDidMount() {
+      // ... that takes care of the subscription...
+      authService.registerAuthStatusChangeListener(this.onAuthStatusChanged);
+    }
+
+    componentWillUnmount() {
+        authService.unregisterAuthStatusChangeListener(this.onAuthStatusChanged);
+    }
+
+    onAuthStatusChanged = () => {
+        this.setState({authenticated: authService.isAuthenticated()});
+    }
+
+    render() {
+      const { authenticated } = this.state;
+      return authenticated? <AuthenticatedNavigation />: <UnaunthenticatedNavigation />
+    }
+}

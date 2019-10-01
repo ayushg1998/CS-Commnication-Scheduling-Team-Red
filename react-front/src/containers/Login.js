@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import './Login.css';
 import LoaderButton from '../components/LoaderButton';
-import { login } from '../shared/UserFunctions';
+import * as authService from '../shared/authService';
  
 export default class Login extends Component {
     constructor(props) {
@@ -28,14 +28,11 @@ export default class Login extends Component {
         event.preventDefault();
         const {username, password} = this.state;
 
-        login({username, password}).then(res => {
-            console.log(this.props);
-            if (res) {
-                console.log('logged in');
-                console.log(res);
-                this.props.userAuthenticationChanged();
-            }
-        })
+        //TODO: show loading spinner meanwhile
+        authService.login({username, password})
+            .catch(err => {
+                alert('oops');
+            })
     }
 
     render() {

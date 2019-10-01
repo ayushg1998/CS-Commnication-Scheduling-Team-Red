@@ -152,6 +152,21 @@ module.exports = function(mysql) {
             });            
         })
     }
+
+    // function createEvent({cwid,eid,name,description,location,start_time,end_time}){
+    //     return new Promise(function(resolve,reject){
+    //         const queryString =`Insert Into Events (cwid,eid,name,description,location,start_time,end_time) VALUES ('${cwid}','${eid}','${name}','${description}','${location}','${start_time}','${end_time}')`;
+    //         mysql.query(queryString,async function(err){
+    //             if(err){eject(err);return;}
+    //             const user
+    //         })
+    //     });     
+        
+    // }
+
+
+      
+
     
     return {
         findUserByEmail,

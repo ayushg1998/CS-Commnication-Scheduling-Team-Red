@@ -6,7 +6,7 @@ import {
     ControlLabel
 } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
-import { register } from '../shared/UserFunctions';
+import { register } from '../shared/authService';
 import './Register.css';
 
 export default class Register extends Component {

@@ -18,8 +18,8 @@ class Dashboard extends Component {
             id: 0,
             title: 'All Day Event very long title',
             allDay: true,
-            start: new Date(2019, 6, 0),
-            end: new Date(2019, 6, 1),
+            start: moment('2019-07-06T08:00').toDate(),
+            end: moment('2019-07-07T18:00').toDate(),
         },
         {
             id: 1,

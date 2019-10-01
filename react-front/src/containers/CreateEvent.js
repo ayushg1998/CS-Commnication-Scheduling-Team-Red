@@ -6,7 +6,7 @@ import {
     FormControl,
     ControlLabel
 } from 'react-bootstrap';
-import { createEvent } from '../shared/UserFunctions';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
@@ -60,8 +60,7 @@ export default class CreateEvent extends Component {
 
         console.log(eventData);
 
-        // Uncomment the following code when the api is created.
-        // createEvent is in the shared/UserFunctions.js file
+        // Uncomment the following code when the api is available
 
         // createEvent(eventData).then(res => {
         //     console.log(this.props);

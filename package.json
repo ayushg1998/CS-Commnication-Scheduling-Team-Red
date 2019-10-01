@@ -19,6 +19,7 @@
     "express-session": "^1.11.3",
     "git": "^0.1.5",
     "material": "^0.3.13",
+    "moment": "^2.24.0",
     "morgan": "^1.6.0",
     "mysql": "^2.7.0",
     "passport": "^0.2.2",
