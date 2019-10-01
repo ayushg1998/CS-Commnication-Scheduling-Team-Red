@@ -58,17 +58,24 @@ class AuthenticatedNavigation extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">            
             <NavItem path="/dashboard" name="Dashboard" />
-            <NavItem name="Link 1" disabled="true" />
             
+            <NavDropdown name="Calendar">
+                <a className="dropdown-item" href="/notfound">Share</a>
+                <a className="dropdown-item" href="/notfound">Export</a>
+                <a className="dropdown-item" href="/notfound">Edit</a>
+            </NavDropdown>
+
+            <NavDropdown name="Messages">
+                <a className="dropdown-item" href="/notfound">View Messages</a>
+            </NavDropdown>
+
             <NavDropdown name="Events">
                 <a className="dropdown-item" href="/createEvent">Create Event</a>
             </NavDropdown>
-            
-            <NavDropdown name="Calendar">
-                <a className="dropdown-item" href="/notfound">Action</a>
-                <a className="dropdown-item" href="/notfound">Another action</a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="/notfound">Something else here</a>
+
+            <NavDropdown name="Groups">
+                <a className="dropdown-item" href="/notfound">View Current Groups</a>
+                <a className="dropdown-item" href="/notfound">Create New Group</a>
             </NavDropdown>
           </ul>
           <ul className="navbar-nav ml-auto">

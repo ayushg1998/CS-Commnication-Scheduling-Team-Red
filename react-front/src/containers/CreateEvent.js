@@ -75,7 +75,7 @@ export default class CreateEvent extends Component {
         return(
             <form onSubmit={this.handleSubmit}>
                 <FormGroup controlId="title" bsSize="large">
-                    <ControlLabel>Event Title</ControlLabel>
+                    <ControlLabel>Event Title:</ControlLabel>
                     <FormControl
                         autoFocus
                         type="cwid"
@@ -85,7 +85,7 @@ export default class CreateEvent extends Component {
                 </FormGroup>
 
                 <FormGroup controlId="description" bsSize="large">
-                    <ControlLabel>Event Title</ControlLabel>
+                    <ControlLabel>Event Description:</ControlLabel>
                     <textarea  
                         id="description" 
                         cols="30" 
@@ -98,7 +98,7 @@ export default class CreateEvent extends Component {
                 </FormGroup>
 
                 <FormGroup controlId="startDate">
-                    <ControlLabel>Select a Start Date</ControlLabel>
+                    <ControlLabel style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </ControlLabel>
                     <DatePicker
                         selected={this.state.start}
                         onChange={this.handleStartDateChange}
@@ -111,7 +111,7 @@ export default class CreateEvent extends Component {
                 </FormGroup>
 
                 <FormGroup controlId="startDate">
-                    <ControlLabel>Select a End Date</ControlLabel>
+                    <ControlLabel style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </ControlLabel>
                     <DatePicker
                         selected={this.state.end}
                         onChange={this.handleEndDateChange}
