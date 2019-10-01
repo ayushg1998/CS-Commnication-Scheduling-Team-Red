@@ -50,6 +50,13 @@ export default class Register extends Component {
         });
     }
 
+    handleOptionChange = event => {
+        console.log("Radio change to: " + event.target.value);
+        this.setState({
+            userType: event.target.value
+        });
+    }
+
     handleSubmit = async event => {
         event.preventDefault();
 
@@ -179,6 +186,8 @@ export default class Register extends Component {
                             className="form-check-input"
                             name="userType"
                             value="student"
+                            checked={this.state.userType === "student"}
+                            onChange={this.handleOptionChange}
                         /> Student
                     </label>
                 </div>
@@ -188,6 +197,8 @@ export default class Register extends Component {
                             className="form-check-input"
                             name="userType"
                             value="faculty"
+                            checked={this.state.userType === "faculty"}
+                            onChange={this.handleOptionChange}
                         /> Faculty
                     </label>
                 </div>
