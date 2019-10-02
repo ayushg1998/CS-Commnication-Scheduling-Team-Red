@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import * as authService from '../shared/authService';
 
 const NavItem = props => {
@@ -73,10 +73,15 @@ class AuthenticatedNavigation extends React.Component {
                 <a className="dropdown-item" href="/createEvent">Create Event</a>
             </NavDropdown>
 
+            <NavDropdown name="Appointment">
+                <a className="dropdown-item" href="/Appointment">Appointment</a>
+            </NavDropdown>
+
             <NavDropdown name="Groups">
                 <a className="dropdown-item" href="/notfound">View Current Groups</a>
                 <a className="dropdown-item" href="/notfound">Create New Group</a>
             </NavDropdown>
+            
           </ul>
           <ul className="navbar-nav ml-auto">
               <NavItem  path="/logout" name="Logout" />            
