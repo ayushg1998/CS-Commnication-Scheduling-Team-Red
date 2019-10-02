@@ -10,6 +10,7 @@ import AppliedRoute from './components/AppliedRoute';
 import * as authService from './shared/authService';
 import authAwareComponent from './authAwareComponent';
 import Appointment from './containers/Appointments';
+import MakeAppointment from './containers/MakeAppointment';
 
 class Logout extends React.Component {
     constructor(props) {
@@ -32,7 +33,7 @@ const WrappedRegister = authAwareComponent(Register, false);
 const WrappedDashboard = authAwareComponent(Dashboard, true);
 const WrappedCreateEvent = authAwareComponent(CreateEvent, true);
 const WrappedAppointment = authAwareComponent(Appointment, true);
-
+const WrappedMakeAppointment = authAwareComponent(MakeAppointment, true);
 
 const WrappedLogout = authAwareComponent(Logout, true);
 
@@ -66,6 +67,7 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
+                <AppliedRoute path="/MakeAppointment" exact component={WrappedMakeAppointment} />
                 <AppliedRoute path="/logout" exact component={WrappedLogout} />
                 { /* Catch all unmatched routes */}
                 <AppliedRoute component={NotFound} />
