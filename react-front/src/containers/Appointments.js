@@ -8,13 +8,14 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
+import * as appointmentEventService from '../shared/appointmentEventService'
 
 export default class Appointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "",
-            description: "",
+            slotInterval: 1,
+            description: null,
             start: null,
             end: null
         }
@@ -22,7 +23,7 @@ export default class Appointment extends Component {
 
     validateForm() {
         return (
-            this.state.title.length > 0 &&
+            this.state.slotInterval > 0 &&
             this.state.start !== null &&
             this.state.end !== null
         );
@@ -48,15 +49,32 @@ export default class Appointment extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
+        if (!this.validateForm()) {
+            alert('invalid form'); return;
+        }
 
-        const appointmentData = {
-            title: this.state.title,
+        appointmentEventService.addAppointmentEvent({
+            slotInterval: this.state.slotInterval,
             description: this.state.description,
             start: this.state.start,
             end: this.state.end
-        };
+        })
+            .then(result => {
+                alert('success');
+                this.resetState();
+            })
+            .catch(error => {
+                alert(`errored: ${error.message}`);
+            });        
+    }
 
-        console.log(appointmentData);
+    resetState = () => {
+        this.setState({
+            slotInterval: 1,
+            description: null,
+            start: null,
+            end: null
+        });
     }
 
     render() {
@@ -88,12 +106,12 @@ export default class Appointment extends Component {
                     />
                 </FormGroup>
 
-                <FormGroup controlId="title" bsSize="large">
+                <FormGroup controlId="slotInterval" bsSize="large">
                     <ControlLabel>Interval-Slots</ControlLabel>
                     <FormControl
                         autoFocus
-                        type="id"
-                        value={this.state.title}
+                        type="number"
+                        value={this.state.slotInterval}
                         onChange={this.handleChange}
                     />
                 </FormGroup>

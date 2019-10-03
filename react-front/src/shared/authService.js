@@ -78,6 +78,11 @@ export function isAuthenticated() {
     return !!localStorage.getItem('user');
 }
 
+export function getAuthToken() {
+    const { loginToken } = JSON.parse(localStorage.getItem('user'));
+    return loginToken;
+}
+
 function emitAuthStatusChangeListener() {
     listeners.forEach(fn => { fn(); });
 }
