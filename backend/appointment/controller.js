@@ -22,6 +22,7 @@ module.exports = function(usecase) {
   }
 
   //TODO: test
+  //TODO: if no appointment events, should be [] instead of null
   /*
     query: {
       appointerId

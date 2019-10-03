@@ -26,8 +26,8 @@ module.exports = function(repository) {
   }
 
   async function addAppointment({position, appointmentEventId, appointeeId}) {
-    assert.ok(Number.isInteger(position) && slotInterval >= 0);
-    assert.ok(appointerId); assert.ok(appointmentEventId);
+    assert.ok(Number.isInteger(position) && position >= 0);
+    assert.ok(appointeeId); assert.ok(appointmentEventId);
 
     const ae = await repository.getAppointmentEvent(appointmentEventId);
     assert.ok(ae);
@@ -42,7 +42,12 @@ module.exports = function(repository) {
 
     const appointmentStart = ae.start.clone().add(startOffset, 'minutes');
     const appointmentEnd = ae.start.clone().add(endOffset, 'minutes');
-    setSecondsToZero(appointmentEnd); setSecondsToZero(appointmentEnd);
+
+    //TODO: HACK for demo
+    appointmentStart.add(-5, 'hours');
+    appointmentEnd.add(-5, 'hours');
+
+    setSecondsToZero(appointmentStart); setSecondsToZero(appointmentEnd);
 
     await repository.addAppointment({
       start: appointmentStart, 
