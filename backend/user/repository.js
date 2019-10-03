@@ -31,15 +31,38 @@ module.exports = function(mysql) {
     });
   }
 
+  function findUserById(id) {
+    return new Promise(function(resolve, reject){
+        mysql.query(`SELECT * FROM User WHERE id = '${id}'`, function(err, rows){
+            if (err) {reject(err); return;}
+            if (!rows.length) { resolve(null); return;}//user with username not found
+            resolve(toUserDomain(rows[0]));
+        });
+    });
+  }
+
+  function findUserByLoginToken(loginToken) {
+    return new Promise(function(resolve, reject){
+        mysql.query(`SELECT * FROM User WHERE loginToken = '${loginToken}'`, function(err, rows){
+            if (err) {reject(err); return;}
+            if (!rows.length) { resolve(null); return;}//user with username not found
+            resolve(toUserDomain(rows[0]));
+        });
+    });
+  }
+
   return {
     createUser,
     findUserByCWID,
-    findUserByUsername
+    findUserByUsername,
+    findUserById,
+    findUserByLoginToken
   };  
 };
 
 function toUserDomain(row) {
   return {
+      id: row.id,
       cwid: row.cwid,
       fname: row.fname,
       lname: row.lname,

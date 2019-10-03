@@ -46,6 +46,19 @@ app.listen(port, function() {
         app.post('/create/faculty', loginController.registerFaculty);
         app.post('/login', loginController.login);
 
+        //thou shall not pass
+        app.use(async function(req, res, next) {
+            try {
+                const authtoken = req.headers.authtoken;
+                const user = await userRepository.findUserByLoginToken(authtoken); assert.ok(user);
+                req.user = user;
+
+                next();
+            } catch(error) {
+                res.send({success: false, message: 'Unauthorized access'});
+            }
+        });
+
         app.post('/appointment-event', appointmentController.addAppointmentEvent);
         app.post('/appointment', appointmentController.addAppointment);
         app.get('/appointment-event', appointmentController.getAppointmentEvents);

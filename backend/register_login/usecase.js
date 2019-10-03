@@ -1,6 +1,6 @@
 const assert = require('assert');
 const lib = require('../lib');
-const constants = require('./constants');
+const constants = require('../constants');
 
 module.exports = function(repository) {
   async function registerStudent({cwid, username, email, password, fname, lname}) {
