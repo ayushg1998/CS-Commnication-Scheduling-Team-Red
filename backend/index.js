@@ -39,11 +39,18 @@ app.listen(port, function() {
         connection.query('USE calendar');
 
         const {repository: userRepository} = require('./user')(connection);
-        const {controller} = require('./register_login')(connection, {userRepository});
+        const {controller: loginController} = require('./register_login')(connection, {userRepository});
+        const {controller: appointmentController} = require('./appointment')(connection, {userRepository});
         
-        app.post('/create/student', controller.registerStudent);
-        app.post('/create/faculty', controller.registerFaculty);
-        app.post('/login', controller.login);
+        app.post('/create/student', loginController.registerStudent);
+        app.post('/create/faculty', loginController.registerFaculty);
+        app.post('/login', loginController.login);
+
+        app.post('/appointment-event', appointmentController.addAppointmentEvent);
+        app.post('/appointment', appointmentController.addAppointment);
+        app.get('/appointment-event', appointmentController.getAppointmentEvents);
+        app.get('/appointment-event/:id', appointmentController.getSpecificAppointmentEvent);
+        app.get('/appointment/:id', appointmentController.getSpecificAppointment);
     });
 
     //sql TCP connection
