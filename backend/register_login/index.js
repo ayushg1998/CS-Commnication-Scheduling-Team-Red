@@ -1,5 +1,5 @@
-module.exports = function(mysql) {
-  const repository = require('./repository')(mysql);
+module.exports = function(mysql, {userRepository}) {
+  const repository = require('./repository')(mysql, {userRepository});
   const usecase = require('./usecase')(repository);
   const controller = require('./controller')(usecase);
 
