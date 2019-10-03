@@ -1,5 +1,8 @@
+const assert = require('assert');
 const lib = require('../lib');
-module.exports = function(repository, constants) {
+const constants = require('./constants');
+
+module.exports = function(repository) {
   async function registerStudent({cwid, username, email, password, fname, lname}) {
     assert.ok(cwid); assert.ok(username); assert.ok(email); assert.ok(password);
     assert.ok(fname); assert.ok(lname);
@@ -30,7 +33,7 @@ module.exports = function(repository, constants) {
   
     const isCWIDValid = lib.validateFormat.checkCWID(cwid);
     const isUsernameValid = lib.validateFormat.checkUsername(username);
-    const isEmailValid = lib.validateFormat.checkFacultyEmaill(email);
+    const isEmailValid = lib.validateFormat.checkFacultyEmail(email);
     const isPasswordValid = lib.validateFormat.checkPassword(password);
     const isFnameValid = lib.validateFormat.checkFname(fname);
     const isLnameValid = lib.validateFormat.checkLname(lname);
@@ -44,8 +47,19 @@ module.exports = function(repository, constants) {
     return repository.createUser({cwid, username, email, loginToken, password, fname, lname, userType: constants.USERTYPE_FACULTY});
   }
 
+  async function loginByUsername(username, pwd) {
+    assert.ok(username); assert.ok(pwd);
+    
+    const user = await repository.findUserByUsername(username);
+    if (!user) return 0;
+    if (user.password !== pwd) return 1;
+
+    return user;
+  }
+
   return {
     registerStudent,
-    registerFaculty
+    registerFaculty,
+    loginByUsername
   }
 }

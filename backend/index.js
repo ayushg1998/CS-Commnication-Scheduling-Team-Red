@@ -38,10 +38,13 @@ app.listen(port, function() {
         console.log('connected to db');
         connection.query('USE calendar');
 
-        const {controller} = require('./register')(connection);
+        const {controller} = require('./register_login')(connection);
         
-        app.post('/create/faculty', controller.registerStudent);
-        app.post('/create/student', controller.registerFaculty);
+        app.post('/create/student', controller.registerStudent);
+        app.post('/create/faculty', controller.registerFaculty);
+        app.post('/login', controller.login);
+
+        app.post('/login', controller.login);
     });
 
     //sql TCP connection

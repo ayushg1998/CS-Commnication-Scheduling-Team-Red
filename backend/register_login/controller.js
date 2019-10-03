@@ -1,3 +1,5 @@
+const assert = require('assert');
+
 module.exports = function(usecase) {
   async function registerFaculty(req, res, next) {
     try {
@@ -77,5 +79,24 @@ module.exports = function(usecase) {
     }          
   }
 
-  return { registerStudent, registerFaculty };
+  async function login(req, res, next) {
+    try {
+      const username = req.body.username;
+      const pwd = req.body.password;
+      
+      const result = await usecase.loginByUsername(username, pwd);
+      if (result == 0) {
+          res.send({success: false, message: 'User not found with following username.'});
+      } else if (result == 1) {
+          res.send({success: false, message: 'Authentication failed.'});
+      } else {
+          //result is user
+          res.send({success: true, user: result});
+      }
+    } catch(error) {
+      res.send({success: false, message: err.message });
+    }
+  }
+
+  return { registerStudent, registerFaculty, login };
 }
