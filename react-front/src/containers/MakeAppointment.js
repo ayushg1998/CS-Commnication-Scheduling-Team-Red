@@ -7,23 +7,18 @@ import {
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
-
 export default class MakeAppointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
             title: "",
             description: "",
-            start: null,
-            end: null
         }
     }
 
     validateForm() {
         return (
-            this.state.title.length > 0 &&
-            this.state.start !== null &&
-            this.state.end !== null
+            this.state.title.length > 0
         );
     }
 
@@ -33,26 +28,15 @@ export default class MakeAppointment extends Component {
         });
     }
 
-    handleStartDateChange= date => {
-        this.setState({
-            start: date
-        });
-    }
 
-    handleEndDateChange= date => {
-        this.setState({
-            end: date
-        });
-    }
+    
 
     handleSubmit = event => {
         event.preventDefault();
 
         const appointmentData = {
             title: this.state.title,
-            description: this.state.description,
-            start: this.state.start,
-            end: this.state.end
+            description: this.state.description
         };
 
         console.log(appointmentData);
