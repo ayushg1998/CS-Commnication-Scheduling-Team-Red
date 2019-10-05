@@ -75,7 +75,12 @@ module.exports = function(usecase) {
       start,
       end,
       slotInterval,
-      appointerId,
+      slotCount,
+      appointer: {
+        fname,
+        lname,
+        id
+      }
       appointments: Array<{
         id,
         start,
@@ -91,15 +96,51 @@ module.exports = function(usecase) {
   */
   async function getSpecificAppointmentEvent(req, res, next) {
     try {
-      res.send({success: true, message: 'getSpecificAppointmentEvent'});
+      const appointmentEventId = req.query.id; assert.ok(appointmentEventId);
+      
+      const appointmentEvent = await usecase.getAppointmentEvent(appointmentEventId);
+      const appointments = await usecase.getAppointmentsOfAppointmentEvent(appointmentEventId);
+      const appointer = await usecase.getUser(appointmentEvent.appointerId);
+
+      const ret = {
+        id: appointmentEvent.id,
+        description: appointmentEvent.description,
+        start: appointmentEvent.start,
+        end: appointmentEvent.end,
+        slotInterval: appointmentEvent.slotInterval,
+        slotCount: appointmentEvent.slotCount,
+        appointer: {
+          fname: appointer.fname,
+          lname: appointer.lname,
+          id: appointer.id
+        },
+        appointments: appointments
+      };
+
+      res.send({success: true, appointmentEvent: ret});
     } catch(error) {
       res.send({success: false, message: error.message});
     }
   }
 
+
   async function getSpecificAppointment(req, res, next) {
     try {
-      res.send({success: true, message: 'getSpecificAppointment'});
+      const appointmentId = req.query.id; assert.ok(appointmentId);
+      const appointment = await usecase.getAppointment(appointmentId);
+      if (!appointment) return res.send({success: true, appointment: null});
+
+      const appointer = await usecase.getAppointerOfAppointmentEvent(appointment.appointmentEventId);
+      const ret = {
+        ...appointment,
+        appointer: {
+          fname: appointer.id,
+          lname: appointer.fname,
+          id: appointer.id
+        }
+      };
+
+      res.send({ success: true, appointment: ret });
     } catch(error) {
       res.send({success: false, message: error.message});
     }

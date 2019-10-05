@@ -64,6 +64,20 @@ app.listen(port, function() {
         app.get('/appointment-event', appointmentController.getAppointmentEvents);
         app.get('/appointment-event/:id', appointmentController.getSpecificAppointmentEvent);
         app.get('/appointment/:id', appointmentController.getSpecificAppointment);
+        
+        /*
+        **** for faculty ****
+        GET '/calendar-events'
+        appointment-events: [{start, end, eventname, id}],
+        events: [{start, end, eventname, id}]
+        */
+
+        /*
+        **** for student ****
+        GET '/calendar-events'
+        appointment: [start, end, eventname, id], 
+        events: [start, end, event_name, id]
+        */
     });
 
     //sql TCP connection
