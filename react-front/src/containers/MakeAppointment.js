@@ -60,7 +60,7 @@ export default class MakeAppointment extends Component {
                     </textarea>
                 </FormGroup>
 
-                <FormGroup controlId="searchFaculty" bsSize="large">
+                <FormGroup controlId="title" bsSize="large">
                     <ControlLabel>Search Faculty</ControlLabel>
                     <FormControl
                         autoFocus
