@@ -1,7 +1,6 @@
- //TODO: fix colon absent values and put em inside ''
-
 const TYPE_STUDENT = 'student'; const TYPE_FACULTY = 'faculty';
 
+/*@deprecated*/
 module.exports = function(mysql) {
 
     function findUserByEmail(email) {

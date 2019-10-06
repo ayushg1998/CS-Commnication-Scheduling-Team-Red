@@ -1,3 +1,5 @@
+const { USERTYPE_FACULTY } = require('../constants');
+
 module.exports = function(mysql) {
   function createUser({cwid, username, email, password, fname, lname, loginToken, userType}) {
     return new Promise(function(resolve, reject){
@@ -7,6 +9,16 @@ module.exports = function(mysql) {
             if (err) { reject(err); return; }
             const user = await userRepository.findUserByCWID(cwid);
             resolve(user);
+        });
+    });
+  }
+
+  function getFaculties() {
+    return new Promise(function(resolve, reject){
+        mysql.query(`SELECT * FROM User WHERE userType='${USERTYPE_FACULTY}'`, function(err, rows){
+            if (err) {reject(err);return;}
+            if (!rows.length) { resolve(null); return;}
+            resolve(rows.map(r => toUserDomain(r)));
         });
     });
   }
@@ -56,7 +68,8 @@ module.exports = function(mysql) {
     findUserByCWID,
     findUserByUsername,
     findUserById,
-    findUserByLoginToken
+    findUserByLoginToken,
+    getFaculties
   };  
 };
 

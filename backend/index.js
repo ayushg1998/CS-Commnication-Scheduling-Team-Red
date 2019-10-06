@@ -38,9 +38,10 @@ app.listen(port, function() {
         console.log('connected to db');
         connection.query('USE calendar');
 
-        const {repository: userRepository} = require('./user')(connection);
+        const {controller: userController, repository: userRepository} = require('./user')(connection);
         const {controller: loginController} = require('./register_login')(connection, {userRepository});
-        const {controller: appointmentController} = require('./appointment')(connection, {userRepository});
+        const {controller: appointmentController, repository: appointmentRepository} = require('./appointment')(connection, {userRepository});
+        const {controller: calendarEventController} = require('./calendar_event')(connection,{appointmentRepository, userRepository});
         
         app.post('/create/student', loginController.registerStudent);
         app.post('/create/faculty', loginController.registerFaculty);
@@ -59,25 +60,16 @@ app.listen(port, function() {
             }
         });
 
-        app.post('/appointment-event', appointmentController.addAppointmentEvent);
-        app.post('/appointment', appointmentController.addAppointment);
         app.get('/appointment-event', appointmentController.getAppointmentEvents);
         app.get('/appointment-event/:id', appointmentController.getSpecificAppointmentEvent);
-        app.get('/appointment/:id', appointmentController.getSpecificAppointment);
-        
-        /*
-        **** for faculty ****
-        GET '/calendar-events'
-        appointment-events: [{start, end, eventname, id}],
-        events: [{start, end, eventname, id}]
-        */
+        app.post('/appointment-event', appointmentController.addAppointmentEvent);
 
-        /*
-        **** for student ****
-        GET '/calendar-events'
-        appointment: [start, end, eventname, id], 
-        events: [start, end, event_name, id]
-        */
+        app.post('/appointment', appointmentController.addAppointment);
+        app.get('/appointment/:id', appointmentController.getSpecificAppointment);
+
+        app.get('/user/faculty', userController.getFaculties);
+
+        app.get('/calendar-events', calendarEventController.getCalendarEvents);
     });
 
     //sql TCP connection
@@ -96,21 +88,6 @@ app.listen(port, function() {
 //         const repository = require('./repository')(connection);
 //         const loginUsecase = require('./loginUsecase')(repository);
         
-//         app.post('/login', async function(req, res, next) {
-//             const username = req.body.username;
-//             const pwd = req.body.password;
-            
-//             const result = await loginUsecase.loginByUsername(username, pwd);
-//             if (result == 0) {
-//                 res.send({success: false, message: 'User not found with following username.'});
-//             } else if (result == 1) {
-//                 res.send({success: false, message: 'Authentication failed.'});
-//             } else {
-//                 //result is user
-//                 res.send({success: true, user: result});
-//             }
-//         });
-
 //         /*body
 //             {username: 'name'}
 //         */
@@ -154,85 +131,6 @@ app.listen(port, function() {
 //             } catch(err) {
 //                 res.send({success: false, message: err.message });
 //             }
-//         });
-
-//         app.post('/create/faculty', async function(req, res, next) {
-//             try {
-//                 const cwid = req.body.cwid;
-//                 const username = req.body.username;
-//                 const email = req.body.email;
-//                 const password = req.body.password;
-//                 const fname = req.body.fname;
-//                 const lname = req.body.lname;
-    
-//                 const result = await loginUsecase.createFaculty({cwid, username, email, password, fname, lname});
-    
-//                  if(result == 0)
-//                  {
-//                     res.send({success: false, message:'CWID is invalid'});
-//                  }
-//                  else if(result == 1)
-//                  {
-//                     res.send({success: false, message:'Username is invalid'});
-//                  }
-//                  else if(result == 2)
-//                  {
-//                     res.send({success: false, message:'Email is invalid'});
-//                  }
-//                  else if(result == 3)
-//                  {
-//                     res.send({success: false, message:'Password is invalid'});
-//                  }
-//                  else if (result == 4)
-//                  {
-//                     res.send({success: false, message: 'Name is invalid'});
-//                  }
-//                  else {
-//                     res.send({success:true, user: result});
-//                  }
-//             } catch(err) {
-//                 res.send({success: false, message: err.message });
-//             }
-//         });
-
-//         app.post('/create/student', async function(req, res, next) {
-//             try {
-//                 const cwid = req.body.cwid;
-//                 const username = req.body.username;
-//                 const email = req.body.email;
-//                 const password = req.body.password;
-//                 const fname = req.body.fname;
-//                 const lname = req.body.lname;
-    
-//                 const result = await loginUsecase.createStudent({cwid, username, email, password, fname, lname});
-    
-//                  if(result == 0)
-//                  {
-//                     res.send({success: false, message:'CWID is invalid'});
-//                  }
-//                  else if(result == 1)
-//                  {
-//                     res.send({success: false, message:'Username is invalid'});
-//                  }
-//                  else if(result == 2)
-//                  {
-//                     res.send({success: false, message:'Email is invalid'});
-//                  }
-//                  else if(result == 3)
-//                  {
-//                     res.send({success: false, message:'Password is invalid'});
-//                  }
-//                  else if (result == 4)
-//                  {
-//                     res.send({success: false, message: 'Name is invalid'});
-//                  }
-//                  else {
-//                     res.send({success:true, user: result});
-//                  }
-//             } catch(err) {
-//                 res.send({success: false, message: err.message });
-//             }          
-//         })     
-//     });    
+//         });  
 });
 

@@ -24,20 +24,20 @@ module.exports = function(repository) {
 
   async function getAppointmentEventsOfAppointer(appointerId) {
     assert.ok(appointerId);
+    const appointer = await getUser(appointerId); assert.ok(appointer);
+
+    assert.ok(appointer.userType === constants.USERTYPE_FACULTY);
+  
     return repository.getAppointmentEventsofAppointer(appointerId);
   }
 
+  //TODO: position should be unique for a given appointmentEventId
   async function addAppointment({position, appointmentEventId, appointeeId}) {
     assert.ok(Number.isInteger(position) && position >= 0);
     assert.ok(appointeeId); assert.ok(appointmentEventId);
 
     const ae = await repository.getAppointmentEvent(appointmentEventId);
-    assert.ok(ae);
-    
-    const diffInMinutes = ae.end.diff(ae.start, 'minutes');
-    const availablePositions = diffInMinutes / ae.slotInterval;
-
-    assert.ok(position < availablePositions);
+    assert.ok(ae); assert.ok(position < ae.slotCount);
 
     const startOffset = ae.slotInterval * position;
     const endOffset = startOffset + ae.slotInterval;
@@ -57,7 +57,7 @@ module.exports = function(repository) {
   }
 
   /*
-    returns @see repository.getAppointmentEvent
+    @return @see repository.getAppointmentEvent
   */
   async function getAppointmentEvent(appointmentEventId) {
     assert.ok(appointmentEventId);
@@ -65,7 +65,7 @@ module.exports = function(repository) {
   }
 
   /*
-    return @see repository.getAppointmentsOfAppointmentEvent
+    @return @see repository.getAppointmentsOfAppointmentEvent
   */
   async function getAppointmentsOfAppointmentEvent(appointmentEventId) {
     assert.ok(appointmentEventId);
@@ -73,7 +73,7 @@ module.exports = function(repository) {
   }
 
   /*
-    return @see getUser
+    @return @see getUser
   */
   async function getAppointerOfAppointmentEvent(appointmentEventId) {
     assert.ok(appointmentEventId);
@@ -83,7 +83,7 @@ module.exports = function(repository) {
   }
 
   /*
-    return @see repository.getAppointment
+    @return @see repository.getAppointment
   */
   async function getAppointment(appointmentId) {
     assert.ok(appointmentId);
@@ -92,7 +92,7 @@ module.exports = function(repository) {
   }
 
   /*
-    return @see repository.findUserById
+    @return @see repository.findUserById
   */
   async function getUser(userId) {
     return repository.findUserById(userId);
@@ -104,7 +104,9 @@ module.exports = function(repository) {
     getAppointmentEventsOfAppointer,
     getAppointerOfAppointmentEvent,
     getAppointmentsOfAppointmentEvent,
-    getAppointment
+    getAppointment,
+    getAppointmentEvent,
+    getUser
   };
 }
 

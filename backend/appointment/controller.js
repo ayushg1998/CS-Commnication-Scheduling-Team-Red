@@ -1,12 +1,17 @@
+const assert = require('assert');
+
 module.exports = function(usecase) {
 
-  //teseted
   /*
-    body: {
+    @body {
       start,
       end,
       slotInterval,
       description
+    }
+
+    @response {
+      success: true
     }
   */
   async function addAppointmentEvent(req, res, next) {
@@ -21,21 +26,23 @@ module.exports = function(usecase) {
     }
   }
 
-  //TODO: test
-  //TODO: if no appointment events, should be [] instead of null
   /*
-    query: {
+    @query {
       appointerId
     }
 
-    response: Array<{
-      id,
-      description,
-      start,
-      end,
-      slotInterval,
-      appointerId
-    }>
+    @response {
+      success: true,
+      appointmentEvents: Array<{
+        id,
+        description,
+        start,
+        end,
+        slotInterval,
+        slotCount,
+        appointerId
+      }>
+    }
   */
   async function getAppointmentEvents(req, res, next) {
     try {
@@ -48,11 +55,15 @@ module.exports = function(usecase) {
     }
   }
 
-  //TODO: test
+  
   /*
-    body: {
+    @body {
       position
       appointmentEventId
+    }
+
+    @response {
+      success: true
     }
   */
   async function addAppointment(req, res, next) {
@@ -67,36 +78,39 @@ module.exports = function(usecase) {
     }
   }
 
-  //TODO: test
   /*
-    rsponse: {
-      id,
-      description,
-      start,
-      end,
-      slotInterval,
-      slotCount,
-      appointer: {
-        fname,
-        lname,
-        id
-      }
-      appointments: Array<{
+    @response {
+      success: true,
+      appointmentEvent: {
         id,
+        description,
         start,
         end,
-        position,
-        appointee: {
+        slotInterval,
+        slotCount,
+       appointer: {
           fname,
           lname,
           id
-        }
-      }>
+        },
+        appointments: Array<{
+          id,
+          start,
+          end,
+          position,
+          appointmentEventId,
+          appointee: {
+            fname,
+            lname,
+            id
+          }
+        }>
+      }
     }
   */
   async function getSpecificAppointmentEvent(req, res, next) {
     try {
-      const appointmentEventId = req.query.id; assert.ok(appointmentEventId);
+      const appointmentEventId = req.params.id; assert.ok(appointmentEventId);
       
       const appointmentEvent = await usecase.getAppointmentEvent(appointmentEventId);
       const appointments = await usecase.getAppointmentsOfAppointmentEvent(appointmentEventId);
@@ -123,10 +137,27 @@ module.exports = function(usecase) {
     }
   }
 
-
+  /*
+    @response {
+      success: true,
+      appointment: {
+        id,
+        appointmentEventId,
+        apointeeid,
+        start,
+        end,
+        position,
+        appointer: {
+          id,
+          fname,
+          lname
+        }
+      }
+    }
+  */
   async function getSpecificAppointment(req, res, next) {
     try {
-      const appointmentId = req.query.id; assert.ok(appointmentId);
+      const appointmentId = req.params.id; assert.ok(appointmentId);
       const appointment = await usecase.getAppointment(appointmentId);
       if (!appointment) return res.send({success: true, appointment: null});
 
@@ -134,9 +165,9 @@ module.exports = function(usecase) {
       const ret = {
         ...appointment,
         appointer: {
-          fname: appointer.id,
-          lname: appointer.fname,
-          id: appointer.id
+          id: appointer.id,
+          fname: appointer.fname,
+          lname: appointer.lname
         }
       };
 

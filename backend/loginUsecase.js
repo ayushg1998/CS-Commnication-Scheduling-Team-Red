@@ -2,6 +2,7 @@ const assert = require('assert');
 const lib = require('./lib');
 const mailer = require('./mailer');
 
+/*@deprecated*/
 module.exports =  function(repository) {
     
     /*
