@@ -4,6 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Dashboard.css';
+import * as displayEvents from '../shared/api';
 
 moment.locale('en-GB');
 const localizer = momentLocalizer(moment);
@@ -12,37 +13,56 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
 
-        const now = new Date();
-        const events = [
-        {
-            id: 0,
-            title: 'All Day Event very long title',
-            allDay: true,
-            start: moment('2019-07-06T08:00').toDate(),
-            end: moment('2019-07-07T18:00').toDate(),
-        },
-        {
-            id: 1,
-            title: 'Long Event',
-            start: new Date(2019, 3, 7),
-            end: new Date(2019, 3, 10),
-        },
-        {
-            id: 2,
-            title: 'Right now Time Event',
-            start: now,
-            end: now,
-        },
-        {
-            id: 3,
-            title: 'Right now Time Event 2',
-            start: now,
-            end: now,
-        },
-        ]
         this.state = {
-            events
+            events: [{
+                id: 0,
+                title: 'All Day Event very long title',
+                allDay: false,
+                start: moment('2019-10-06T08:00').toDate(),
+                end: moment('2019-10-06T18:00').toDate(),
+            }]
         };
+    }
+
+
+    // componentDidMount(){
+    //     let appointments = displayEvents.getAppointmentEvent();
+    //     console.log(appointments);
+    //     console.log("??");
+    //     // for (let i = 0; i < appointments.length; i++) {
+    //     //     appointments[i].start = moment(appointments[i].start).toDate();
+    //     //     appointments[i].end = moment(appointments[i].end).toDate();
+            
+    //     //   }
+    //     console.log(displayEvents.getAppointmentEvent());
+    //     console.log(appointments.length);
+    //     //this.setState({events:appointments});
+    // }
+
+
+    // componentWillMount(){
+    //     let appointments = (displayEvents.getAppointmentEvent())
+    //     appointments.start = moment.utc(appointments.start).toDate();
+    //     appointments.end = moment.utc(appointments.end).toDate();
+    //     appointments.then(res => {
+    //         console.log(appointments.start);            
+    //         console.log(appointments.end);
+    //         console.log(res);
+    //     })
+    // }
+
+    componentDidMount(){
+        let appointments = (displayEvents.getAppointmentEvent())
+        
+        appointments.then(res => {
+            //appointments.start = moment(appointments.start).toDate();
+            console.log(appointments.start);            
+            console.log(appointments.end);
+            console.log(res);
+            console.log(appointments);
+            this.setState({events: res.appointmentEvents});
+            return res;
+        })
     }
 
     render () {

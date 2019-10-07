@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import moment from 'moment';
 
 export function login({username, password}) {
     return axios
@@ -28,6 +28,17 @@ export function addAppointmentEvent({start, end, slotInterval, description}) {
         return;
     });
 }
+
+export function getAppointmentEvent(){
+    return axios
+    .get('/appointment-event?appointerId=1', getAuthHeaders())
+    .then(res => res.data)
+    .catch(res => {
+        if(!res.success) throw new Error(res.message);
+        return "Error";
+    });
+}
+
 
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
