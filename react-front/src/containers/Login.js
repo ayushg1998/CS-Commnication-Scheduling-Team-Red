@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+
+//React-Bootstrap
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 import './Login.css';
-import LoaderButton from '../components/LoaderButton';
+//import LoaderButton from '../components/LoaderButton';
 import * as authService from '../shared/authService';
  
 export default class Login extends Component {
@@ -38,34 +42,30 @@ export default class Login extends Component {
     render() {
         return (
             <div className="Login">
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="username" bsSize="large">
-                        <ControlLabel>Username</ControlLabel>
-                        <FormControl
+                <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                    <Form.Group controlId="username">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
                             autoFocus
                             type="username"
                             value={this.state.username}
                             onChange={this.handleChange}
                         />
-                    </FormGroup>
-                    <FormGroup controlId="password" bsSize="large">
-                        <ControlLabel>Password</ControlLabel>
-                        <FormControl
+                    </Form.Group>
+
+                    <Form.Group controlId="password">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
                             type="password"
                             value={this.state.password}
                             onChange={this.handleChange}
                         />
-                    </FormGroup>
-                    <LoaderButton
-                        block
-                        bsSize="large"
-                        disabled={!this.validateForm()}
-                        type="submit"
-                        isLoading={this.state.isLoading}
-                        text="Login"
-                        loadingText="Logging in..."
-                    />
-                </form>
+                    </Form.Group>
+
+                    <Button type="submit" variant="primary">
+                        Login
+                    </Button>
+                </Form>
             </div>
         );
     }

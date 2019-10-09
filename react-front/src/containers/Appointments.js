@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from 'react-bootstrap';
+
+//React-Bootstrap
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,7 +14,7 @@ export default class Appointment extends Component {
         super(props);
         this.state = {
             slotInterval: 1,
-            description: null,
+            description: '',
             start: null,
             end: null
         }
@@ -71,7 +70,7 @@ export default class Appointment extends Component {
     resetState = () => {
         this.setState({
             slotInterval: 1,
-            description: null,
+            description: '',
             start: null,
             end: null
         });
@@ -79,9 +78,9 @@ export default class Appointment extends Component {
 
     render() {
         return(
-            <form onSubmit={this.handleSubmit}>
-                <FormGroup controlId="startDate">
-                    <ControlLabel style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </ControlLabel>
+            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </Form.Label>
                     <DatePicker
                         selected={this.state.start}
                         onChange={this.handleStartDateChange}
@@ -91,10 +90,10 @@ export default class Appointment extends Component {
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="startDate">
-                    <ControlLabel style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </ControlLabel>
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </Form.Label>
                     <DatePicker
                         selected={this.state.end}
                         onChange={this.handleEndDateChange}
@@ -104,20 +103,20 @@ export default class Appointment extends Component {
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="slotInterval" bsSize="large">
-                    <ControlLabel>Interval-Slots</ControlLabel>
-                    <FormControl
+                <Form.Group controlId="slotInterval">
+                    <Form.Label>Interval-Slots</Form.Label>
+                    <Form.Control
                         autoFocus
                         type="number"
                         value={this.state.slotInterval}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="description" bsSize="large">
-                    <ControlLabel>Appointment Description:</ControlLabel>
+                <Form.Group controlId="description">
+                    <Form.Label>Appointment Description:</Form.Label>
                     <textarea  
                         id="description" 
                         cols="30" 
@@ -127,12 +126,12 @@ export default class Appointment extends Component {
                         onChange={this.handleChange}
                     >
                     </textarea>
-                </FormGroup>
+                </Form.Group>
 
-                <button type="submit" className="btn btn-primary">
+                <Button variant="primary" type="submit">
                     Submit
-                </button>
-            </form>
+                </Button>
+            </Form>
         );
     }
 }

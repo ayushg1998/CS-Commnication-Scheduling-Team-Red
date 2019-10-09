@@ -64,6 +64,7 @@ export default class Route extends React.Component {
 
         return authenticated? (
             <Switch>       
+                <AppliedRoute path="/" exact component={WrappedDashboard} />
                 <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />

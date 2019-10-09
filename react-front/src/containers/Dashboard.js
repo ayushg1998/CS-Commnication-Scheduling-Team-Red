@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Dashboard.css';
 import * as displayEvents from '../shared/api';
@@ -66,6 +65,7 @@ class Dashboard extends Component {
     }
 
     render () {
+        console.log(moment().toDate());
         return (
             <div className="container">
                 <header className="App-header">

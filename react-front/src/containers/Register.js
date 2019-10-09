@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import {
-    HelpBlock,
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
+
+//React-Bootstrap
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
+//import LoaderButton from '../components/LoaderButton';
 import { register } from '../shared/authService';
 import './Register.css';
 
@@ -94,89 +93,90 @@ export default class Register extends Component {
 
     renderConfirmationForm() {
         return (
-            <form onSubmit={this.handleConfirmationSubmit}>
-                <FormGroup controlId="confirmationCode" bsSize="large">
-                    <ControlLabel>Condirmation Code</ControlLabel>
-                    <FormControl
+            <Form onSubmit={this.handleConfirmationSubmit} style={{ padding: 1 + 'em' }}>
+                <Form.Group controlId="confirmationCode">
+                    <Form.Label>Condirmation Code</Form.Label>
+                    <Form.Control
                         autoFocus
                         type="tel"
                         value={this.state.confirmationCode}
                         onChange={this.handleChange} />
-                    <HelpBlock>Please check your email for the code.</HelpBlock>
-                </FormGroup>
-                <LoaderButton
-                    block
-                    bsSize="large"
-                    disabled={!this.validateConfirmationForm()}
-                    type="submit"
-                    isLoading={this.state.isLoading}
-                    text="Verify"
-                    loadingText="Verifying..."
-                />
-            </form>
+                    <Form.Text className="text-muted">Please check your email for the code.</Form.Text>
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
         );
     }
 
     renderForm() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <FormGroup controlId="cwid" bsSize="large">
-                    <ControlLabel>CWID</ControlLabel>
-                    <FormControl
+            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                <Form.Group controlId="cwid">
+                    <Form.Label>CWID</Form.Label>
+                    <Form.Control
                         autoFocus
                         type="cwid"
                         value={this.state.cwid}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="fname" bsSize="large">
-                    <ControlLabel>First Name</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="fname">
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
                         type="fname"
                         value={this.state.fname}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="lname" bsSize="large">
-                    <ControlLabel>Last Name</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="lname">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
                         type="lname"
                         value={this.state.lname}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="username" bsSize="large">
-                    <ControlLabel>Username</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
                         type="username"
                         value={this.state.username}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="email" bsSize="large">
-                    <ControlLabel>Email</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
                         type="email"
                         value={this.state.email}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="password" bsSize="large">
-                    <ControlLabel>Password</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
                         type="password"
                         value={this.state.password}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <FormGroup controlId="confirmPassword" bsSize="large">
-                    <ControlLabel>Confirm Password</ControlLabel>
-                    <FormControl
+                </Form.Group>
+
+                <Form.Group controlId="confirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
                         type="password"
                         value={this.state.confirmPassword}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
+                </Form.Group>
 
                 <label htmlfor="userType">Register as:</label>
                 <div className="form-check">
@@ -202,16 +202,12 @@ export default class Register extends Component {
                     </label>
                 </div>
 
-                <LoaderButton
-                    block
-                    bsSize="large"
-                    disabled={!this.validateForm()}
-                    type="submit"
-                    isLoading={this.state.isLoading}
-                    text="Register"
-                    loadingText="Registering..."
-                />
-            </form>
+                <br />
+
+                <Button variant="primary" type="submit">
+                    Register
+                </Button>
+            </Form>
         );
     }
 
