@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import LoaderButton from '../components/LoaderButton';
-import {
-    HelpBlock,
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from 'react-bootstrap';
+// import LoaderButton from '../components/LoaderButton';
+
+//React-Bootstrap
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -73,19 +71,19 @@ export default class CreateEvent extends Component {
 
     render() {
         return(
-            <form onSubmit={this.handleSubmit}>
-                <FormGroup controlId="title" bsSize="large">
-                    <ControlLabel>Event Title:</ControlLabel>
-                    <FormControl
+            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                <Form.Group controlId="title">
+                    <Form.Label>Event Title:</Form.Label>
+                    <Form.Control
                         autoFocus
                         type="cwid"
                         value={this.state.title}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="description" bsSize="large">
-                    <ControlLabel>Event Description:</ControlLabel>
+                <Form.Group controlId="description">
+                    <Form.Label>Event Description:</Form.Label>
                     <textarea  
                         id="description" 
                         cols="30" 
@@ -95,10 +93,10 @@ export default class CreateEvent extends Component {
                         onChange={this.handleChange}
                     >
                     </textarea>
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="startDate">
-                    <ControlLabel style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </ControlLabel>
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </Form.Label>
                     <DatePicker
                         selected={this.state.start}
                         onChange={this.handleStartDateChange}
@@ -108,10 +106,10 @@ export default class CreateEvent extends Component {
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup controlId="startDate">
-                    <ControlLabel style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </ControlLabel>
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </Form.Label>
                     <DatePicker
                         selected={this.state.end}
                         onChange={this.handleEndDateChange}
@@ -121,12 +119,12 @@ export default class CreateEvent extends Component {
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
-                </FormGroup>
+                </Form.Group>
 
-                <button type="submit" className="btn btn-primary">
+                <Button variant="primary" type="submit">
                     Submit
-                </button>
-            </form>
+                </Button>
+            </Form>
         );
     }
 }

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from 'react-bootstrap';
+
+//React-Bootstrap
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
@@ -44,35 +43,20 @@ export default class MakeAppointment extends Component {
 
     render() {
         return(
-            <form onSubmit={this.handleSubmit}>
-                
-
-                <FormGroup controlId="description" bsSize="large">
-                    <ControlLabel>Appointment Description:</ControlLabel>
-                    <textarea  
-                        id="description" 
-                        cols="30" 
-                        rows="10" 
-                        className="form-control"
-                        value={this.state.description}
-                        onChange={this.handleChange}
-                    >
-                    </textarea>
-                </FormGroup>
-
-                <FormGroup controlId="title" bsSize="large">
-                    <ControlLabel>Search Faculty</ControlLabel>
-                    <FormControl
+            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                <Form.Group controlId="title">
+                    <Form.Label>Search Faculty</Form.Label>
+                    <Form.Control
                         autoFocus
                         type="id"
                         value={this.state.title}
                         onChange={this.handleChange}
                     />
-                </FormGroup>
-                <button type="submit" className="btn btn-primary">
+                </Form.Group>
+                <Button type="submit" variant="primary">
                     Submit
-                </button>
-            </form>
+                </Button>
+            </Form>
         );
     }
 }
