@@ -106,7 +106,7 @@ export default class Appointment extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="slotInterval">
-                    <Form.Label>Interval-Slots</Form.Label>
+                    <Form.Label>Slot Duration (In Minutes): </Form.Label>
                     <Form.Control
                         autoFocus
                         type="number"
