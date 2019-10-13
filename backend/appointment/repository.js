@@ -9,7 +9,9 @@ module.exports = function(mysql, {userRepository}) {
       end: moment,
       slotInterval: int,
       appointerId: int,
-      slotCount: int
+      slotCount: int,
+      name: string,
+      color: string
     }>
   */
   async function getAppointmentEvent(appointmentEventId) {
@@ -50,7 +52,9 @@ module.exports = function(mysql, {userRepository}) {
       end: moment,
       slotInterval,
       appointerId,
-      slotCount
+      slotCount,
+      name,
+      color
     }>>  
   */
   async function getAppointmentEventsofAppointer(appointerId) {
@@ -62,9 +66,9 @@ module.exports = function(mysql, {userRepository}) {
     });
   }
 
-  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount}) {
-    const o = toDBAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount});
-    const query = `INSERT INTO AppointmentEvent (description, slotCount, start, end, slotInterval, appointerId) VALUES ('${o.description}','${o.slotCount}','${o.start}','${o.end}','${o.slotInterval}','${o.appointerId}');`;
+  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color}) {
+    const o = toDBAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color});
+    const query = `INSERT INTO AppointmentEvent (description, slotCount, start, end, slotInterval, appointerId, name, color) VALUES ('${o.description}','${o.slotCount}','${o.start}','${o.end}','${o.slotInterval}','${o.appointerId}','${o.name}','${o.color}');`;
     return new Promise(function(resolve, reject){
       mysql.query(query, function(err) {
           if (err) { reject(err);return; }
@@ -136,7 +140,8 @@ function toDBAppointmentEvent(ae) {
   return {
     ...ae,
     start: ae.start.toISOString(),
-    end: ae.end.toISOString()
+    end: ae.end.toISOString(),
+    name: ae.name || null
   };
 }
 

@@ -55,7 +55,8 @@ function mapAppointmentEvents(appointmentEvents) {
     id: ape.id,
     start: ape.start,
     end: ape.end,
-    description: ape.description
+    name: ape.name,
+    color: ape.color
   }))
   .sort(descSortFn);
 }
@@ -65,7 +66,8 @@ function mapEvents(events) {
     start: e.start,
     end: e.end,
     name: e.name,
-    id: e.id
+    id: e.id,
+    color: e.color
   }))
   .sort(descSortFn);
 }
@@ -75,7 +77,8 @@ function mapAppointments(appointments) {
     id: ap.id,
     start: ap.start,
     end: ap.end,
-    description: ap.description,
+    name: ap.name,
+    color: ap.color,
     appointer: {
       fname: ap.appointer.fname,
       lname: ap.appointer.lname,

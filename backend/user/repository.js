@@ -7,7 +7,7 @@ module.exports = function(mysql) {
         const queryString = `INSERT INTO User (cwid, fname, lname, username, email, password, loginToken, signupOtpVerified, userType) VALUES ('${cwid}','${fname}','${lname}','${username}','${email}','${password}','${loginToken}',${signupOtpVerified},'${userType}');`
         mysql.query(queryString, async function(err) {
             if (err) { reject(err); return; }
-            const user = await userRepository.findUserByCWID(cwid);
+            const user = await findUserByCWID(cwid);
             resolve(user);
         });
     });

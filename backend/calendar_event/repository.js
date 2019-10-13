@@ -17,7 +17,7 @@ module.exports = function(mysql, {appointmentRepository, userRepository}) {
     }>>
   */
   async function getAppointmentsOfAppointee(userId) {
-    let query = `SELECT U.fname as appointerFname,U.lname as appointerLname,U.id as appointerId,Ap.start,Ap.end,Ape.description,Ap.id`;
+    let query = `SELECT U.fname as appointerFname,U.lname as appointerLname,U.id as appointerId,Ap.start,Ap.end,Ape.name,Ape.color,Ap.id`;
     query += ` FROM Appointment Ap JOIN AppointmentEvent Ape ON Ap.appointmentEventId=Ape.id JOIN User U ON  U.id=Ape.appointerId`;
     query += ` WHERE appointeeId=${userId}`;
 
@@ -31,7 +31,8 @@ module.exports = function(mysql, {appointmentRepository, userRepository}) {
           id: r.id,
           start: moment(r.start),
           end: moment(r.end),
-          description: r.description,
+          name: r.name,
+          color: r.color,
           appointer: {
             fname: r.appointerFname,
             lname: r.appointerLname,

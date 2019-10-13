@@ -42,10 +42,12 @@ app.listen(port, function() {
         const {controller: loginController} = require('./register_login')(connection, {userRepository});
         const {controller: appointmentController, repository: appointmentRepository} = require('./appointment')(connection, {userRepository});
         const {controller: calendarEventController} = require('./calendar_event')(connection,{appointmentRepository, userRepository});
+        const {controller: colorController} = require('./color')(connection);
         
         app.post('/create/student', loginController.registerStudent);
         app.post('/create/faculty', loginController.registerFaculty);
         app.post('/login', loginController.login);
+        app.get('/colors', colorController.getColors);
 
         //thou shall not pass
         app.use(async function(req, res, next) {

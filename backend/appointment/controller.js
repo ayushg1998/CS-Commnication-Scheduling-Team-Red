@@ -6,8 +6,10 @@ module.exports = function(usecase) {
     @body {
       start,
       end,
+      name,
+      color,
+      description,
       slotInterval,
-      description
     }
 
     @response {
@@ -16,10 +18,10 @@ module.exports = function(usecase) {
   */
   async function addAppointmentEvent(req, res, next) {
     try {
-      const {start, end, slotInterval, description} = req.body;
+      const {start, end, slotInterval, description, name, color} = req.body;
       const appointerId = req.user.id;
 
-      await usecase.addAppointmentEvent({start, end, slotInterval, description, appointerId});
+      await usecase.addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color});
       res.send({success: true});
     } catch(error) {
       res.send({success: false, message: error.message});
@@ -36,6 +38,8 @@ module.exports = function(usecase) {
       appointmentEvents: Array<{
         id,
         description,
+        name,
+        color,
         start,
         end,
         slotInterval,
@@ -58,8 +62,8 @@ module.exports = function(usecase) {
   
   /*
     @body {
-      position
-      appointmentEventId
+     position
+     appointmentEventId
     }
 
     @response {
@@ -85,6 +89,7 @@ module.exports = function(usecase) {
         id,
         description,
         start,
+        name, color
         end,
         slotInterval,
         slotCount,
@@ -123,6 +128,8 @@ module.exports = function(usecase) {
         end: appointmentEvent.end,
         slotInterval: appointmentEvent.slotInterval,
         slotCount: appointmentEvent.slotCount,
+        name:  appointmentEvent.name,
+        color:  appointmentEvent.color,
         appointer: {
           fname: appointer.fname,
           lname: appointer.lname,
@@ -185,3 +192,12 @@ module.exports = function(usecase) {
     getSpecificAppointment
   };
 }
+
+// {
+//   "start": "2019-10-13T03:00:00.000Z",
+//   "end": "2019-10-13T04:00:00.000Z",
+//   "name": "London Event",
+//   "color": "fffeee",
+//   "description": null,
+//   "slotInterval": 10
+// }

@@ -4,22 +4,22 @@ const constants = require('../constants');
 
 module.exports = function(repository) {
 
-  async function addAppointmentEvent({start, end, slotInterval, description, appointerId}) {
-    assert.ok(start); assert.ok(end); assert.ok(slotInterval); assert.ok(appointerId);
+  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color}) {
+    assert.ok(start); assert.ok(end); assert.ok(slotInterval); assert.ok(appointerId); assert.ok(color);
     assert.ok(Number.isInteger(slotInterval) && slotInterval > 0);
+    name = name || null;
 
     start = moment(start); end = moment(end); assert.ok(start.isSameOrBefore(end));
     setSecondsToZero(start); setSecondsToZero(end);
 
     const diffInMinutes = end.diff(start, 'minutes'); assert.ok(diffInMinutes % slotInterval == 0);
-    const slotCount = diffInMinutes / slotInterval; assert.ok(slotCount >= 1);
-    
+    const slotCount = diffInMinutes / slotInterval; assert.ok(slotCount >= 1);    
 
     const user = await repository.findUserById(appointerId);
     assert.ok(user);
     assert.ok(user.userType === constants.USERTYPE_FACULTY);
 
-    await repository.addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount});
+    await repository.addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color});
   }
 
   async function getAppointmentEventsOfAppointer(appointerId) {

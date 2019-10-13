@@ -6,8 +6,8 @@ const constants = require('../constants');
 @response {
   success: true,
   data: {
-    appointmentEvents: [{start, end, id, description }],
-    events: [{start, end, name, id}],
+    appointmentEvents: [{start, end, id, name, color }],
+    events: [{start, end, name, color, id}],
     type: 'faculty'
   }
 }
@@ -16,8 +16,8 @@ const constants = require('../constants');
 @response {
   success: true,
   data: {
-    appointments: [{start, end, description, id, appointer: { fname, lname, id } }],
-    events: [{start, end, name, id}],
+    appointments: [{start, end, id, name, color, appointer: { fname, lname, id } }],
+    events: [{start, end, name, id, color}],
     type: 'student'
   }
 }
