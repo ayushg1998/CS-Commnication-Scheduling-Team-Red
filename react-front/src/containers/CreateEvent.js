@@ -16,7 +16,8 @@ export default class CreateEvent extends Component {
             title: "",
             description: "",
             start: null,
-            end: null
+            end: null,
+            color: 'Select a Color'
         }
     }
 
@@ -24,7 +25,8 @@ export default class CreateEvent extends Component {
         return (
             this.state.title.length > 0 &&
             this.state.start !== null &&
-            this.state.end !== null
+            this.state.end !== null &&
+            this.state.color.length > 0
         );
     }
 
@@ -53,7 +55,8 @@ export default class CreateEvent extends Component {
             title: this.state.title,
             description: this.state.description,
             start: this.state.start,
-            end: this.state.end
+            end: this.state.end,
+            color: this.state.color
         };
 
         console.log(eventData);
@@ -67,6 +70,16 @@ export default class CreateEvent extends Component {
         //         console.log(res);
         //     }
         // });
+    }
+
+    resetState = () => {
+        this.setState({
+            title: "",
+            description: "",
+            start: null,
+            end: null,
+            color: 'Select a Color'
+        });
     }
 
     render() {
@@ -120,6 +133,20 @@ export default class CreateEvent extends Component {
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </Form.Group>
+
+                <Form.Group controlId="description">
+                    <Form.Label>Color</Form.Label>
+                    <select id="color" className="form-control">
+                        <option value = "color" selected>Select a Color</option>
+                        <option value = "color">Red</option>
+                        <option value = "color">Blue</option>
+                        <option value = "color">Green</option>
+                    </select>
+                </Form.Group>
+
+                <Button type="reset" onClick={this.resetState}>
+                    Reset
+                </Button>
 
                 <Button variant="primary" type="submit">
                     Submit
