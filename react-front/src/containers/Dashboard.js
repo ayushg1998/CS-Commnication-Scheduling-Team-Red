@@ -13,53 +13,28 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            events: [{
-                id: 0,
-                title: 'All Day Event very long title',
-                allDay: false,
-                start: moment('2019-10-06T08:00').toDate(),
-                end: moment('2019-10-06T18:00').toDate(),
-            }]
+            events: []
         };
     }
-
-
-    // componentDidMount(){
-    //     let appointments = displayEvents.getAppointmentEvent();
-    //     console.log(appointments);
-    //     console.log("??");
-    //     // for (let i = 0; i < appointments.length; i++) {
-    //     //     appointments[i].start = moment(appointments[i].start).toDate();
-    //     //     appointments[i].end = moment(appointments[i].end).toDate();
-            
-    //     //   }
-    //     console.log(displayEvents.getAppointmentEvent());
-    //     console.log(appointments.length);
-    //     //this.setState({events:appointments});
-    // }
-
-
-    // componentWillMount(){
-    //     let appointments = (displayEvents.getAppointmentEvent())
-    //     appointments.start = moment.utc(appointments.start).toDate();
-    //     appointments.end = moment.utc(appointments.end).toDate();
-    //     appointments.then(res => {
-    //         console.log(appointments.start);            
-    //         console.log(appointments.end);
-    //         console.log(res);
-    //     })
-    // }
 
     componentDidMount(){
         let appointments = (displayEvents.getAppointmentEvent())
         
         appointments.then(res => {
-            //appointments.start = moment(appointments.start).toDate();
-            console.log(appointments.start);            
-            console.log(appointments.end);
-            console.log(res);
-            console.log(appointments);
-            this.setState({events: res.appointmentEvents});
+            
+            let objectApp = [{}];
+            console.log(res.appointmentEvents.length)
+
+            for(let i =0; i<res.appointmentEvents.length; i++){
+                objectApp.push({
+                    title: res.appointmentEvents[i].name,
+                    start: new Date(res.appointmentEvents[i].start),
+                    end: new Date(res.appointmentEvents[i].end)
+                });
+            }
+            console.log(objectApp);
+
+            this.setState({events: objectApp});
             return res;
         })
     }
