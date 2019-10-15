@@ -8,23 +8,28 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
 import * as appointmentEventService from '../shared/appointmentEventService'
+import moment from 'moment';
 
 export default class Appointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: '',
             slotInterval: 1,
             description: '',
             start: null,
-            end: null
+            end: null, 
+            color: ''
         }
     }
 
     validateForm() {
         return (
+            this.state.title.length > 0 &&
             this.state.slotInterval > 0 &&
             this.state.start !== null &&
-            this.state.end !== null
+            this.state.end !== null &&
+            this.state.color.length >0
         );
     }
 
@@ -53,10 +58,12 @@ export default class Appointment extends Component {
         }
 
         appointmentEventService.addAppointmentEvent({
+            title: this.state.title,
             slotInterval: this.state.slotInterval,
             description: this.state.description,
             start: this.state.start,
-            end: this.state.end
+            end: this.state.end,
+            color: this.state.color
         })
             .then(result => {
                 alert('success');
@@ -66,19 +73,32 @@ export default class Appointment extends Component {
                 alert(`errored: ${error.message}`);
             });        
     }
-
     resetState = () => {
         this.setState({
+            title: '',
             slotInterval: 1,
             description: '',
             start: null,
-            end: null
+            end: null,
+            color: 'Select Color'
         });
     }
 
     render() {
         return(
             <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1 + 'em' }}>Title:  </Form.Label>
+                    <input type="text"  
+                        id="title" 
+                        cols="10"
+                        className="form-control"
+                        value={this.state.title}
+                        onChange={this.handleChange}
+                    />                    
+                </Form.Group>
+                
                 <Form.Group controlId="startDate">
                     <Form.Label style={{ paddingRight: 1 + 'em' }}>Select a Start Date:  </Form.Label>
                     <DatePicker
@@ -91,7 +111,6 @@ export default class Appointment extends Component {
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </Form.Group>
-
                 <Form.Group controlId="startDate">
                     <Form.Label style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </Form.Label>
                     <DatePicker
@@ -114,6 +133,16 @@ export default class Appointment extends Component {
                         onChange={this.handleChange}
                     />
                 </Form.Group>
+                <Form.Group controlId="description">
+                    <Form.Label>Color</Form.Label>
+                    <select id="color" className="form-control">
+                        <option value = "color" selected>Select a Color</option>
+                        <option value = "color">Red</option>
+                        <option value = "color">Blue</option>
+                        <option value = "color">Green</option>
+                    </select>
+                </Form.Group>
+
 
                 <Form.Group controlId="description">
                     <Form.Label>Appointment Description:</Form.Label>
@@ -128,6 +157,9 @@ export default class Appointment extends Component {
                     </textarea>
                 </Form.Group>
 
+                <Button type="reset" onClick={this.resetState}>
+                    Reset
+                </Button>
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
