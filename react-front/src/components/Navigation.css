@@ -1,3 +1,9 @@
 .navbar-custom {
     background-color: #862633;
 }
+
+@media (min-width: 992px) {
+    .dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+}

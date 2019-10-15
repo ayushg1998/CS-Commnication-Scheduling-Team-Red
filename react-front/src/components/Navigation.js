@@ -60,7 +60,7 @@ class AuthenticatedNavigation extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">            
             <NavItem path="/dashboard" name="Dashboard" />
-            
+
             <NavDropdown name="Calendar">
                 <a className="dropdown-item" href="/notfound">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
