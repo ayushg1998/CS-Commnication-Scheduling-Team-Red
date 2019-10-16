@@ -1,34 +1,53 @@
 import React, { Component } from 'react';
+import * as displayFaculty from '../shared/api';
+import Select from 'react-select';
 
-//React-Bootstrap
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-
-import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
+
+
 export default class MakeAppointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "",
-            description: "",
+            selectedOption: '',
+            clearable: true,    
+            faculty: []
         }
     }
 
-    validateForm() {
-        return (
-            this.state.title.length > 0
-        );
+    componentDidMount(){
+        let faculty = (displayFaculty.getFaculty());
+        console.log(faculty);
+        
+        faculty.then(res => {
+            let objectApp = [];
+            console.log(res.faculties.length);
+
+            for(let i =0; i<res.faculties.length; i++){
+                
+
+                objectApp.push({
+                    label: res.faculties[i].fname + " " + res.faculties[i].lname,
+                    value: res.faculties[i].lname
+                });
+            }
+
+            console.log("This is objectApp: " + objectApp);
+
+            this.setState({faculty:objectApp});
+            console.log(this.state.faculty);
+            return res;
+       })
     }
 
-    handleChange = event => {
+    handleChange = selectedOption => {
+        console.log("In handle change");
+        console.log(this.state.faculty);
+        console.log(selectedOption);
         this.setState({
-            [event.target.id]: event.target.value
+            selectedOption
         });
     }
-
-
-    
 
     handleSubmit = event => {
         event.preventDefault();
@@ -42,21 +61,22 @@ export default class MakeAppointment extends Component {
     }
 
     render() {
+        console.log(this.state.faculty);
         return(
-            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
-                <Form.Group controlId="title">
-                    <Form.Label>Search Faculty</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="id"
-                        value={this.state.title}
-                        onChange={this.handleChange}
-                    />
-                </Form.Group>
-                <Button type="submit" variant="primary">
-                    Submit
-                </Button>
-            </Form>
+            
+            <div>
+                
+            <Select
+                name="form-field-name"
+                value={this.state.value}
+                onChange={this.handleChange}
+                clearable={this.state.clearable}
+                searchable={this.state.searchable}
+                labelKey='name'
+                valueKey='last name'                
+                options={this.state.faculty}                  
+            />
+    </div>    
         );
     }
 }
