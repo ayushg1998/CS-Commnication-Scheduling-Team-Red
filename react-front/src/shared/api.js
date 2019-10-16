@@ -39,6 +39,15 @@ export function getAppointmentEvent(){
     });
 }
 
+export function getFaculty() {
+    return axios
+    .get('/user/faculty', getAuthHeaders())
+    .then(res => res.data)
+    .catch(res => {
+        if(!res.success) throw new Error(res.message);
+        return "Error";
+    });
+}
 
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
