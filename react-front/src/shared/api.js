@@ -19,9 +19,9 @@ export function logout() {
 }
 
 
-export function addAppointmentEvent({start, end, slotInterval, description}) {
+export function addAppointmentEvent({name, start, end, slotInterval, description,color}) {
     return axios
-    .post('/appointment-event', {start, end, slotInterval, description}, getAuthHeaders())
+    .post('/appointment-event', {name, start, end, slotInterval, description, color}, getAuthHeaders())
     .then(res => res.data)
     .then(res => {
         if (!res.success) throw new Error(res.message);
@@ -29,9 +29,9 @@ export function addAppointmentEvent({start, end, slotInterval, description}) {
     });
 }
 
-export function getAppointmentEvent(){
+export function getAppointmentEvent(id){
     return axios
-    .get('/appointment-event?appointerId=1', getAuthHeaders())
+    .get('/appointment-event?appointerId='+id, getAuthHeaders())
     .then(res => res.data)
     .catch(res => {
         if(!res.success) throw new Error(res.message);

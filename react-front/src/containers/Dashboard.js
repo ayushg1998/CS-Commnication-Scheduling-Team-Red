@@ -17,12 +17,19 @@ class Dashboard extends Component {
         };
     }
 
+    
+
     componentDidMount(){
-        let appointments = (displayEvents.getAppointmentEvent())
         
+        let getObject = JSON.parse(localStorage.getItem('user'));
+        let appointments = (displayEvents.getAppointmentEvent(getObject.id))
+        console.log(appointments);
+        console.log(getObject.id);
         appointments.then(res => {
             
             let objectApp = [{}];
+            
+            if(res.success === true){
             console.log(res.appointmentEvents.length)
 
             for(let i =0; i<res.appointmentEvents.length; i++){
@@ -33,7 +40,7 @@ class Dashboard extends Component {
                 });
             }
             console.log(objectApp);
-
+        }
             this.setState({events: objectApp});
             return res;
         })

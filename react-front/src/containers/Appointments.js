@@ -19,7 +19,7 @@ export default class Appointment extends Component {
             description: '',
             start: null,
             end: null, 
-            color: ''
+            color: 'ff0000'
         }
     }
 
@@ -52,6 +52,7 @@ export default class Appointment extends Component {
     }
 
     handleSubmit = event => {
+        console.log(this.state.title);
         event.preventDefault();
         if (!this.validateForm()) {
             alert('invalid form'); return;
@@ -67,6 +68,7 @@ export default class Appointment extends Component {
         })
             .then(result => {
                 alert('success');
+                console.log(this.state.title);
                 this.resetState();
             })
             .catch(error => {
@@ -80,7 +82,7 @@ export default class Appointment extends Component {
             description: '',
             start: null,
             end: null,
-            color: 'Select Color'
+            color: 'ff0000'
         });
     }
 
@@ -135,11 +137,10 @@ export default class Appointment extends Component {
                 </Form.Group>
                 <Form.Group controlId="description">
                     <Form.Label>Color</Form.Label>
-                    <select id="color" className="form-control">
-                        <option value = "color" selected>Select a Color</option>
-                        <option value = "color">Red</option>
-                        <option value = "color">Blue</option>
-                        <option value = "color">Green</option>
+                    <select id="color" className="form-control" value={this.state.color} onChange={this.handleChange}>
+                        <option value = "ff0000">Red</option>
+                        <option value = "0000ff">Blue</option>
+                        <option value = "00ff00">Green</option>
                     </select>
                 </Form.Group>
 
