@@ -63,8 +63,12 @@ export default class MakeAppointment extends Component {
     render() {
         console.log(this.state.faculty);
         return(
+
             
-            <div>
+            <div style={{ paddingTop: 1.5 + 'em' }}>
+            <header className="App-header">
+                    <h3 className="App-title">Search for Faculty by Name</h3>
+            </header>
                 
             <Select
                 name="form-field-name"
@@ -74,7 +78,7 @@ export default class MakeAppointment extends Component {
                 searchable={this.state.searchable}
                 labelKey='name'
                 valueKey='last name'                
-                options={this.state.faculty}                  
+                options={this.state.faculty} 
             />
     </div>    
         );
