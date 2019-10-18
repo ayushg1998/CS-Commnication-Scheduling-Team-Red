@@ -17,7 +17,16 @@ class Dashboard extends Component {
         };
     }
 
-    
+    eventStyle = (event) => {
+        console.log(event);
+        const backgroundColor = '#' + event.color;
+        const style = {
+            backgroundColor: backgroundColor
+        };
+        return {
+            style: style
+        };
+    }
 
     componentDidMount(){
         
@@ -36,7 +45,8 @@ class Dashboard extends Component {
                 objectApp.push({
                     title: res.appointmentEvents[i].name,
                     start: new Date(res.appointmentEvents[i].start),
-                    end: new Date(res.appointmentEvents[i].end)
+                    end: new Date(res.appointmentEvents[i].end),
+                    color: res.appointmentEvents[i].color
                 });
             }
             console.log(objectApp);
@@ -60,6 +70,7 @@ class Dashboard extends Component {
                         startAccessor="start"
                         endAccessor="end"
                         defaultDate={moment().toDate()}
+                        eventPropGetter={(this.eventStyle)}
                     />
                 </div>
             </div>
