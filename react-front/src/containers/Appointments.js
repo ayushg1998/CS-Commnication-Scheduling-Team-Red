@@ -59,7 +59,7 @@ export default class Appointment extends Component {
         }
 
         appointmentEventService.addAppointmentEvent({
-            title: this.state.title,
+            name: this.state.title,
             slotInterval: this.state.slotInterval,
             description: this.state.description,
             start: this.state.start,
