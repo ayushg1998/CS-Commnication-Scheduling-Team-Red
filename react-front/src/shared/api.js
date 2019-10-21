@@ -11,6 +11,16 @@ export function login({username, password}) {
         });
 }
 
+export function getCalendarEvents() {
+    return axios
+        .get('/calendar-events', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return res.data;
+        });
+}
+
 export function logout() {
     return Promise.resolve()
         .then(() => {

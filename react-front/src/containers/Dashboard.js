@@ -13,47 +13,50 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            events: []
+            events: [],
         };
     }
 
     eventStyle = (event) => {
         console.log(event);
         const backgroundColor = '#' + event.color;
-        const style = {
-            backgroundColor: backgroundColor
-        };
-        return {
-            style: style
-        };
+        const style = { backgroundColor };
+        console.log(style);
+        return { style };
     }
 
     componentDidMount(){
         
         let getObject = JSON.parse(localStorage.getItem('user'));
-        let appointments = (displayEvents.getAppointmentEvent(getObject.id))
-        console.log(appointments);
-        console.log(getObject.id);
-        appointments.then(res => {
-            
-            let objectApp = [{}];
-            
-            if(res.success === true){
-            console.log(res.appointmentEvents.length)
+        displayEvents.getCalendarEvents()
+            .then(data => {            
+                const events = data.events.map(e => ({
+                    title: (e.name || 'N/A: ') + `(${e.permission})`,
+                    start: new Date(e.start),
+                    end: new Date(e.end),
+                    color: e.color,
+                    type: 'event'
+                }));
 
-            for(let i =0; i<res.appointmentEvents.length; i++){
-                objectApp.push({
-                    title: res.appointmentEvents[i].name,
-                    start: new Date(res.appointmentEvents[i].start),
-                    end: new Date(res.appointmentEvents[i].end),
-                    color: res.appointmentEvents[i].color
-                });
-            }
-            console.log(objectApp);
-        }
-            this.setState({events: objectApp});
-            return res;
-        })
+                console.log(data);
+
+                const appointmentEvents = data.appointmentEvents.map(ape => ({
+                    title: (ape.name || 'N/A: ') + `(${ape.permission})`,
+                    start: new Date(ape.start),
+                    end: new Date(ape.end),
+                    color: ape.color,
+                    type: 'event'
+                }));
+
+                const calendarEvents = [...events,...appointmentEvents];
+
+                console.log(calendarEvents);
+                
+               this.setState({events: calendarEvents});
+            })
+            .catch(error => {
+                alert(error.message);
+            })
     }
 
     render () {
