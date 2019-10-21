@@ -44,7 +44,7 @@ app.listen(port, function() {
         const {controller: userController, repository: userRepository} = require('./user')(connection);
         const {controller: appointmentController, usecase: appointmentUsecase} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);
-        const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase});
+        const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase, userRepository});
         const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceRepository, eventUsecase, appointmentUsecase});
         const { controller: loginController } = require('./register_login')(connection, {userRepository, resourceRepository, groupRepository});
 
@@ -104,6 +104,8 @@ app.listen(port, function() {
 
         app.get('/calendar-events', calendarEventController.getCalendarEvents);
         app.post('/calendar-events/share', calendarEventController.shareCalendarWithUser);
+
+        app.post('/events', eventController.addEvent);
     });
 
     //sql TCP connection

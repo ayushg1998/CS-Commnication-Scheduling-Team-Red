@@ -2,7 +2,7 @@ const assert = require('assert');
 const moment = require('moment');
 const { sqlUtils } = require('../lib');
 
-module.exports = function(mysql, {resourceRepository}) {
+module.exports = function(mysql, {resourceRepository, userRepository}) {
   assert.ok(resourceRepository);
   /*
     @param groupIds: Array<int>
@@ -109,7 +109,8 @@ module.exports = function(mysql, {resourceRepository}) {
     updateEvent,
     getEvent,
     addEventResource: resourceRepository.addEventResource,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup
+    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
+    getSoloGroupOfUser: userRepository.getSoloGroupOfUser
   };
 }
 

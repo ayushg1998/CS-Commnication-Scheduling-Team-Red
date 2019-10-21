@@ -11,6 +11,15 @@ export function login({username, password}) {
         });
 }
 
+export function createEvent({ name, description, image, start, end, color, groupId }) {
+    return axios
+        .post('/events', { name, description, image, start, end, color, groupId }, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+        });
+}
+
 export function getCalendarEvents() {
     return axios
         .get('/calendar-events', getAuthHeaders())
@@ -41,12 +50,21 @@ export function addAppointmentEvent({name, start, end, slotInterval, description
 
 export function getAppointmentEvent(id){
     return axios
-    .get('/appointment-event?appointerId='+id, getAuthHeaders())
-    .then(res => res.data)
-    .catch(res => {
-        if(!res.success) throw new Error(res.message);
-        return "Error";
-    });
+        .get('/appointment-event?appointerId='+id, getAuthHeaders())
+        .then(res => res.data)
+        .catch(res => {
+            if(!res.success) throw new Error(res.message);
+            return "Error";
+        });
+}
+
+export function shareCalendar({userId, permission}) {
+    return axios
+        .post('/calendar-events/share', {userId, permission}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+        });
 }
 
 export function getFaculty() {

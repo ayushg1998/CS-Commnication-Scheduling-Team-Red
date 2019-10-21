@@ -32,7 +32,12 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const resourceId = await repository.addEventResource(eventId);
 
+    //give join permission to members of group
     await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+
+    //give update permission to creator of group
+    const creatorGroup = await repository.getSoloGroupOfUser(creatorId);
+    await repository.addResourcePermissionToUserGroup({groupId: creatorGroup.id, resourceId, permission: UPDATE});
   }
 
   async function updateEvent({eventId, userId, event}) {

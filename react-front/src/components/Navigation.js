@@ -71,7 +71,7 @@ class AuthenticatedNavigation extends React.Component {
                             <NavItem path="/dashboard" name="Dashboard" />
                 
                             <NavDropdown name="Calendar">
-                                <a className="dropdown-item" href="/notfound">Share</a>
+                                <a className="dropdown-item" href="/share-calendar">Share</a>
                                 <a className="dropdown-item" href="/notfound">Export</a>
                                 <a className="dropdown-item" href="/notfound">Edit</a>
                             </NavDropdown>

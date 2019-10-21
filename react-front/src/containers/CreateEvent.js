@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 //React-Bootstrap
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import * as api from '../shared/api';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -52,24 +53,23 @@ export default class CreateEvent extends Component {
         event.preventDefault();
 
         const eventData = {
-            title: this.state.title,
+            name: this.state.title,
             description: this.state.description,
             start: this.state.start,
             end: this.state.end,
-            color: this.state.color
+            color: this.state.color,
+            image: null,
+            groupId: 21//TODO: change this static value later.
         };
 
-        console.log(eventData);
-
-        // Uncomment the following code when the api is available
-
-        // createEvent(eventData).then(res => {
-        //     console.log(this.props);
-        //     if(res) {
-        //         console.log("Created Event");
-        //         console.log(res);
-        //     }
-        // });
+        return api.createEvent(eventData)
+            .then(() => {
+                alert('success');
+            })
+            .catch(err => {
+                console.log(err.message);
+                alert('failed');
+            });
     }
 
     resetState = () => {
@@ -136,11 +136,11 @@ export default class CreateEvent extends Component {
 
                 <Form.Group controlId="description">
                     <Form.Label>Color</Form.Label>
-                    <select id="color" className="form-control">
-                        <option value = "color" selected>Select a Color</option>
-                        <option value = "color">Red</option>
-                        <option value = "color">Blue</option>
-                        <option value = "color">Green</option>
+                    <select id="color" className="form-control" onChange={this.handleChange}>
+                        <option value = ""  selected>Select a Color</option>
+                        <option value = "ff0000">Red</option>
+                        <option value = "00ff00">Blue</option>
+                        <option value = "0000ff">Green</option>
                     </select>
                 </Form.Group>
 
