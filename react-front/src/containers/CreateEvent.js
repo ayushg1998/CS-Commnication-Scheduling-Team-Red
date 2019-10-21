@@ -14,6 +14,7 @@ export default class CreateEvent extends Component {
         super(props);
         this.state = {
             title: "",
+            group: "",
             description: "",
             start: null,
             end: null,
@@ -24,6 +25,7 @@ export default class CreateEvent extends Component {
     validateForm() {
         return (
             this.state.title.length > 0 &&
+            this.state.group.length > 0 &&
             this.state.start !== null &&
             this.state.end !== null &&
             this.state.color.length > 0
@@ -53,6 +55,7 @@ export default class CreateEvent extends Component {
 
         const eventData = {
             title: this.state.title,
+            group: this.state.group,
             description: this.state.description,
             start: this.state.start,
             end: this.state.end,
@@ -75,6 +78,7 @@ export default class CreateEvent extends Component {
     resetState = () => {
         this.setState({
             title: "",
+            group: "",
             description: "",
             start: null,
             end: null,
@@ -93,6 +97,17 @@ export default class CreateEvent extends Component {
                         value={this.state.title}
                         onChange={this.handleChange}
                     />
+                </Form.Group>
+
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1 + 'em' }}>Select Group:  </Form.Label>
+                    <input type="text"  
+                        id="group" 
+                        cols="10"
+                        className="form-control"
+                        value={this.state.group}
+                        onChange={this.handleChange}
+                    />                    
                 </Form.Group>
 
                 <Form.Group controlId="description">

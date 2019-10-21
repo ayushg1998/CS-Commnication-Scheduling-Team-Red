@@ -15,6 +15,7 @@ export default class Appointment extends Component {
         super(props);
         this.state = {
             title: '',
+            group: '',
             slotInterval: 1,
             description: '',
             start: null,
@@ -26,6 +27,7 @@ export default class Appointment extends Component {
     validateForm() {
         return (
             this.state.title.length > 0 &&
+            this.state.group.length > 0 &&
             this.state.slotInterval > 0 &&
             this.state.start !== null &&
             this.state.end !== null &&
@@ -79,6 +81,7 @@ export default class Appointment extends Component {
     resetState = () => {
         this.setState({
             title: '',
+            group: '',
             slotInterval: 1,
             description: '',
             start: null,
@@ -98,6 +101,17 @@ export default class Appointment extends Component {
                         cols="10"
                         className="form-control"
                         value={this.state.title}
+                        onChange={this.handleChange}
+                    />                    
+                </Form.Group>
+
+                <Form.Group controlId="startDate">
+                    <Form.Label style={{ paddingRight: 1 + 'em' }}>Select Group:  </Form.Label>
+                    <input type="text"  
+                        id="group" 
+                        cols="10"
+                        className="form-control"
+                        value={this.state.group}
                         onChange={this.handleChange}
                     />                    
                 </Form.Group>
