@@ -39,7 +39,7 @@ class Dashboard extends Component {
             let objectApp = [{}];
             
             if(res.success === true){
-            console.log(res.appointmentEvents.length)
+            console.log(res.appointmentEvents)
 
             for(let i =0; i<res.appointmentEvents.length; i++){
                 objectApp.push({
