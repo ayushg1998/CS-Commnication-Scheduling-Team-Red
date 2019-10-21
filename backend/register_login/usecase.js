@@ -1,8 +1,10 @@
 const assert = require('assert');
 const lib = require('../lib');
 const constants = require('../constants');
+const {UPDATE, READ} = constants;
 
 module.exports = function(repository) {
+  
   async function registerStudent({cwid, username, email, password, fname, lname}) {
     assert.ok(cwid); assert.ok(username); assert.ok(email); assert.ok(password);
     assert.ok(fname); assert.ok(lname);
@@ -22,7 +24,16 @@ module.exports = function(repository) {
     if (!isPasswordValid) return 3;
     if (!isFnameValid || !isLnameValid) return 4;
   
-    return repository.createUser({cwid, username, email, loginToken, password, fname, lname, userType: constants.USERTYPE_STUDENT});
+    const user = await repository.createUser({cwid, username, email, loginToken, password, fname, lname, userType: constants.USERTYPE_STUDENT});
+
+    await repository.addUserResource(user.id);
+
+    const groupId = await (async function() {
+      const groupName = fname +' solo group';
+      return repository.createGroup({name: groupName, description: null, creatorId: null});
+    })();
+    
+    await repository.addGroupMember({userId: user.id, groupId});
   }
   
   async function registerFaculty({cwid, username, email, password, fname, lname}) {
@@ -44,7 +55,16 @@ module.exports = function(repository) {
     if (!isPasswordValid) return 3;
     if (!isFnameValid || !isLnameValid) return 4;
   
-    return repository.createUser({cwid, username, email, loginToken, password, fname, lname, userType: constants.USERTYPE_FACULTY});
+    const user = await repository.createUser({cwid, username, email, loginToken, password, fname, lname, userType: constants.USERTYPE_FACULTY});
+
+    await repository.addUserResource(user.id);
+
+    const groupId = await (async function() {
+      const groupName = fname +' solo group';
+      return repository.createGroup({name: groupName, description: null, creatorId: null});
+    })();
+    
+    await repository.addGroupMember({userId: user.id, groupId});
   }
 
   async function loginByUsername(username, pwd) {

@@ -6,8 +6,8 @@ const constants = require('../constants');
 @response {
   success: true,
   data: {
-    appointmentEvents: [{start, end, id, name, color }],
-    events: [{start, end, name, color, id}],
+    appointmentEvents: [{start, end, id, name, color, permission }],
+    events: [{start, end, name, color, id, permission}],
     type: 'faculty'
   }
 }
@@ -30,7 +30,8 @@ module.exports = function(usecase) {
   
       let ret;
       if (userType === constants.USERTYPE_STUDENT) {
-        ret = await usecase.getStudentCalendarEvents(userId);
+        //ret = await usecase.getStudentCalendarEvents(userId);
+        res.send({success: false, message: 'Only faculties for now'});
       } else if (userType === constants.USERTYPE_FACULTY) {
         ret = await usecase.getFacultyCalendarEvents(userId);
       }
@@ -42,7 +43,30 @@ module.exports = function(usecase) {
     }
   }
 
+  /*
+    @body {
+      userId: int, id of the sharee,
+      permission: 'UPDATE' | 'READ'
+    }
+    @response {
+      success: true
+    }
+  */
+  async function shareCalendarWithUser(req, res, next) {
+    try {
+      const sharerId = req.user.id;
+      const shareeId = req.body.userId;
+      const permission = req.body.permission;
+
+      await usecase.shareCalendarWithUser({sharerId, shareeId, permission});
+      res.send({success: true});
+    } catch(error) {
+      res.send({success: false, message: error.message});
+    }
+  }
+
   return {
-    getCalendarEvents
+    getCalendarEvents,
+    shareCalendarWithUser
   };
 };

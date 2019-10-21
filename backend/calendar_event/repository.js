@@ -1,7 +1,11 @@
+const assert = require('assert');
 const moment = require('moment');
+const { sqlUtils } = require('../lib');
 
-module.exports = function(mysql, {appointmentRepository, userRepository}) {
-
+module.exports = function(mysql, {userRepository, resourceRepository}) {
+  assert.ok(userRepository);
+  
+  //NOTE: @deprecated?
   //this is not in appointmentRepository since it is very particular to calendar
   /*
     @return Promise<Array<{
@@ -45,6 +49,7 @@ module.exports = function(mysql, {appointmentRepository, userRepository}) {
     });
   }
 
+  //NOTE: @deprecated?
   //TODO: got to have groups
   //TODO: have this in Event module
   /*
@@ -69,18 +74,79 @@ module.exports = function(mysql, {appointmentRepository, userRepository}) {
     });
   }
 
+  /*
+  @return Promise<Array<{
+    id,
+    name,
+    color,
+    description,
+    start: moment,
+    end: moment,
+    slotInterval,
+    appointerId,
+    slotCount,
+    groupId
+  }>>  
+  */
+  async function getAppointmentEvents(appointmentEventIds) {
+    if (!appointmentEventIds.length) return Promise.resolve([]);
+
+    let query = `SELECT * FROM AppointmentEvent WHERE id IN ${sqlUtils.sqlLikeArray(appointmentEventIds)}`;
+    
+    return new Promise(function(resolve, reject) {
+      mysql.query(query, function(err, rows) {
+        if (err) { reject(err); return; }
+  
+        const ret = rows.map(r => ({
+          ...r,
+          start: moment(r.start),
+          end: moment(r.end)
+        }));
+  
+        resolve(ret);
+      });
+    });
+  }
+
+    /*
+    @return Promise<Array<{
+      id,
+      name: string,
+      description: string,
+      image: string,
+      start: moment,
+      end: moment,
+      color: string,
+      creatorId: int,
+      groupId: int
+    }>>
+  */
+  async function getEvents(eventIds) {
+    if (!eventIds.length) return Promise.resolve([]);
+
+    let query = `SELECT * FROM Event WHERE id IN ${sqlUtils.sqlLikeArray(eventIds)}`;
+    
+    return new Promise(function(resolve, reject) {
+      mysql.query(query, function(err, rows) {
+        if (err) { reject(err); return; }
+  
+        const ret = rows.map(r => ({
+          ...r,
+          start: moment(r.start),
+          end: moment(r.end)
+        }));
+  
+        resolve(ret);
+      });
+    });
+  }
+
   return {
-    getAppointmentEventsofAppointer: appointmentRepository.getAppointmentEventsofAppointer,
-    getAppointmentsOfAppointee,
+    getEvents,
+    getAppointmentEvents,
     findUserById: userRepository.findUserById,
-    getEventsForUser
+    getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
+    getUserResourceOfUser: resourceRepository.getUserResourceOfUser,
+    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup
   };
 };
-
-function fromDBEvent(event) {
-  return {
-    ...event,
-    start: moment(event.start),
-    end: moment(event.end)
-  };
-}

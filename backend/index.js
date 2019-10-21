@@ -1,3 +1,4 @@
+const moment = require('moment');
 const assert = require('assert');
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -38,12 +39,42 @@ app.listen(port, function() {
         console.log('connected to db');
         connection.query('USE calendar');
 
+        const {repository: resourceRepository, usecase: resourceUsecase} = require('./resource')(connection);
+        const {repository: groupRepository} = require('./group')(connection);
         const {controller: userController, repository: userRepository} = require('./user')(connection);
-        const {controller: loginController} = require('./register_login')(connection, {userRepository});
-        const {controller: appointmentController, repository: appointmentRepository} = require('./appointment')(connection, {userRepository});
-        const {controller: calendarEventController} = require('./calendar_event')(connection,{appointmentRepository, userRepository});
+        const {controller: appointmentController, usecase: appointmentUsecase} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);
-        
+        const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase});
+        const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceRepository, eventUsecase, appointmentUsecase});
+        const { controller: loginController } = require('./register_login')(connection, {userRepository, resourceRepository, groupRepository});
+
+        ////////////////////TEST
+        (function() {
+            // const user = { 
+            //     cwid: '30004000', 
+            //     username: 'fname123', 
+            //     email: 'fname@gmail.com', 
+            //     password: 'password123', 
+            //     fname: 'fname', 
+            //     lname: 'lname' 
+            // }
+
+            // const sharerId = 1;
+            // const shareeId = 2;
+            // const permission = 'UPDATE';
+
+            // calendarEventUsecase.shareCalendarWithUser({sharerId,shareeId, permission})
+            //     .then(result => {
+            //         console.log('success');
+            //         console.log(result);
+            //     })
+            //     .catch(error => {
+            //         console.log('failed');
+            //         console.log(error);
+            //     })
+        })();
+        ////////////////////TEST
+
         app.post('/create/student', loginController.registerStudent);
         app.post('/create/faculty', loginController.registerFaculty);
         app.post('/login', loginController.login);
@@ -72,6 +103,7 @@ app.listen(port, function() {
         app.get('/user/faculty', userController.getFaculties);
 
         app.get('/calendar-events', calendarEventController.getCalendarEvents);
+        app.post('/calendar-events/share', calendarEventController.shareCalendarWithUser);
     });
 
     //sql TCP connection
