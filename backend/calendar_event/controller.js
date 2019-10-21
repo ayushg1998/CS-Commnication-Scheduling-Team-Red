@@ -45,7 +45,8 @@ module.exports = function(usecase) {
 
   /*
     @body {
-      userId: int, id of the sharee
+      userId: int, id of the sharee,
+      permission: 'UPDATE' | 'READ'
     }
     @response {
       success: true
@@ -55,8 +56,9 @@ module.exports = function(usecase) {
     try {
       const sharerId = req.user.id;
       const shareeId = req.body.userId;
+      const permission = req.body.permission;
 
-      await usecase.shareCalendar(sharerId, shareeId);
+      await usecase.shareCalendarWithUser({sharerId, shareeId, permission});
       res.send({success: true});
     } catch(error) {
       res.send({success: false, message: error.message});
