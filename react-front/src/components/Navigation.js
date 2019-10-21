@@ -71,7 +71,7 @@ class AuthenticatedNavigation extends React.Component {
                             <NavItem path="/dashboard" name="Dashboard" />
                 
                             <NavDropdown name="Calendar">
-                                <a className="dropdown-item" href="/notfound">Share</a>
+                                <a className="dropdown-item" href="/ShareCalendar">Share</a>
                                 <a className="dropdown-item" href="/notfound">Export</a>
                                 <a className="dropdown-item" href="/notfound">Edit</a>
                             </NavDropdown>
@@ -117,7 +117,7 @@ class AuthenticatedNavigation extends React.Component {
             <NavItem path="/dashboard" name="Dashboard" />
 
             <NavDropdown name="Calendar">
-                <a className="dropdown-item" href="/notfound">Share</a>
+                <a className="dropdown-item" href="/ShareCalendar">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
                 <a className="dropdown-item" href="/notfound">Edit</a>
             </NavDropdown>
@@ -164,7 +164,7 @@ class AuthenticatedNavigation extends React.Component {
             <NavItem path="/dashboard" name="Dashboard" />
 
             <NavDropdown name="Calendar">
-                <a className="dropdown-item" href="/notfound">Share</a>
+                <a className="dropdown-item" href="/ShareCalendar">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
                 <a className="dropdown-item" href="/notfound">Edit</a>
             </NavDropdown>
