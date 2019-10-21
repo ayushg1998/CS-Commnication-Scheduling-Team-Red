@@ -1,11 +1,14 @@
 const { USERTYPE_FACULTY } = require('../constants');
+const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql) {
   function createUser({cwid, username, email, password, fname, lname, loginToken, userType}) {
+    const signupOtpVerified = false;
+    const query = `INSERT INTO User (cwid, fname, lname, username, email, password, loginToken, signupOtpVerified, userType) 
+    VALUES ${sqlUtils.sqlValues([cwid, fname, lname, username, email, password, loginToken, signupOtpVerified, userType])};`
+    
     return new Promise(function(resolve, reject){
-        const signupOtpVerified = false;
-        const queryString = `INSERT INTO User (cwid, fname, lname, username, email, password, loginToken, signupOtpVerified, userType) VALUES ('${cwid}','${fname}','${lname}','${username}','${email}','${password}','${loginToken}',${signupOtpVerified},'${userType}');`
-        mysql.query(queryString, async function(err) {
+        mysql.query(query, async function(err) {
             if (err) { reject(err); return; }
             const user = await findUserByCWID(cwid);
             resolve(user);
@@ -13,6 +16,23 @@ module.exports = function(mysql) {
     });
   }
 
+  //creator id is NULL for solo group of user
+  function getSoloGroupOfUser(userId) {
+      const query = `SELECT UG.id,UG.name,UG.description,UG.creatorId FROM User_UserGroup UUG 
+        JOIN UserGroup UG ON UG.id=UUG.groupId
+        WHERE UUG.userId=${userId} AND UG.creatorId IS NULL;`;
+
+        return new Promise(function(resolve, reject){
+            mysql.query(query, async function(err, rows) {
+                if (err) { reject(err); return; }
+                if (!rows.length) { resolve(null); return; }
+                resolve(rows[0]);
+            });
+        });
+  }
+
+
+  
   function getFaculties() {
     return new Promise(function(resolve, reject){
         mysql.query(`SELECT * FROM User WHERE userType='${USERTYPE_FACULTY}'`, function(err, rows){
@@ -69,7 +89,8 @@ module.exports = function(mysql) {
     findUserByUsername,
     findUserById,
     findUserByLoginToken,
-    getFaculties
+    getFaculties,
+    getSoloGroupOfUser
   };  
 };
 

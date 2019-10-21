@@ -1,11 +1,15 @@
 const moment = require('moment');
 const assert = require('assert');
+const AppointmentEventResourceAggregator = require('./collector');
 const constants = require('../constants');
+const { READ, JOIN, UPDATE, UPDATE_JOIN } = constants.permissions.appointmentEvent;
 
-module.exports = function(repository) {
+module.exports = function(repository, {resourceUsecase}) {
+  assert.ok(resourceUsecase);
 
-  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color}) {
-    assert.ok(start); assert.ok(end); assert.ok(slotInterval); assert.ok(appointerId); assert.ok(color);
+  //TODO: sql transaction for series of inserts
+  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color, groupId}) {
+    assert.ok(start); assert.ok(end); assert.ok(slotInterval); assert.ok(appointerId); assert.ok(color); assert.ok(groupId);
     assert.ok(Number.isInteger(slotInterval) && slotInterval > 0);
     name = name || null;
 
@@ -16,10 +20,28 @@ module.exports = function(repository) {
     const slotCount = diffInMinutes / slotInterval; assert.ok(slotCount >= 1);    
 
     const user = await repository.findUserById(appointerId);
-    assert.ok(user);
-    assert.ok(user.userType === constants.USERTYPE_FACULTY);
+    assert.ok(user); assert.ok(user.userType === constants.USERTYPE_FACULTY);
 
-    await repository.addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color});
+    const appointmentEventId = await repository.addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color, groupId});
+
+    const resourceId = await repository.addAppointmentEventResource(appointmentEventId);
+
+    await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+  }
+
+  /*
+    @return Promise<Array<{
+      appointmentEventId: int, 
+      permission: 'UPDATE+JOIN' || 'READ' || 'UPDATE' || 'JOIN', 
+      resourceId: int}>>
+  */
+  async function getAllVisibleAppointmentEventsOfUser(userId) {
+    assert.ok(userId);
+    const collector = new AppointmentEventResourceAggregator();
+    const fetcher = {fetch: repository.getAppointmentEventsOfGroups};
+
+    await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
+    return collector.getCollection();
   }
 
   async function getAppointmentEventsOfAppointer(appointerId) {
@@ -106,6 +128,7 @@ module.exports = function(repository) {
     getAppointmentsOfAppointmentEvent,
     getAppointment,
     getAppointmentEvent,
+    getAllVisibleAppointmentEventsOfUser,
     getUser
   };
 }

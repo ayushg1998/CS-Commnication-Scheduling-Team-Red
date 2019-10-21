@@ -1,6 +1,10 @@
+const { sqlUtils } = require('../lib');
+const assert = require('assert');
 const moment = require('moment');
 
-module.exports = function(mysql, {userRepository}) {
+module.exports = function(mysql, {userRepository, resourceRepository}) {
+  assert.ok(userRepository); assert.ok(resourceRepository);
+  
   /*
     @return Promise<{
       id: int,
@@ -66,13 +70,19 @@ module.exports = function(mysql, {userRepository}) {
     });
   }
 
-  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color}) {
-    const o = toDBAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color});
-    const query = `INSERT INTO AppointmentEvent (description, slotCount, start, end, slotInterval, appointerId, name, color) VALUES ('${o.description}','${o.slotCount}','${o.start}','${o.end}','${o.slotInterval}','${o.appointerId}','${o.name}','${o.color}');`;
+  /*
+    @return Promise<int>
+  */
+  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, slotCount, name, color, groupId}) {
+    
+    const query = `INSERT INTO AppointmentEvent (description, slotCount, start, end, slotInterval, appointerId, name, color, groupId)
+    VALUES ${sqlUtils.sqlValues([description, slotCount, start, end, slotInterval, appointerId, name, color, groupId])};`;
+
+    console.log(query);
     return new Promise(function(resolve, reject){
-      mysql.query(query, function(err) {
+      mysql.query(query, function(err, result) {
           if (err) { reject(err);return; }
-          resolve(null);
+          resolve(result.insertId);
       });
     });
   }
@@ -82,9 +92,9 @@ module.exports = function(mysql, {userRepository}) {
     const query = `INSERT INTO Appointment (start, end, appointeeId, position, appointmentEventId) VALUES ('${o.start}','${o.end}','${o.appointeeId}','${o.position}','${o.appointmentEventId}');`;
     console.log(query);
     return new Promise(function(resolve, reject){
-      mysql.query(query, function(err) {
+      mysql.query(query, function(err, result) {
           if (err) { reject(err);return; }
-          resolve(null);
+          resolve(result.insertId);
       });
     });
   }
@@ -125,13 +135,61 @@ module.exports = function(mysql, {userRepository}) {
     });
   }
 
+  /*
+    @param groupIds: Array<int>
+    @return Array<{appointmentEventId, permission, resourceId}>
+  */
+  async function getAppointmentEventsOfGroups(groupIds) {
+    if (!groupIds.length) return Promise.resolve([]);
+
+    const query = `SELECT URP.groupId,R.appointmentEventId,URP.permission,URP.resourceId FROM UserGroup_Resource_Permission URP 
+      JOIN Resource R ON R.id=URP.resourceId
+      WHERE URP.groupId IN ${sqlUtils.sqlLikeArray(groupIds)} AND R.appointmentEventId IS NOT NULL
+      ORDER BY URP.groupId;`;
+
+      return new Promise((resolve, reject) => {
+        
+        mysql.query(query, function(err, rows){
+          if (err) {reject(err); return;}
+          if (!rows.length) { resolve([]); return;}
+  
+          const result = []; let currentGroupId = -1;
+          rows.forEach(row => {
+            if (currentGroupId != row.groupId) {
+              result.push({
+                groupId: row.groupId,
+                resources: [{
+                  appointmentEventId: row.appointmentEventId,
+                  permission: row.permission,
+                  resourceId: row.resourceId                  
+                }]
+              });
+              currentGroupId = row.groupId;
+            }
+            else {
+              result[result.length - 1].resources.push({
+                appointmentEventId: row.appointmentEventId,
+                permission: row.permission,
+                resourceId: row.resourceId
+              });
+            }
+          });
+  
+          resolve(result); 
+        });
+      }); 
+  }
+
   return {
     getAppointmentEvent,
+    getAppointmentEventsOfGroups,
     getAppointmentEventsofAppointer,
     addAppointmentEvent,
     getAppointment,
     getAppointmentsOfAppointmentEvent,
-    addAppointment,    
+    addAppointment,
+    addAppointmentEventResource: resourceRepository.addAppointmentEventResource,
+    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
     findUserById: userRepository.findUserById
   };
 }

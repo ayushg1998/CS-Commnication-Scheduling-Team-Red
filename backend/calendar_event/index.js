@@ -1,6 +1,10 @@
-module.exports = function(mysql, {appointmentRepository, userRepository}) {
-  const repository = require('./repository')(mysql, {appointmentRepository, userRepository});
-  const usecase = require('./usecase')(repository);
+const assert = require('assert');
+
+module.exports = function(mysql, {userRepository, resourceRepository, eventUsecase, appointmentUsecase}) {
+  assert.ok(userRepository); assert.ok(eventUsecase); assert.ok(appointmentUsecase);
+  
+  const repository = require('./repository')(mysql, {userRepository, resourceRepository});
+  const usecase = require('./usecase')(repository, {eventUsecase, appointmentUsecase});
   const controller = require('./controller')(usecase);
 
   return {
