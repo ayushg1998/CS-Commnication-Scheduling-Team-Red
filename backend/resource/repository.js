@@ -134,8 +134,6 @@ module.exports = function(mysql) {
     const query = `INSERT INTO UserGroup_Resource_Permission (groupId, resourceId, permission)
       VALUES ${sqlUtils.sqlValues([groupId, resourceId, permission])};`
 
-      console.log(query);
-
       return new Promise(function(resolve, reject){
         mysql.query(query, async function(err, result) {
           if (err) { reject(err); return; }
