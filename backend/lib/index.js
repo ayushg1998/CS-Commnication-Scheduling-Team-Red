@@ -1,6 +1,7 @@
 module.exports = {
     otp: require('./otp'),
-    loginToken: require('./loginToken'),
+    csvParser: require('./csv_parser'),
+    loginToken: require('./login_token'),
     validateFormat: require('./validate-format'),
     sqlUtils: require('./sqlUtils')
 };
