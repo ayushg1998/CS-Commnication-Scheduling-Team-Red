@@ -48,38 +48,21 @@ class NavDropdown extends React.Component {
 }
 
 class AuthenticatedNavigation extends React.Component {
-  render() {
-        
-    let user =localStorage.getItem('user');
-    let userArray = user.split(','); 
-           for(let i =0; i<userArray.length; i++){
-                if(userArray[i].includes("userType"))
-                {
-                  if(userArray[i].includes("faculty"))
-                  {
-                    console.log(userArray[i]);
+  display()
+  {
+    let userType = JSON.parse(localStorage.getItem('user'));  
+    console.log(userType.userType);
+         
+                  if(userType.userType === "faculty")
+                  {                  
                     return (
-      
-                      <nav className="navbar navbar-expand-lg navbar-custom navbar-dark">
-                        <a className="navbar-brand" href="/">CS Communication System</a>
-                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                          <span className="navbar-toggler-icon"></span>
-                        </button>
-                
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                          <ul className="navbar-nav mr-auto">            
-                            <NavItem path="/dashboard" name="Dashboard" />
-                
+                      <div> 
+                        <ul className="navbar-nav mr-auto">   
                             <NavDropdown name="Calendar">
-                                <a className="dropdown-item" href="/share-calendar">Share</a>
-                                <a className="dropdown-item" href="/notfound">Export</a>
-                                <a className="dropdown-item" href="/notfound">Edit</a>
+                            <a className="dropdown-item" href="/ShareCalendar">Share</a>
+                            <a className="dropdown-item" href="/notfound">Export</a>
+                            <a className="dropdown-item" href="/notfound">Edit</a>
                             </NavDropdown>
-                
-                            <NavDropdown name="Messages">
-                                <a className="dropdown-item" href="/notfound">View Messages</a>
-                            </NavDropdown>
-                
                             <NavDropdown name="Events">
                                 <a className="dropdown-item" href="/createEvent">Create Event</a>
                             </NavDropdown>
@@ -90,42 +73,22 @@ class AuthenticatedNavigation extends React.Component {
                 
                             <NavDropdown name="Groups">
                                 <a className="dropdown-item" href="/notfound">View Current Groups</a>
-                                <a className="dropdown-item" href="/notfound">Create New Group</a>
+                                <a className="dropdown-item" href="/CreateGroups">Create New Group</a>
                             </NavDropdown>
-                            
-                          </ul>
-                          <ul className="navbar-nav ml-auto">
-                              <NavItem  path="/logout" name="Logout" />            
-                          </ul>
-                        </div>
-                      </nav> 
+                            </ul>
+                       </div>
                     )
                   }
-                  if(userArray[i].includes("admin"))
-                  {
-                    console.log(userArray[i]);
+                  else if(userType.userType === "admin")
+                  {                
                     return (
-      
-                      <nav className="navbar navbar-expand-lg navbar-custom navbar-dark">
-        <a className="navbar-brand" href="/">CS Communication System</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">            
-            <NavItem path="/dashboard" name="Dashboard" />
-
+                      <div>
+                        <ul className="navbar-nav mr-auto"> 
             <NavDropdown name="Calendar">
-                <a className="dropdown-item" href="/notfound">Share</a>
+                <a className="dropdown-item" href="/ShareCalendar">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
                 <a className="dropdown-item" href="/notfound">Edit</a>
             </NavDropdown>
-
-            <NavDropdown name="Messages">
-                <a className="dropdown-item" href="/notfound">View Messages</a>
-            </NavDropdown>
-
             <NavDropdown name="Events">
                 <a className="dropdown-item" href="/createEvent">Create Event</a>
             </NavDropdown>
@@ -136,43 +99,22 @@ class AuthenticatedNavigation extends React.Component {
 
             <NavDropdown name="Groups">
                 <a className="dropdown-item" href="/notfound">View Current Groups</a>
-                <a className="dropdown-item" href="/notfound">Create New Group</a>
-            </NavDropdown>
-            
-          </ul>
-          <ul className="navbar-nav ml-auto">
-              <NavItem  path="/logout" name="Logout" />            
-          </ul>
-        </div>
-      </nav> 
+                <a className="dropdown-item" href="/CreateGroups">Create New Group</a>
+            </NavDropdown> 
+            </ul>       
+        </div> 
                     )
 
                   }
-                  if(userArray[i].includes("student"))
+                  else if(userType.userType === "student")
                   {
-                    console.log(userArray[i]);
-                    return (
-      
-                      <nav className="navbar navbar-expand-lg navbar-custom navbar-dark">
-        <a className="navbar-brand" href="/">CS Communication System</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">            
-            <NavItem path="/dashboard" name="Dashboard" />
-
+                     return (
+                       <div>
+                         <ul className="navbar-nav mr-auto"> 
             <NavDropdown name="Calendar">
-                <a className="dropdown-item" href="/notfound">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
                 <a className="dropdown-item" href="/notfound">Edit</a>
             </NavDropdown>
-
-            <NavDropdown name="Messages">
-                <a className="dropdown-item" href="/notfound">View Messages</a>
-            </NavDropdown>
-
             <NavDropdown name="Events">
                 <a className="dropdown-item" href="/createEvent">Event Sign Up</a>
             </NavDropdown>
@@ -183,22 +125,42 @@ class AuthenticatedNavigation extends React.Component {
 
             <NavDropdown name="Groups">
                 <a className="dropdown-item" href="/notfound">View Current Groups</a>
+            </NavDropdown> 
+            </ul>          
+        </div>
+                    )
+                  }    
+  }
+  render() {
+    return(
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-custom navbar-dark">
+        <a className="navbar-brand" href="/">CS Communication System</a>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">            
+            <NavItem path="/dashboard" name="Dashboard" />
+
+            <NavDropdown name="Messages">
+                <a className="dropdown-item" href="/notfound">View Messages</a>
             </NavDropdown>
+            
+            {this.display()}
             
           </ul>
           <ul className="navbar-nav ml-auto">
               <NavItem  path="/logout" name="Logout" />            
           </ul>
         </div>
-      </nav> 
-                    )
-
-                  }
-                }
-            }
-    
+      </nav>
+      </div>
+    );
   }
 }
+
 
 class UnaunthenticatedNavigation extends React.Component {
   render() {

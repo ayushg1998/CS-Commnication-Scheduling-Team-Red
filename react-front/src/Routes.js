@@ -12,6 +12,7 @@ import authAwareComponent from './authAwareComponent';
 import Appointment from './containers/Appointments';
 import MakeAppointment from './containers/MakeAppointment';
 import ShareCalendar from './containers/ShareCalendar';
+import CreateGroups from './containers/CreateGroups';
 
 class Logout extends React.Component {
     constructor(props) {
@@ -36,6 +37,7 @@ const WrappedCreateEvent = authAwareComponent(CreateEvent, true);
 const WrappedAppointment = authAwareComponent(Appointment, true);
 const WrappedMakeAppointment = authAwareComponent(MakeAppointment, true);
 const WrappedShareCalendar = authAwareComponent(ShareCalendar, true);
+const WrappedCreateGroups = authAwareComponent(CreateGroups, true);
 
 const WrappedLogout = authAwareComponent(Logout, true);
 
@@ -71,6 +73,7 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
                 <AppliedRoute path="/MakeAppointment" exact component={WrappedMakeAppointment} />
+                <AppliedRoute path="/CreateGroups" exact component={WrappedCreateGroups} />
                 <AppliedRoute path="/logout" exact component={WrappedLogout} />
                 <AppliedRoute path="/share-calendar" exact component={WrappedShareCalendar} />
                 { /* Catch all unmatched routes */}
