@@ -40,7 +40,7 @@ app.listen(port, function() {
         connection.query('USE calendar');
 
         const {repository: resourceRepository, usecase: resourceUsecase} = require('./resource')(connection);
-        const {repository: groupRepository} = require('./group')(connection);
+        const {repository: groupRepository, usecase: groupUsecase} = require('./group')(connection, {resourceUsecase});
         const {controller: userController, repository: userRepository} = require('./user')(connection);
         const {controller: appointmentController, usecase: appointmentUsecase} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);

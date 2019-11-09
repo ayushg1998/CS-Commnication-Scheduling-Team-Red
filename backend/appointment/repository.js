@@ -139,7 +139,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     @param groupIds: Array<int>
     @return Array<{appointmentEventId, permission, resourceId}>
   */
-  async function getAppointmentEventsOfGroups(groupIds) {
+  async function getAppointmentEventResourcesOfGroups(groupIds) {
     if (!groupIds.length) return Promise.resolve([]);
 
     const query = `
@@ -189,7 +189,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
 
   return {
     getAppointmentEvent,
-    getAppointmentEventsOfGroups,
+    getAppointmentEventResourcesOfGroups,
     getAppointmentEventsofAppointer,
     addAppointmentEvent,
     getAppointment,

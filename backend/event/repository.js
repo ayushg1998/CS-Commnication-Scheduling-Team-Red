@@ -11,7 +11,7 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
   function getEventResourcesOfGroups(groupIds) {
     if (!groupIds.length) return Promise.resolve([]);
 
-    const query = `SELECT URP.groupId,R.eventId,URP.permission,URP.resourceId FROM UserGroup_Resource_Permission URP 
+    const query = `SELECT URP.groupId,URP.permission,URP.resourceId,R.eventId FROM UserGroup_Resource_Permission URP 
       JOIN Resource R ON R.id=URP.resourceId
       WHERE URP.groupId IN ${sqlUtils.sqlLikeArray(groupIds)} AND R.eventId IS NOT NULL
       ORDER BY URP.groupId;`;

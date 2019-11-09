@@ -17,12 +17,17 @@ module.exports = {
     user: {
       UPDATE: 'UPDATE',
       READ: 'READ'
+    },
+    group: {
+      UPDATE: 'UPDATE',
+      READ: 'READ'
     }
   },
   resourceTypes: {
     USER: 'USER',
     EVENT: 'EVENT',
     APPOINTMENT_EVENT: 'APPOINTMENT_EVENT',
-    APPOINTMENT: 'APPOINTMENT'
+    APPOINTMENT: 'APPOINTMENT',
+    GROUP: 'GROUP'
   }
 }
