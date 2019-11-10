@@ -69,6 +69,7 @@ export default class ShareCalendar extends Component {
             <Select
                 name="form-field-name"
                 value={this.state.value}
+                isMulti
                 onChange={this.handleChange}
                 clearable={this.state.clearable}
                 searchable={this.state.searchable}

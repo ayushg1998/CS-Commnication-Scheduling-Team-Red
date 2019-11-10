@@ -81,7 +81,7 @@ export default class CreateGroups extends Component {
     }
     
 
-    /*share = () => {
+    share = () => {
         const facultyId = this.state.selectedOption && this.state.selectedOption.id;
         if (!facultyId) alert('please select member first');
         api.shareCalendar({userId: facultyId, permission: 'UPDATE'})
@@ -91,7 +91,7 @@ export default class CreateGroups extends Component {
             .catch((err) => {
                 alert('failed: ' + err.message);
             })
-    }*/
+    }
 
     resetState = () => {
         this.setState({
@@ -147,6 +147,25 @@ export default class CreateGroups extends Component {
                     >
                     </textarea>
                 </Form.Group>
+            <div>
+                <header className="App-header">
+                    <h3 className="App-title">Share Group With:</h3> 
+            </header>
+            <Select
+                name="form-field-name"
+                value={this.state.value}
+                isMulti
+                onChange={this.handleOptionChange}
+                clearable={this.state.clearable}
+                searchable={this.state.searchable}
+                labelKey='name'
+                valueKey='last name'                
+                options={this.state.faculty} 
+            />
+
+            <button onClick={this.share}>Share</button>
+            </div>
+            
             <Button type="reset" onClick={this.resetState}>
                     Reset
             </Button>
