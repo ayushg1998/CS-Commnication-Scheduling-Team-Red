@@ -1,3 +1,5 @@
+const assert = require('assert');
+const constants = require('../constants');
 const { READ, JOIN, UPDATE, UPDATE_JOIN } = require('../constants').permissions.event;
 
 module.exports = function(repository) {
@@ -27,17 +29,15 @@ module.exports = function(repository) {
     //[{groupId, permission}]
     let currentGroups = groupsOfUsers.reduce((acc, k)=> {
       let {userId, groups} = k;
+
+      //`visitedUsers` are already updated with `currentUsers`, so this can be done
       const permission = visitedUsers.find(u => u.userId === userId).permission;
 
       groups.forEach(g => { 
-        let accGIndex = -1;
-        const accG = acc.find((g_, index) => {
-          if (g_.groupId === g.id) {accGIndex = index; return true;}
-          return false;
-        });
-        if (!accG) {acc.push({groupId: g.id, permission }); return;}
+        const accG = acc.find(g_ => g_.groupId === g.id);
+        if (!accG) { acc.push({groupId: g.id, permission }); return;}
 
-        if (checkPermission(accG.permission, permission) == -1)acc[accGIndex].permission = permission;
+        if (checkPermission(accG.permission, permission) < 0) accG.permission = permission;
       });
 
       return acc;
@@ -53,13 +53,9 @@ module.exports = function(repository) {
     //elems in currentGroups are added in visitedGroup
     //if the elem is already present, then the permission is updated.
     currentGroups.forEach(each => {
-      let vgIndex = -1;
-      const vg = visitedGroups.find((g, index) => {
-        if (each.groupId === g.groupId) { vgIndex = index; return true; }
-        return false;
-      });
+      const vg = visitedGroups.find(g => each.groupId === g.groupId);
       if (!vg) { visitedGroups.push(each); return; }
-      visitedGroups[vgIndex] = each.permission;
+      vg.permission = each.permission;
     });
 
     const currentGroupIds = currentGroups.map(g => g.groupId);
@@ -88,26 +84,23 @@ module.exports = function(repository) {
     let nextUsers = userResourcesOfGroups.reduce((acc, each) => {
       const {groupId, resources} = each;
       const groupMaxPermission = currentGroups.find(g => g.groupId === groupId).permission;
+
+      //here chosing lesser of group's max permission and group's resource permission
       const userIdPermissionPairs = resources.map(r => ({
         userId: r.userId, 
-        permission: checkPermission(groupMaxPermission, r.permission) == -1? groupMaxPermission: r.permission
+        permission: checkPermission(groupMaxPermission, r.permission) < 0? groupMaxPermission: r.permission
       }));
 
       userIdPermissionPairs.forEach(each => {
-        let pairIndex_ = -1;
-        let pair_ = acc.find((each_, index) => {
-          if (each_.userId === each.userId) { pairIndex_ = index; return true;};
-          return false; 
-        });
-        if (!pair_) { acc.push(each); return }
-        if (checkPermission(pair_.permission, each.permission) == -1) { 
-          acc[pairIndex_].permission = each.permission;
-        }
+        let pair = acc.find(each_ => each_.userId === each.userId);
+        if (!pair) { acc.push(each); return }
+        if (checkPermission(pair.permission, each.permission) < 0) pair.permission = each.permission;
       });
 
       return acc;
     }, []);
 
+    //BEGIN: updating visitedUsers
     //if not in visitedUsers, push to it.
     //if in visitedUsers, but the nextUser has better permission, then update visited user
     //if in visitedUsers, and nextUser has lower permission, then discard it
@@ -125,13 +118,80 @@ module.exports = function(repository) {
       }
       return false;
     });
+    //END: updating visitedUsers
 
     return recur(nextUsers);
   })([{userId, permission: 'UPDATE'}]);
   }
 
+  /*
+    if direct permission exists:
+      if existing permission equal requested permisson no change
+      else change existing permission
+    if direct permission does not exist
+      create direct permission
+    also checks for permission
+    
+    @return 0 if no change, 1 if changed or created
+  */
+  async function addResourcePermissionToUserGroup({groupId, resourceId, permission}) {
+    assert.ok(groupId); assert.ok(resourceId); assert.ok(permission);
+
+    const resource = await repository.getResource(resourceId); 
+    assert.ok(resource); assert.ok(checkPermissionCompatible(resource, permission));
+
+    const existingPermission = await repository.getDirectPermissionOfGroupOnResource({groupId, resourceId});
+
+    if (!existingPermission) {
+      await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission});
+      return 1;
+    } else if (existingPermission !== permission) {
+      await repository.updateResourcePermission({resourceId, groupId, permission});
+      return 1;
+    }
+    return 0;
+  }
+
+  const checkPermissionCompatible = (function() {
+    let p;
+    
+    p = constants.permissions.event;
+    const eventP = [p.UPDATE, p.JOIN, p.READ, p.UPDATE_JOIN];
+
+    p = constants.permissions.appointmentEvent;
+    const appointmentEventP = [p.UPDATE, p.JOIN, p.READ, p.UPDATE_JOIN];
+
+    p = constants.permissions.group;
+    const groupP = [p.UPDATE, p.READ];
+
+    p = constants.permissions.appointment;
+    const appointmentP = [p.UPDATE, p.READ];
+
+    p = constants.permissions.user;
+    const userP = [p.UPDATE, p.READ];
+
+    return function checkPermissionCompatible(resource, permission) {
+      const { eventId, appointmentEventId, appointmentId, groupId, userId } = resource;
+        let possiblePermissions = [];
+        if (eventId) {
+          possiblePermissions = eventP;
+        } else if (appointmentEventId) {
+          possiblePermissions = appointmentEventP;
+        } else if (appointmentId) {
+          possiblePermissions = appointmentP;
+        } else if (groupId) {
+          possiblePermissions = groupP;
+        } else if (userId) {
+          possiblePermissions = userP;
+        }
+        return possiblePermissions.indexOf(permission) >= 0;
+    }
+  })();
+
   return {
-    getAccessibleResources
+    getAccessibleResources,
+    checkPermissionCompatible,
+    addResourcePermissionToUserGroup
   };
 }
 

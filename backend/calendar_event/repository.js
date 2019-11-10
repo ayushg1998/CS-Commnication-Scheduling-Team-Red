@@ -3,7 +3,7 @@ const moment = require('moment');
 const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql, {userRepository, resourceRepository}) {
-  assert.ok(userRepository);
+  assert.ok(userRepository); assert.ok(resourceRepository);
   
   //NOTE: @deprecated?
   //this is not in appointmentRepository since it is very particular to calendar
@@ -146,7 +146,6 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     getAppointmentEvents,
     findUserById: userRepository.findUserById,
     getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
-    getUserResourceOfUser: resourceRepository.getUserResourceOfUser,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup
+    getUserResourceOfUser: resourceRepository.getUserResourceOfUser
   };
 };

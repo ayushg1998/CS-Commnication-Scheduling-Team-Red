@@ -3,7 +3,7 @@ const moment = require('moment');
 const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql, {resourceRepository, userRepository}) {
-  assert.ok(resourceRepository);
+  assert.ok(resourceRepository); assert.ok(userRepository);
   /*
     @param groupIds: Array<int>
     @return Array<{eventId, permission, resourceId}>
@@ -11,7 +11,7 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
   function getEventResourcesOfGroups(groupIds) {
     if (!groupIds.length) return Promise.resolve([]);
 
-    const query = `SELECT URP.groupId,R.eventId,URP.permission,URP.resourceId FROM UserGroup_Resource_Permission URP 
+    const query = `SELECT URP.groupId,URP.permission,URP.resourceId,R.eventId FROM UserGroup_Resource_Permission URP 
       JOIN Resource R ON R.id=URP.resourceId
       WHERE URP.groupId IN ${sqlUtils.sqlLikeArray(groupIds)} AND R.eventId IS NOT NULL
       ORDER BY URP.groupId;`;
@@ -68,8 +68,6 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     start=${sqv(start)},end=${sqv(end)},color=${sqv(color)}`;    
     const query = `UPDATE Event ${setParam} WHERE id=${eventId};`;
 
-    console.log(query);
-
     return new Promise((resolve, reject) => {
       mysql.query(query, err => {
           if (err) { reject(err); return; }
@@ -109,7 +107,6 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     updateEvent,
     getEvent,
     addEventResource: resourceRepository.addEventResource,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
     getSoloGroupOfUser: userRepository.getSoloGroupOfUser
   };
 }

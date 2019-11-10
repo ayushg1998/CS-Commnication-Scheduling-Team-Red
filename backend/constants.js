@@ -14,7 +14,15 @@ module.exports = {
       READ: 'READ',
       UPDATE_JOIN: 'UPDATE+JOIN'
     },
+    appointment: {
+      UPDATE: 'UPDATE',
+      READ: 'READ'      
+    },
     user: {
+      UPDATE: 'UPDATE',
+      READ: 'READ'
+    },
+    group: {
       UPDATE: 'UPDATE',
       READ: 'READ'
     }
@@ -23,6 +31,7 @@ module.exports = {
     USER: 'USER',
     EVENT: 'EVENT',
     APPOINTMENT_EVENT: 'APPOINTMENT_EVENT',
-    APPOINTMENT: 'APPOINTMENT'
+    APPOINTMENT: 'APPOINTMENT',
+    GROUP: 'GROUP'
   }
 }

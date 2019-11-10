@@ -1,7 +1,29 @@
-const { USER, EVENT, APPOINTMENT_EVENT, APPOINTMENT } = require('../constants').resourceTypes;
+const { USER, EVENT, APPOINTMENT_EVENT, APPOINTMENT, GROUP } = require('../constants').resourceTypes;
 const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql) {
+
+  /*
+    @return Promise<{
+      id, eventId, appointmentEventId,
+      appointmentId, groupId, userId
+    }>
+  */
+  function getResource(resourceId) {
+    const sqv = sqlUtils.sqlValue;
+
+    const query = `SELECT * from Resource WHERE id=${sqv(resourceId)}`;
+
+    return new Promise((resolve, reject) => {
+        
+      mysql.query(query, function(err, rows){
+        if (err) {reject(err); return;}
+        if (!rows.length) { resolve(null); return;}
+        resolve(rows[0]);
+      });
+    });
+  }
+
   /*
     @param groupIds: Array<int>
     @return Promise<Array<{groupId, resources: Array<{userId: int, permission: string, resourceId: int}>}>>
@@ -92,18 +114,19 @@ module.exports = function(mysql) {
 
   //@return Promise<int>
   function addResource(resourceId, TYPE) {
-    let eventId = appointmentEventId = appointmentId = userId = null;
+    let eventId = appointmentEventId = appointmentId = groupId = userId = null;
     
     switch(TYPE) {
       case USER: { userId = resourceId; } break;
       case EVENT: { eventId = resourceId; } break;
       case APPOINTMENT_EVENT: { appointmentEventId = resourceId; } break;
       case APPOINTMENT: { appointmentId = resourceId; } break;
+      case GROUP: { groupId = resourceId; } break;
       default: { throw new Error('Resource Type mismatch'); }
     }
 
-    const query = `INSERT INTO Resource (eventId, appointmentEventId, appointmentId, userId) 
-      VALUES(${eventId}, ${appointmentEventId}, ${appointmentId}, ${userId})`;
+    const query = `INSERT INTO Resource (eventId, appointmentEventId, appointmentId, groupId, userId)
+      VALUES(${eventId}, ${appointmentEventId}, ${appointmentId}, ${groupId}, ${userId})`;
 
     return new Promise(function(resolve, reject){
       mysql.query(query, async function(err, result) {
@@ -115,6 +138,10 @@ module.exports = function(mysql) {
 
   function addUserResource(userId) {
     return addResource(userId, USER);
+  }
+
+  function addGroupResource(groupId) {
+    return addResource(groupId, GROUP);
   }
 
   function addEventResource(eventId) {
@@ -134,8 +161,6 @@ module.exports = function(mysql) {
     const query = `INSERT INTO UserGroup_Resource_Permission (groupId, resourceId, permission)
       VALUES ${sqlUtils.sqlValues([groupId, resourceId, permission])};`
 
-      console.log(query);
-
       return new Promise(function(resolve, reject){
         mysql.query(query, async function(err, result) {
           if (err) { reject(err); return; }
@@ -144,14 +169,52 @@ module.exports = function(mysql) {
       });
   }
 
+  /*
+    NOTE: no way to know if update was success
+  */  
+  function updateResourcePermission({groupId, resourceId, permission}) {
+    const sqv = sqlUtils.sqlValue;
+
+    const query = `UPDATE UserGroup_Resource_Permission
+      SET permission=${sqv(permission)}
+      WHERE resourceId=${sqv(resourceId)} AND groupId=${sqv(groupId)};`;
+
+    return new Promise(function(resolve, reject){
+      mysql.query(query, async function(err) {
+        if (err) { reject(err); return; }
+        resolve();
+      });
+    });
+  }
+
+  function getDirectPermissionOfGroupOnResource({groupId, resourceId}) {
+    const sqv = sqlUtils.sqlValue;
+
+    const query = `SELECT * FROM UserGroup_Resource_Permission
+      WHERE groupId=${sqv(groupId)} AND resourceId=${sqv(resourceId)}`;
+
+      return new Promise((resolve, reject) => {
+        
+        mysql.query(query, function(err, rows){
+          if (err) {reject(err); return;}
+          if (!rows.length) { resolve(null); return;}
+          resolve(rows[0].permission);
+        });
+      });
+  }
+
   return {
+    getResource,
     getUserResourcesOfGroups,
     getUserResourceOfUser,
     getGroupsOfUsers,
     addUserResource,
+    addGroupResource,
     addEventResource,
     addAppointmentEventResource,
     addAppointmentResource,
-    addResourcePermissionToUserGroup
+    addResourcePermissionToUserGroup,
+    updateResourcePermission,
+    getDirectPermissionOfGroupOnResource
   };
 }

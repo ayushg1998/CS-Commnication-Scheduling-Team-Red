@@ -3,12 +3,18 @@ const assert = require('assert');
 const constants = require('../constants');
 const {UPDATE, READ} = constants.permissions.user;
 
-module.exports = function(repository, {eventUsecase, appointmentUsecase}) {
-
+module.exports = function(repository, {resourceUsecase, eventUsecase, appointmentUsecase}) {
+  assert.ok(resourceUsecase); assert.ok(eventUsecase); assert.ok(appointmentUsecase);
   /*
     @return Promise<{
-      appointmentEvents: Array<{start, end, id, description }>,
-      events: Array<{start, end, name, id}>
+      appointmentEvents: Array<{
+        id, start, end,
+        name, color, permission
+      }>,
+      events: Array<{
+        id, start, end,
+        name, color, permission
+      }>
     }>
   */
   async function getFacultyCalendarEvents(userId) {
@@ -71,7 +77,9 @@ module.exports = function(repository, {eventUsecase, appointmentUsecase}) {
     const group = await repository.getSoloGroupOfUser(shareeId);
     const resource = await repository.getUserResourceOfUser(sharerId);
 
-    await repository.addResourcePermissionToUserGroup({groupId: group.id, resourceId: resource.id, permission});
+    await resourceUsecase.addResourcePermissionToUserGroup({
+      groupId: group.id, 
+      resourceId: resource.id, permission});
   }
 
   return {

@@ -26,7 +26,7 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const resourceId = await repository.addAppointmentEventResource(appointmentEventId);
 
-    await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+    await resourceUsecase.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
   }
 
   /*
@@ -38,7 +38,7 @@ module.exports = function(repository, {resourceUsecase}) {
   async function getAllVisibleAppointmentEventsOfUser(userId) {
     assert.ok(userId);
     const collector = new AppointmentEventResourceAggregator();
-    const fetcher = {fetch: repository.getAppointmentEventsOfGroups};
+    const fetcher = {fetch: repository.getAppointmentEventResourcesOfGroups};
 
     await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
     return collector.getCollection();

@@ -139,10 +139,12 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     @param groupIds: Array<int>
     @return Array<{appointmentEventId, permission, resourceId}>
   */
-  async function getAppointmentEventsOfGroups(groupIds) {
+  async function getAppointmentEventResourcesOfGroups(groupIds) {
     if (!groupIds.length) return Promise.resolve([]);
 
-    const query = `SELECT URP.groupId,R.appointmentEventId,URP.permission,URP.resourceId FROM UserGroup_Resource_Permission URP 
+    const query = `
+      SELECT URP.groupId,R.appointmentEventId,URP.permission,URP.resourceId
+      FROM UserGroup_Resource_Permission URP 
       JOIN Resource R ON R.id=URP.resourceId
       WHERE URP.groupId IN ${sqlUtils.sqlLikeArray(groupIds)} AND R.appointmentEventId IS NOT NULL
       ORDER BY URP.groupId;`;
@@ -154,6 +156,11 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
           if (!rows.length) { resolve([]); return;}
   
           const result = []; let currentGroupId = -1;
+          
+          //since every (groupId, resource) pair is unique,
+          //following aggregation method is chosen. Also,
+          //easy one pass aggregation into result array could be done since,
+          //rows are ordered by groupId
           rows.forEach(row => {
             if (currentGroupId != row.groupId) {
               result.push({
@@ -182,14 +189,13 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
 
   return {
     getAppointmentEvent,
-    getAppointmentEventsOfGroups,
+    getAppointmentEventResourcesOfGroups,
     getAppointmentEventsofAppointer,
     addAppointmentEvent,
     getAppointment,
     getAppointmentsOfAppointmentEvent,
     addAppointment,
     addAppointmentEventResource: resourceRepository.addAppointmentEventResource,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
     findUserById: userRepository.findUserById
   };
 }
