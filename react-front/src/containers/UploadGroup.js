@@ -1,131 +1,134 @@
 import React, { Component } from 'react';
 import * as api from '../shared/api';
-import Select from 'react-select';
 import './ShareCalendar.css';
 
-import Button from 'react-bootstrap/Button';
-import FileDrop from 'react-file-drop';
 import CSVReader from "react-csv-reader";
+
+const CSV_HEADER_CWID = "ID number";
+const CSV_HEADER_EMAIL = "Email address";
+
+const csvInputStyle = { 
+    border: '1px solid black', 
+    width: 600, 
+    color: 'black', 
+    padding: 20 
+};
 
 export default class UploadGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupName: "",
-            selectedOption: '',
-            clearable: true,    
-            faculty: [],
-            description: ""
+            groups: [],
+            csvData: [],
+            selectedGroup: -1,
+            submitting: false
         }
     }
-    handleDrop = (files, event) => {
-      console.log(files, event);
-    }
-    validateForm() {
-        return (
-            this.state.groupName.length > 0 &&
-            this.state.selectedOption.Length> 0
-        );
-    }
 
-    componentDidMount(){
-        //change this to getEmail api
-        api.getFaculty()
-            .then(res => {
-                let objectApp = [];
-                console.log(res.faculties.length);
-
-                for(let i =0; i<res.faculties.length; i++){
-                    const fac = res.faculties[i];
-
-                    objectApp.push({
-                        label: fac.fname + " " + fac.lname,
-                        value: fac.lname,
-                        id: fac.id
-                    });
-                }
-
-                console.log("This is objectApp: " + objectApp);
-
-                this.setState({faculty:objectApp});
-                console.log(this.state.faculty);
-                return res;
-            })
+    componentDidMount() {
+        api.getAllVisibleGroups()
+            .then(groups_ => {
+                //groups with UPDATE permission
+                //only concerned with name and id
+                const groups = groups_.filter(g => g.permission === 'UPDATE')
+                    .map(g => ({id:g.id, name: g.name}));
+                
+                this.setState({groups: groups});
+            });
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-
-        const eventData = {
-            name: this.state.groupName,
-            selectedOption: this.state.selectedOption,
-            description: this.state.description,
-        };
-
-        /*return api.createGroup(eventData)
-            .then(() => {
-                alert('success');
-            })
-            .catch(err => {
-                console.log(err.message);
-                alert('failed');
-            });*/
+    handleGroupSelectChange = e => {
+        const groupId = e.target.value;
+        this.setState({selectedGroup: groupId});
     }
-
-    handleOptionChange = selectedOption => {
-        this.setState({
-            selectedOption
-        });
-    }
-
-    handleChange = event => {
-        this.setState({
-            [event.target.id]: event.target.value
-        });
-    }
-    
-
-    /*share = () => {
-        const facultyId = this.state.selectedOption && this.state.selectedOption.id;
-        if (!facultyId) alert('please select member first');
-        api.shareCalendar({userId: facultyId, permission: 'UPDATE'})
-            .then(() => {
-                alert('success');
-            })
-            .catch((err) => {
-                alert('failed: ' + err.message);
-            })
-    }*/
-
+   
     resetState = () => {
         this.setState({
-            groupName: "",
-            selectedOption: '',
-            description: ""
+            groups: [],
+            csvData: [],
+            selectedGroup: -1,
+            submitting: false
         });
     }
-    render() {
-      const handleForce = data => console.log(data);
 
-const papaparseOptions = {
-  header: true,
-  dynamicTyping: true,
-  skipEmptyLines: true,
-  transformHeader: header => header.toLowerCase().replace(/\W/g, "_")
-};
-      const styles = { border: '1px solid black', width: 600, color: 'black', padding: 20 };
-      return (
-        <div className="container">
-    <CSVReader
-      cssClass=""
-      label="Selct CSV file to upload."
-      onFileLoaded={handleForce}
-      parserOptions={papaparseOptions}
-    />
-    <p>Open the console to view data in file for now.</p>
-  </div>
-  
-        
-      );
+    onCsvLoaded = data => {
+        data = data.map(item => ({
+            cwid: item[CSV_HEADER_CWID],
+            email: item[CSV_HEADER_EMAIL],
+        }));
+
+        this.setState({csvData: data});
+    }
+
+    handleSubmit = () => {
+        const { selectedGroup, csvData, submitting } = this.state;
+        if (submitting) return;
+
+        this.setState({submitting: true}, () => {
+            if (selectedGroup == -1) {
+                alert('Please select group'); 
+                this.setState({submitting: false});
+                return;
+            }
+            if (!csvData.length) {
+                alert('0 members found'); 
+                this.setState({submitting: false});
+                return;
+            }
+            const cwids = csvData.map(d => d.cwid);
+            const groupId = selectedGroup;
+
+            api.addGroupMembers(groupId, cwids)
+                .then(() => {
+                    alert('success');
+                })
+                .catch(error => {
+                    alert(error.message);
+                })
+                .finally(() => {
+                    this.setState({submitting: false, csvData: []});
+                })
+        })        
+    }
+
+    render() {
+        const { csvData, groups } = this.state;
+
+        const papaparseOptions = {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true
+        };
+
+        return (
+            <div className="container">
+                <h3>Select Groups to add members.</h3>
+                <select onChange={this.handleGroupSelectChange}>
+                    <option value={-1}>Select Group</option>
+                    {
+                        groups.map(g => (
+                            <option key={g.id} value={g.id}>{g.name}</option>
+                        ))
+                    }
+                </select>
+                <br /> <br />                
+
+                <h3>Selct CSV file to upload.</h3>
+                <CSVReader
+                    cssClass=""
+                    onFileLoaded={this.onCsvLoaded}
+                    parserOptions={papaparseOptions}
+                    inputStyle={csvInputStyle} />
+                <ul>
+                    {
+                        csvData.map(d => (
+                            <li key={d.cwid}>{d.cwid}: {d.email}</li>
+                        ))
+                    }
+                </ul>
+
+                <button onClick={this.handleSubmit} >Submit</button>
+            </div>
+        );
     }
 }

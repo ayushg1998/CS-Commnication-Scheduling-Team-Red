@@ -77,6 +77,59 @@ export function getFaculty() {
     });
 }
 
+/*
+    @return Promise<Array<{
+        id: number,
+        name: string,
+        description: string,
+        creatorId: number,
+        permission: string
+    }>>
+*/
+export function getAllVisibleGroups() {
+    return axios
+    .get('/groups/me?filters=all_visible', getAuthHeaders())
+    .then(res => res.data)
+    .then(res => res.groups)
+    .catch(res => {
+        if(!res.success) throw new Error(res.message);
+    });
+}
+
+/*
+    @return Promise<Array<{
+        id: number,
+        name: string,
+        description: string,
+        creatorId: number,
+        permission: string
+    }>>
+*/
+export function getMyCreatedGroups() {
+    return axios
+    .get('/groups/me', getAuthHeaders())
+    .then(res => res.data)
+    .then(res => res.groups)
+    .catch(res => {
+        if(!res.success) throw new Error(res.message);
+    });
+}
+
+export function addGroupMembers(groupId, cwids) {
+    console.log('adding....');
+    console.log(groupId);
+    console.log(cwids);
+    
+    const url = `/groups/${groupId}/members`;
+    return axios
+        .post(url, {cwids}, getAuthHeaders())
+        .then(res => res.data)
+        .catch(res => {
+            if(!res.success) throw new Error(res.message);
+        });
+}
+
+
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
     return {
