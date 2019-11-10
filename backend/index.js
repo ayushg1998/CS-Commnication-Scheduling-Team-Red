@@ -40,41 +40,14 @@ app.listen(port, function() {
         connection.query('USE calendar');
 
         const {repository: resourceRepository, usecase: resourceUsecase} = require('./resource')(connection);
-        const {repository: groupRepository, usecase: groupUsecase} = require('./group')(connection, {resourceUsecase});
         const {controller: userController, repository: userRepository} = require('./user')(connection);
+        const {repository: groupRepository, usecase: groupUsecase, controller: groupController} = require('./group')(connection, {resourceUsecase, resourceRepository, userRepository});
         const {controller: appointmentController, usecase: appointmentUsecase} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);
         const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase, userRepository});
-        const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceRepository, eventUsecase, appointmentUsecase});
+        const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceUsecase, resourceRepository, eventUsecase, appointmentUsecase});
         const { controller: loginController } = require('./register_login')(connection, {userRepository, resourceRepository, groupRepository});
-
-        ////////////////////TEST
-        (function() {
-            // const user = { 
-            //     cwid: '30004000', 
-            //     username: 'fname123', 
-            //     email: 'fname@gmail.com', 
-            //     password: 'password123', 
-            //     fname: 'fname', 
-            //     lname: 'lname' 
-            // }
-
-            // const sharerId = 1;
-            // const shareeId = 2;
-            // const permission = 'UPDATE';
-
-            // calendarEventUsecase.shareCalendarWithUser({sharerId,shareeId, permission})
-            //     .then(result => {
-            //         console.log('success');
-            //         console.log(result);
-            //     })
-            //     .catch(error => {
-            //         console.log('failed');
-            //         console.log(error);
-            //     })
-        })();
-        ////////////////////TEST
-
+    
         app.post('/create/student', loginController.registerStudent);
         app.post('/create/faculty', loginController.registerFaculty);
         app.post('/login', loginController.login);
@@ -106,6 +79,16 @@ app.listen(port, function() {
         app.post('/calendar-events/share', calendarEventController.shareCalendarWithUser);
 
         app.post('/events', eventController.addEvent);
+
+        app.post('/groups/share', groupController.shareGroupWithUser);
+        app.get('/groups/me', groupController.getMyGroups);
+        app.get('/groups/:id', groupController.getGroup);
+        app.put('/groups/:id', groupController.editGroup);
+        app.post('/groups', groupController.addGroup);
+        app.post('/groups/:id/members', groupController.addGroupMembers);
+        app.delete('/groups/:id/members', groupController.removeGroupMembers);
+        app.post('/groups/:id/members/csv', groupController.addGroupMembersAsCsv);
+        app.delete('/groups/:id/members/csv', groupController.removeGroupMembersAsCsv);
     });
 
     //sql TCP connection

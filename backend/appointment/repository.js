@@ -196,7 +196,6 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     getAppointmentsOfAppointmentEvent,
     addAppointment,
     addAppointmentEventResource: resourceRepository.addAppointmentEventResource,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
     findUserById: userRepository.findUserById
   };
 }

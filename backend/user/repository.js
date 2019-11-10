@@ -83,6 +83,20 @@ module.exports = function(mysql) {
     });
   }
 
+  function getUsersByCwids(cwids) {
+      if (!cwids.length) return [];
+      
+      const query = `SELECT * FROM User WHERE cwid IN ${sqlUtils.sqlValues(cwids)}`;
+      return new Promise(function(resolve, reject){
+        mysql.query(query, function(err, rows){
+            if (err) {reject(err); return;}
+            if (!rows.length) { resolve([]); return;}//user with username not found
+
+            resolve(rows.map(r => toUserDomain(r)));
+        });
+    });
+  }
+
   return {
     createUser,
     findUserByCWID,
@@ -90,6 +104,7 @@ module.exports = function(mysql) {
     findUserById,
     findUserByLoginToken,
     getFaculties,
+    getUsersByCwids,
     getSoloGroupOfUser
   };  
 };

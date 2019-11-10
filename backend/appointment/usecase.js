@@ -26,7 +26,7 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const resourceId = await repository.addAppointmentEventResource(appointmentEventId);
 
-    await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+    await resourceUsecase.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
   }
 
   /*

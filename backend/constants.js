@@ -14,6 +14,10 @@ module.exports = {
       READ: 'READ',
       UPDATE_JOIN: 'UPDATE+JOIN'
     },
+    appointment: {
+      UPDATE: 'UPDATE',
+      READ: 'READ'      
+    },
     user: {
       UPDATE: 'UPDATE',
       READ: 'READ'

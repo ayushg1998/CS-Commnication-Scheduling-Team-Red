@@ -3,7 +3,7 @@ const moment = require('moment');
 const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql, {resourceRepository, userRepository}) {
-  assert.ok(resourceRepository);
+  assert.ok(resourceRepository); assert.ok(userRepository);
   /*
     @param groupIds: Array<int>
     @return Array<{eventId, permission, resourceId}>
@@ -68,8 +68,6 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     start=${sqv(start)},end=${sqv(end)},color=${sqv(color)}`;    
     const query = `UPDATE Event ${setParam} WHERE id=${eventId};`;
 
-    console.log(query);
-
     return new Promise((resolve, reject) => {
       mysql.query(query, err => {
           if (err) { reject(err); return; }
@@ -109,7 +107,6 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     updateEvent,
     getEvent,
     addEventResource: resourceRepository.addEventResource,
-    addResourcePermissionToUserGroup: resourceRepository.addResourcePermissionToUserGroup,
     getSoloGroupOfUser: userRepository.getSoloGroupOfUser
   };
 }

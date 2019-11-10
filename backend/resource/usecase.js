@@ -1,3 +1,5 @@
+const assert = require('assert');
+const constants = require('../constants');
 const { READ, JOIN, UPDATE, UPDATE_JOIN } = require('../constants').permissions.event;
 
 module.exports = function(repository) {
@@ -122,8 +124,74 @@ module.exports = function(repository) {
   })([{userId, permission: 'UPDATE'}]);
   }
 
+  /*
+    if direct permission exists:
+      if existing permission equal requested permisson no change
+      else change existing permission
+    if direct permission does not exist
+      create direct permission
+    also checks for permission
+    
+    @return 0 if no change, 1 if changed or created
+  */
+  async function addResourcePermissionToUserGroup({groupId, resourceId, permission}) {
+    assert.ok(groupId); assert.ok(resourceId); assert.ok(permission);
+
+    const resource = await repository.getResource(resourceId); 
+    assert.ok(resource); assert.ok(checkPermissionCompatible(resource, permission));
+
+    const existingPermission = await repository.getDirectPermissionOfGroupOnResource({groupId, resourceId});
+
+    if (!existingPermission) {
+      await repository.addResourcePermissionToUserGroup({groupId, resourceId, permission});
+      return 1;
+    } else if (existingPermission !== permission) {
+      await repository.updateResourcePermission({resourceId, groupId, permission});
+      return 1;
+    }
+    return 0;
+  }
+
+  const checkPermissionCompatible = (function() {
+    let p;
+    
+    p = constants.permissions.event;
+    const eventP = [p.UPDATE, p.JOIN, p.READ, p.UPDATE_JOIN];
+
+    p = constants.permissions.appointmentEvent;
+    const appointmentEventP = [p.UPDATE, p.JOIN, p.READ, p.UPDATE_JOIN];
+
+    p = constants.permissions.group;
+    const groupP = [p.UPDATE, p.READ];
+
+    p = constants.permissions.appointment;
+    const appointmentP = [p.UPDATE, p.READ];
+
+    p = constants.permissions.user;
+    const userP = [p.UPDATE, p.READ];
+
+    return function checkPermissionCompatible(resource, permission) {
+      const { eventId, appointmentEventId, appointmentId, groupId, userId } = resource;
+        let possiblePermissions = [];
+        if (eventId) {
+          possiblePermissions = eventP;
+        } else if (appointmentEventId) {
+          possiblePermissions = appointmentEventP;
+        } else if (appointmentId) {
+          possiblePermissions = appointmentP;
+        } else if (groupId) {
+          possiblePermissions = groupP;
+        } else if (userId) {
+          possiblePermissions = userP;
+        }
+        return possiblePermissions.indexOf(permission) >= 0;
+    }
+  })();
+
   return {
-    getAccessibleResources
+    getAccessibleResources,
+    checkPermissionCompatible,
+    addResourcePermissionToUserGroup
   };
 }
 
