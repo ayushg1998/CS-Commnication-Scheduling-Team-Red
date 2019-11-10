@@ -137,10 +137,10 @@ export default class CreateEvent extends Component {
                 <Form.Group controlId="description">
                     <Form.Label>Color</Form.Label>
                     <select id="color" className="form-control" onChange={this.handleChange}>
-                        <option value = ""  selected>Select a Color</option>
+                        <option value = ""  defaultValue>Select a Color</option>
                         <option value = "ff0000">Red</option>
-                        <option value = "00ff00">Blue</option>
-                        <option value = "0000ff">Green</option>
+                        <option value = "0000ff">Blue</option>
+                        <option value = "00ff00">Green</option>
                     </select>
                 </Form.Group>
 
