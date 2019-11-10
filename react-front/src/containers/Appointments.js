@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 //React-Bootstrap
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
+import * as api from '../shared/api';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
 import * as appointmentEventService from '../shared/appointmentEventService'
-import moment from 'moment';
+//import moment from 'moment';
+import Select from 'react-select';
 
 export default class Appointment extends Component {
     constructor(props) {
@@ -19,8 +20,34 @@ export default class Appointment extends Component {
             description: '',
             start: null,
             end: null, 
-            color: 'ff0000'
+            color: 'ff0000',
+            selectedOption: ''
         }
+    }
+
+    componentDidMount(){
+        //change this to getEmail api
+        api.getFaculty()
+            .then(res => {
+                let objectApp = [];
+                console.log(res.faculties.length);
+
+                for(let i =0; i<res.faculties.length; i++){
+                    const fac = res.faculties[i];
+
+                    objectApp.push({
+                        label: fac.fname + " " + fac.lname,
+                        value: fac.lname,
+                        id: fac.id
+                    });
+                }
+
+                console.log("This is objectApp: " + objectApp);
+
+                this.setState({faculty:objectApp});
+                console.log(this.state.faculty);
+                return res;
+            })
     }
 
     validateForm() {
@@ -29,7 +56,8 @@ export default class Appointment extends Component {
             this.state.slotInterval > 0 &&
             this.state.start !== null &&
             this.state.end !== null &&
-            this.state.color.length >0
+            this.state.color.length >0 &&
+            this.state.selectedOption.Length> 0
         );
     }
 
@@ -65,6 +93,7 @@ export default class Appointment extends Component {
             start: this.state.start,
             end: this.state.end,
             color: this.state.color
+            //selectedOption: this.state.selectedOption
         })
             .then(result => {
                 alert('success');
@@ -75,6 +104,13 @@ export default class Appointment extends Component {
                 alert(`errored: ${error.message}`);
             });        
     }
+
+    handleOptionChange = selectedOption => {
+        this.setState({
+            selectedOption
+        });
+    }
+
     resetState = () => {
         this.setState({
             title: '',
@@ -158,6 +194,22 @@ export default class Appointment extends Component {
                     </textarea>
                 </Form.Group>
 
+            <div>
+                <header className="App-header">
+                    <h3 className="App-title">What groups time slots are exclusive too. need to change from faculty to groups!!!</h3> 
+                </header>
+            <Select
+                name="form-field-name"
+                value={this.state.value}
+                isMulti
+                onChange={this.handleOptionChange}
+                clearable={this.state.clearable}
+                searchable={this.state.searchable}
+                labelKey='name'
+                valueKey='last name'                
+                options={this.state.faculty} 
+            />
+            </div>
                 <Button type="reset" onClick={this.resetState}>
                     Reset
                 </Button>
