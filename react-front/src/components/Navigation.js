@@ -72,7 +72,7 @@ class AuthenticatedNavigation extends React.Component {
                             </NavDropdown>
                 
                             <NavDropdown name="Groups">
-                                <a className="dropdown-item" href="/notfound">View Current Groups</a>
+                                <a className="dropdown-item" href="/ViewGroups">View Current Groups</a>
                                 <a className="dropdown-item" href="/CreateGroups">Create New Group</a>
                                 <a className="dropdown-item" href="/UploadGroup">Upload Group File</a>
                                 <a className="dropdown-item" href="/notfound">Edit Group</a>
