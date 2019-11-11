@@ -151,6 +151,9 @@ module.exports = function(usecase) {
       const editorId = parseInt(req.user.id);
       const cwids = req.body.cwids;
 
+      console.log(groupId);
+      console.log(cwids);
+
       await usecase.addGroupMembers({cwids, groupId, editorId});
       res.send({success: true});
     } catch(error) {

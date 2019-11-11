@@ -5,7 +5,7 @@ module.exports = function(usecase) {
   /*
     @response {
       success: true,
-      faculties: Array<{id, fname, lname, email}> 
+      faculties: Array<{id, fname, lname, email, cwid}> 
     }
   */
   async function getFaculties(req, res, next) {
@@ -15,7 +15,8 @@ module.exports = function(usecase) {
         id: f.id,
         fname: f.fname,
         lname: f.lname,
-        email: f.email
+        email: f.email,
+        cwid: f.cwid
       }));
 
       res.send({success: true, faculties});
