@@ -67,32 +67,41 @@ export function shareCalendar({userId, permission}) {
         });
 }
 
+/*
+    @return faculties field would have, Promise<Array<{
+        id,
+        fname,
+        lname,
+        email,
+        cwid
+    }>>
+*/
 export function getFaculty() {
     return axios
     .get('/user/faculty', getAuthHeaders())
     .then(res => res.data)
     .catch(res => {
         if(!res.success) throw new Error(res.message);
-        return "Error";
     });
 }
 
+//this is my created groups, and groups that have been shared to me
 /*
     @return Promise<Array<{
         id: number,
         name: string,
         description: string,
         creatorId: number,
-        permission: string
+        permission: string ('UPDATE' | 'READ')
     }>>
 */
 export function getAllVisibleGroups() {
     return axios
     .get('/groups/me?filters=all_visible', getAuthHeaders())
     .then(res => res.data)
-    .then(res => res.groups)
-    .catch(res => {
+    .then(res => {
         if(!res.success) throw new Error(res.message);
+        return res.groups;
     });
 }
 
@@ -102,29 +111,68 @@ export function getAllVisibleGroups() {
         name: string,
         description: string,
         creatorId: number,
-        permission: string
+        permission: string ('UPDATE' | 'READ')
     }>>
 */
 export function getMyCreatedGroups() {
     return axios
-    .get('/groups/me', getAuthHeaders())
-    .then(res => res.data)
-    .then(res => res.groups)
-    .catch(res => {
-        if(!res.success) throw new Error(res.message);
-    });
+        .get('/groups/me', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.groups;
+        });
 }
 
+/*
+    @return Promise<{
+        id: number,
+        name: string,
+        description: string,
+        creatorId: number,
+        permission: string
+        members: Array<{
+          id: number,
+          cwid: number,
+          fname: string,
+          lname: string,
+          email: string
+        }>
+    }>
+*/
+export function getSpecificGroup(id) {
+    return axios
+        .get(`/groups/${id}`, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.group;
+        });
+}
+
+/*
+    @return Promise<number>, id of the created group
+*/
+export function createGroup({name, description}) {
+    return axios
+        .post('/groups', {name, description}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message)
+            return res.groupId;
+        });
+}
+
+/*
+    @return Promise<void>
+*/
 export function addGroupMembers(groupId, cwids) {
-    console.log('adding....');
-    console.log(groupId);
-    console.log(cwids);
     
     const url = `/groups/${groupId}/members`;
     return axios
         .post(url, {cwids}, getAuthHeaders())
         .then(res => res.data)
-        .catch(res => {
+        .then(res => {
             if(!res.success) throw new Error(res.message);
         });
 }
