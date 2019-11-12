@@ -26,28 +26,17 @@ export default class Appointment extends Component {
     }
 
     componentDidMount(){
-        //change this to getEmail api
-        api.getFaculty()
-            .then(res => {
-                let objectApp = [];
-                console.log(res.faculties.length);
-
-                for(let i =0; i<res.faculties.length; i++){
-                    const fac = res.faculties[i];
-
-                    objectApp.push({
-                        label: fac.fname + " " + fac.lname,
-                        value: fac.lname,
-                        id: fac.id
-                    });
-                }
-
-                console.log("This is objectApp: " + objectApp);
-
-                this.setState({faculty:objectApp});
-                console.log(this.state.faculty);
-                return res;
-            })
+        //changed this from faculty to groups
+        
+        api.getAllVisibleGroups()
+        .then(groups_ => {
+            //groups with UPDATE permission
+            //only concerned with name and id
+            const groups = groups_.filter(g => g.permission === 'UPDATE')
+                .map(g => ({id:g.id, label: g.name}));
+            
+            this.setState({groups: groups});
+        });    
     }
 
     validateForm() {
@@ -196,7 +185,7 @@ export default class Appointment extends Component {
 
             <div>
                 <header className="App-header">
-                    <h3 className="App-title">What groups time slots are exclusive too. need to change from faculty to groups!!!</h3> 
+                    <h3 className="App-title">What groups time slots are exclusive to</h3> 
                 </header>
             <Select
                 name="form-field-name"
@@ -207,7 +196,7 @@ export default class Appointment extends Component {
                 searchable={this.state.searchable}
                 labelKey='name'
                 valueKey='last name'                
-                options={this.state.faculty} 
+                options={this.state.groups} 
             />
             </div>
                 <Button type="reset" onClick={this.resetState}>
