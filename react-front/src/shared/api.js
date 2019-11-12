@@ -177,6 +177,15 @@ export function addGroupMembers(groupId, cwids) {
         });
 }
 
+export function removeGroupMembers(groupId, cwids) {
+    const url = `/groups/${groupId}/members`;
+    return axios
+        .delete(url, {cwids}, getAuthHeaders())
+        .then(res => res.data)
+        .catch(res => {
+            if(!res.success) throw new Error(res.message);
+        })
+}
 
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
