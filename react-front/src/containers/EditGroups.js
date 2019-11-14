@@ -85,7 +85,7 @@ class EditGroups extends Component {
 
 
     handleSubmit1 = () => {
-        const { selectedGroup, faculty, submitting } = this.state;
+        const { selectedGroup, facultySelect, submitting } = this.state;
         if (submitting) return;
 
         this.setState({submitting: true}, () => {
@@ -95,7 +95,7 @@ class EditGroups extends Component {
                 return;
             }
 
-            const cwids = faculty.map(d => d.cwid);
+            const cwids = facultySelect.map(d => d.cwid);
             const groupId = selectedGroup;
             console.log(groupId);
             api.addGroupMembers(groupId, cwids)
@@ -111,6 +111,33 @@ class EditGroups extends Component {
         })        
     }
 
+    handleSubmit2 = () => {
+        const { selectedGroup, facultySelect, submitting } = this.state;
+        if (submitting) return;
+
+        this.setState({submitting: true}, () => {
+            if (selectedGroup === -1) {
+                alert('Please select group'); 
+                this.setState({submitting: false});
+                return;
+            }
+
+            const cwids = facultySelect.map(d => d.cwid);
+            const groupId = selectedGroup;
+            console.log(groupId);
+            api.removeGroupMembers(groupId, cwids)
+                .then(() => {
+                    alert('success');
+                })
+                .catch(error => {
+                    alert(error.message);
+                })
+                .finally(() => {
+                    this.setState({submitting: false});
+                })
+        })        
+    }
+
     render() {
         const { groups } = this.state;
         console.log(this.state.selectedGroup);
@@ -118,7 +145,7 @@ class EditGroups extends Component {
 
         return (
             <div className="container">
-                <h3>Select Groups to add members.</h3>
+                <h3>Select Groups to edit</h3>
                 <select onChange={this.handleGroupSelectChange}>
                     <option value={-1}>Select Group</option>
                     {
@@ -131,7 +158,7 @@ class EditGroups extends Component {
                 <br />
 
                 <header className="App-header">
-            <h3 className="App-title">Select email to add members</h3>
+            <h3 className="App-title">Select name to add members</h3>
           </header>
           <Select
             name="form-field-name"
@@ -143,6 +170,21 @@ class EditGroups extends Component {
           />
 
                 <button onClick={this.handleSubmit1} >Submit</button>
+
+
+                <header className="App-header">
+            <h3 className="App-title">Select name to remove members</h3>
+          </header>
+          <Select
+            name="form-field-name"
+            value={this.state.facultySelect}
+            isMulti
+            onChange={this.handleFacultySelectChange}
+            searchable={this.state.searchable}
+            options={this.state.faculty}
+          />
+
+                <button onClick={this.handleSubmit2} >Submit</button>
             </div>
         );
     }
