@@ -187,6 +187,15 @@ export function removeGroupMembers(groupId, cwids) {
         })
 }
 
+export function shareGroup({userId, permission}) {
+    return axios
+        .post('/groups/share', {userId, permission}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+        });
+}
+
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
     return {
