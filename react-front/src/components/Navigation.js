@@ -60,7 +60,7 @@ class AuthenticatedNavigation extends React.Component {
                         <ul className="navbar-nav mr-auto">  
 
                           <NavDropdown name="User">
-                            <a className="dropdown-item" href="/notfound">Create Student</a>
+                            <a className="dropdown-item" href="/CreateStudent">Create Student</a>
                           </NavDropdown>
 
 
@@ -96,7 +96,7 @@ class AuthenticatedNavigation extends React.Component {
 
                         <NavDropdown name="User">
                             <a className="dropdown-item" href="/notfound">Create Faculty</a>
-                            <a className="dropdown-item" href="/notfound">Create Student</a>
+                            <a className="dropdown-item" href="/CreateStudent">Create Student</a>
                           </NavDropdown>
 
             <NavDropdown name="Calendar">

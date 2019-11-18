@@ -5,6 +5,7 @@ import NotFound from './containers/NotFound';
 import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import Register from './containers/Register';
+import CreateStudent from './containers/CreateStudent';
 import CreateEvent from './containers/CreateEvent';
 import AppliedRoute from './components/AppliedRoute';
 import * as authService from './shared/authService';
@@ -38,6 +39,7 @@ const WrappedLanding = authAwareComponent(Landing, false);
 const WrappedRegister = authAwareComponent(Register, false);
 
 const WrappedDashboard = authAwareComponent(Dashboard, true);
+const WrappedCreateStudent = authAwareComponent(CreateStudent, true);
 const WrappedCreateEvent = authAwareComponent(CreateEvent, true);
 const WrappedAppointment = authAwareComponent(Appointment, true);
 const WrappedMakeAppointment = authAwareComponent(MakeAppointment, true);
@@ -78,6 +80,7 @@ export default class Route extends React.Component {
             <Switch>       
                 <AppliedRoute path="/" exact component={WrappedDashboard} />
                 <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
+                <AppliedRoute path="/CreateStudent" exact component={WrappedCreateStudent} />
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
                 <AppliedRoute path="/MakeAppointment" exact component={WrappedMakeAppointment} />

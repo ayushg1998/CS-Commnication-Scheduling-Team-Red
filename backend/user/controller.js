@@ -25,12 +25,12 @@ module.exports = function(usecase) {
     }
   }
 
-  async function addStudents(req, res, next) {
-    try {
+  // async function addStudents(req, res, next) {
+  //   try {
       
-      res.send
-    }
-  }
+  //     res.send
+  //   }
+  // }
 
   return {
     getFaculties
