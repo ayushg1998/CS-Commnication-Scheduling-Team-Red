@@ -187,9 +187,9 @@ export function removeGroupMembers(groupId, cwids) {
         })
 }
 
-export function shareGroup({userId, permission}) {
+export function shareGroup({groupId, userId, permission}) {
     return axios
-        .post('/groups/share', {userId, permission}, getAuthHeaders())
+        .post('/groups/share', {groupId, userId, permission}, getAuthHeaders())
         .then(res => res.data)
         .then(res => {
             if(!res.success) throw new Error(res.message);
