@@ -147,10 +147,6 @@ class AuthenticatedNavigation extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">            
             <NavItem path="/dashboard" name="Dashboard" />
-
-            <NavDropdown name="Messages">
-                <a className="dropdown-item" href="/notfound">View Messages</a>
-            </NavDropdown>
             
             {this.display()}
             

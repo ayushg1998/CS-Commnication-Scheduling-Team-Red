@@ -61,7 +61,7 @@ export default class ShareCalendar extends Component {
         return(
             <div style={{ paddingTop: 1.5 + 'em' }}>
             <header className="App-header">
-                    <h3 className="App-title">Share Calendar</h3>
+                    <h3 className="App-title">Share Group</h3>
                     <br />
                     <h4 className="App-title">Search for Faculty by Name</h4>
             </header>
