@@ -18,6 +18,12 @@ export default class CreateStudent extends Component {
         }
     }
 
+    handleChange = event => {
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
     resetState = () => {
         this.setState({
             cwid: -1,
