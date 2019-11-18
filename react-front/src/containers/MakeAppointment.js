@@ -116,7 +116,7 @@ export default class MakeAppointment extends Component {
         return(
 
             
-            <div style={{ paddingTop: 1.5 + 'em' }}>
+            <div className="container">
             <header className="App-header">
                     <h3 className="App-title">Search for Faculty by Name</h3>
             </header>

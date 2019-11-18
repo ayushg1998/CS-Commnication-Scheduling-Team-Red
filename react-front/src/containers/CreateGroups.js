@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as api from "../shared/api";
 import Select from "react-select";
 import "./ShareCalendar.css";
+import "./CreateEvent.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -109,7 +110,7 @@ export default class CreateGroups extends Component {
   render() {
     //console.log(this.state.faculty);
     return (
-      <div style={{ paddingTop: 1.5 + "em" }}>
+      <div className="container">
         <header className="App-header">
           <h3 className="App-title">Create A Group</h3>
         </header>
@@ -150,7 +151,7 @@ export default class CreateGroups extends Component {
           <Button type="reset" onClick={this.resetState}>
             Reset
           </Button>
-          <Button variant="primary" type="submit">
+          <Button className="button-padding" variant="primary" type="submit">
             Submit
           </Button>
         </Form>

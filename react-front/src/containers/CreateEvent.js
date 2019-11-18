@@ -84,7 +84,7 @@ export default class CreateEvent extends Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+            <Form onSubmit={this.handleSubmit} className="container">
                 <Form.Group controlId="title">
                     <Form.Label>Event Title:</Form.Label>
                     <Form.Control
@@ -148,7 +148,7 @@ export default class CreateEvent extends Component {
                     Reset
                 </Button>
 
-                <Button variant="primary" type="submit">
+                <Button className="button-padding" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>

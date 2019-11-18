@@ -12,7 +12,7 @@ class App extends Component {
   render () {
 
     return (
-      <div className="App container">
+      <div className="App custom-container">
         <Navigation />
         <Routes />
       </div>

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import * as api from '../shared/api';
 import './ShareCalendar.css';
+import './CreateEvent.css';
+
+import Button from "react-bootstrap/Button";
 
 import CSVReader from "react-csv-reader";
 
@@ -102,7 +105,7 @@ export default class UploadGroup extends Component {
 
         return (
             <div className="container">
-                <h3>Select Groups to add members.</h3>
+                <h3>Select Groups to add members:</h3>
                 <select onChange={this.handleGroupSelectChange}>
                     <option value={-1}>Select Group</option>
                     {
@@ -113,7 +116,7 @@ export default class UploadGroup extends Component {
                 </select>
                 <br /> <br />                
 
-                <h3>Selct CSV file to upload.</h3>
+                <h3>Select CSV file to upload:</h3>
                 <CSVReader
                     cssClass=""
                     onFileLoaded={this.onCsvLoaded}
@@ -127,7 +130,9 @@ export default class UploadGroup extends Component {
                     }
                 </ul>
 
-                <button onClick={this.handleSubmit} >Submit</button>
+                <Button variant="primary" type="submit" onClick={this.handleSubmit}>
+                    Submit
+                </Button>
             </div>
         );
     }

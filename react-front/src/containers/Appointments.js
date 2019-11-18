@@ -113,7 +113,7 @@ export default class Appointment extends Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+            <Form onSubmit={this.handleSubmit} className="container">
                 
                 <Form.Group controlId="startDate">
                     <Form.Label style={{ paddingRight: 1 + 'em' }}>Title:  </Form.Label>
@@ -199,10 +199,10 @@ export default class Appointment extends Component {
                 options={this.state.groups} 
             />
             </div>
-                <Button type="reset" onClick={this.resetState}>
+                <Button type="reset" onClick={this.resetState} style={{ marginTop: 0.5 + 'em'}}>
                     Reset
                 </Button>
-                <Button variant="primary" type="submit">
+                <Button className="button-padding" variant="primary" type="submit" style={{ marginTop: 0.5 + 'em'}}>
                     Submit
                 </Button>
             </Form>

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import * as api from '../shared/api';
 import Select from 'react-select';
 
+import './CreateEvent.css';
+
+import Button from "react-bootstrap/Button";
 
 class EditGroups extends Component {
     constructor(props) {
@@ -169,8 +172,9 @@ class EditGroups extends Component {
             options={this.state.faculty}
           />
 
-                <button onClick={this.handleSubmit1} >Submit</button>
-
+                <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.handleSubmit1}>
+                    Submit
+                </Button>
 
                 <header className="App-header">
             <h3 className="App-title">Select name to remove members</h3>
@@ -184,7 +188,9 @@ class EditGroups extends Component {
             options={this.state.faculty}
           />
 
-                <button onClick={this.handleSubmit2} >Submit</button>
+                <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.handleSubmit2}>
+                    Submit
+                </Button>
             </div>
         );
     }
