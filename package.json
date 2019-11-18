@@ -6,7 +6,9 @@
     "start": "concurrently \"npm run backend-start\" \"npm run frontend-start\""
   },
   "dependencies": {
-    "concurrently": "^4.1.2"
+    "concurrently": "^4.1.2",
+    "node-sass": "^4.13.0",
+    "react-ui-cards": "^2.0.0"
   },
   "version": "1.0.0",
   "author": "",

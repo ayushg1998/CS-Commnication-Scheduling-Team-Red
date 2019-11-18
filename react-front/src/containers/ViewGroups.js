@@ -31,11 +31,22 @@ class ViewGroups extends Component {
                
     }
 
-    render () {
+     
+
+    render (
+        styles = {
+        margin: '20px',
+        width: '100%',
+        height: '150px',
+        backgroundColor: '#d3d3d3',
+      }) {
         console.log(this.state.groups);
         const gro = this.state.groups.map((group,i) => {
             return (
-                <div key={i}>
+               
+               <div key={i}>
+                   <a href ="./NotFound.js">
+                       <div style={styles}>
                     <ul>
                         <h5><li>Name: {group.name}</li></h5>
                         <ul>
@@ -43,12 +54,14 @@ class ViewGroups extends Component {
                         <h5><li>Created By: {group.creator}</li></h5>
                         </ul>
                     </ul>
+                    </div>
+                    </a>
                 </div>
                 );
         });
 
         return (
-            <div className="container">
+            <div className="container" >
                 <h1>just testing</h1>
                 {gro}
             </div>
