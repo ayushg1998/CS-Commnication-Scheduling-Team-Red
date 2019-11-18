@@ -57,7 +57,13 @@ class AuthenticatedNavigation extends React.Component {
                   {                  
                     return (
                       <div> 
-                        <ul className="navbar-nav mr-auto">   
+                        <ul className="navbar-nav mr-auto">  
+
+                          <NavDropdown name="User">
+                            <a className="dropdown-item" href="/notfound">Create Student</a>
+                          </NavDropdown>
+
+
                             <NavDropdown name="Calendar">
                             <a className="dropdown-item" href="/ShareCalendar">Share</a>
                             <a className="dropdown-item" href="/notfound">Export</a>
@@ -87,6 +93,12 @@ class AuthenticatedNavigation extends React.Component {
                     return (
                       <div>
                         <ul className="navbar-nav mr-auto"> 
+
+                        <NavDropdown name="User">
+                            <a className="dropdown-item" href="/notfound">Create Faculty</a>
+                            <a className="dropdown-item" href="/notfound">Create Student</a>
+                          </NavDropdown>
+
             <NavDropdown name="Calendar">
                 <a className="dropdown-item" href="/ShareCalendar">Share</a>
                 <a className="dropdown-item" href="/notfound">Export</a>
