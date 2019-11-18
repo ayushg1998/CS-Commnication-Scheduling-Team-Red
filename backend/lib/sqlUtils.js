@@ -28,6 +28,26 @@ function sqlValues(array) {
   return '(' + array.join(',') + ')';
 }
 
+/*
+  @param arrOfArr: Array<Array<>> e.g. [[1, 2], [2, 3]]
+  @return '(1, 2), (2, 3);'
+*/
+function sqlManyValues(arrOfArr) {
+  assert.ok(Array.isArray(arrOfArr));
+  if (arrOfArr.length == 0) return null;
+  
+  const len = arrOfArr.length;
+
+  return arrOfArr.map((arr, index) =>{
+    assert.ok(Array.isArray(arr));
+
+    return index >= len - 1?
+    `${sqlValues(arr)};`: `${sqlValues(arr)},`;
+  })
+  .filter(r => typeof r === 'string')//omit null
+  .join(' ');
+}
+
 function sqlValue(v) {
   if (v instanceof moment) v = v.toISOString();
   if (typeof v === 'string') return `'${v}'`;
@@ -35,4 +55,4 @@ function sqlValue(v) {
   return v;
 }
 
-module.exports = { sqlLikeArray, sqlValues, sqlValue };
+module.exports = { sqlLikeArray, sqlValues, sqlValue, sqlManyValues };

@@ -12,27 +12,26 @@ class ViewGroups extends Component {
 
 
     componentDidMount(){
-        console.log(viewGroups.getAllVisibleGroups());
         viewGroups.getAllVisibleGroups()
         .then(res => {
-            console.log(res);
             const visibleGroups = res.map(e => ({
                 name: e.name,
                 description: e.description,
                 creator: e.creatorId
             }))
-            console.log(visibleGroups);
             this.setState({groups: visibleGroups})
-            console.log(this.state.groups);
         })
         .catch(error => {
             alert(error.message);
         })
-               
+
+        viewGroups.getSpecificGroup(25)
+            .then(group => {
+                console.log(group);
+            })               
     }
 
     render () {
-        console.log(this.state.groups);
         const gro = this.state.groups.map((group,i) => {
             return (
                 <div key={i}>

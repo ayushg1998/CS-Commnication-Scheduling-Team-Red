@@ -59,7 +59,7 @@ export default class CreateEvent extends Component {
             end: this.state.end,
             color: this.state.color,
             image: null,
-            groupId: 21//TODO: change this static value later.
+            groupId: 5//TODO: change this static value later.
         };
 
         return api.createEvent(eventData)

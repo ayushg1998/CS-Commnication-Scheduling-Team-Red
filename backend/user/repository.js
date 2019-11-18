@@ -16,6 +16,22 @@ module.exports = function(mysql) {
     });
   }
 
+  function createUsers(users) {
+    if (users.length == 0) return Promise.resolve();
+
+    const query = `INSERT INTO User (cwid, fname, lname, username, email, password, loginToken, signupOtpVerified, userType) 
+    VALUES ${sqlUtils.sqlManyValues(users)}`;
+
+    return new Promise(function(resolve, reject){
+        mysql.query(query, async function(err) {
+            if (err) { reject(err); return; }
+            const user = await findUserByCWID(cwid);
+            resolve(user);
+        });
+    });
+  }
+
+
   //creator id is NULL for solo group of user
   function getSoloGroupOfUser(userId) {
       const query = `SELECT UG.id,UG.name,UG.description,UG.creatorId FROM User_UserGroup UUG 

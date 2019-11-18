@@ -72,13 +72,12 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const editorCanEdit = await hasPermission(editorId, groupId, UPDATE);
     if (!editorCanEdit) throw new Error('Editor does not have sufficient permission.');
-
+    
     const members = await repository.getGroupMembers(groupId);
     const memberIds = new Set(members.map(m => m.id));
-
     const users = await repository.getUsersByCwids(cwids);
     const userIds = users.map(u => u.id).filter(uid => !memberIds.has(uid));
-
+    
     await repository.addGroupMembers(userIds, groupId);
   }
 
