@@ -7,21 +7,19 @@ import * as api from '../shared/api';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
-import * as appointmentEventService from '../shared/appointmentEventService'
-//import moment from 'moment';
-import Select from 'react-select';
 
 export default class Appointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
             title: '',
+            slotCount: 1,
             slotInterval: 1,
             description: '',
             start: null,
-            end: null, 
             color: 'ff0000',
-            selectedOption: ''
+            groupId: undefined,
+            groups: []
         }
     }
 
@@ -29,24 +27,23 @@ export default class Appointment extends Component {
         //changed this from faculty to groups
         
         api.getAllVisibleGroups()
-        .then(groups_ => {
-            //groups with UPDATE permission
-            //only concerned with name and id
-            const groups = groups_.filter(g => g.permission === 'UPDATE')
-                .map(g => ({id:g.id, label: g.name}));
-            
-            this.setState({groups: groups});
-        });    
+            .then(groups_ => {
+                //groups with UPDATE permission
+                //only concerned with name and id
+                const groups = groups_.filter(g => g.permission === 'UPDATE')
+                    .map(g => ({id:g.id, label: g.name}));
+                
+                this.setState({groups: groups});
+            });    
     }
 
     validateForm() {
-        return (
-            this.state.title.length > 0 &&
-            this.state.slotInterval > 0 &&
-            this.state.start !== null &&
-            this.state.end !== null &&
-            this.state.color.length >0 &&
-            this.state.selectedOption.Length> 0
+        const { title, slotCount, slotInterval, description, start, color, groupId } = this.state;
+        //double !! turns into boolean
+        return !!(
+            title && slotCount &&
+            slotInterval && description &&
+            start && color && groupId
         );
     }
 
@@ -56,37 +53,38 @@ export default class Appointment extends Component {
         });
     }
 
-    handleStartDateChange= date => {
-        this.setState({
-            start: date
-        });
+    handleSlotIntervalChange = e => {
+        this.setState({slotInterval: parseInt(e.target.value)});
     }
 
-    handleEndDateChange= date => {
-        this.setState({
-            end: date
-        });
+    handleSlotCountChange = e => {
+        this.setState({slotCount: parseInt(e.target.value)});
+    }
+
+    handleStartDateChange= date => {
+        this.setState({start: date});
+    }
+
+    handleGroupSelectionChange = e => {
+        this.setState({groupId: parseInt(e.target.value)});
     }
 
     handleSubmit = event => {
-        console.log(this.state.title);
         event.preventDefault();
         if (!this.validateForm()) {
             alert('invalid form'); return;
         }
+        
+        const {start, slotCount, slotInterval, description, title, color, groupId} = this.state;
 
-        appointmentEventService.addAppointmentEvent({
-            name: this.state.title,
-            slotInterval: this.state.slotInterval,
-            description: this.state.description,
-            start: this.state.start,
-            end: this.state.end,
-            color: this.state.color
-            //selectedOption: this.state.selectedOption
+        api.addAppointmentEvent({
+            name: title,
+            start, slotCount,
+            slotInterval, description,
+            color, groupId
         })
             .then(result => {
                 alert('success');
-                console.log(this.state.title);
                 this.resetState();
             })
             .catch(error => {
@@ -94,20 +92,15 @@ export default class Appointment extends Component {
             });        
     }
 
-    handleOptionChange = selectedOption => {
-        this.setState({
-            selectedOption
-        });
-    }
-
     resetState = () => {
         this.setState({
             title: '',
+            slotCount: 1,
             slotInterval: 1,
             description: '',
             start: null,
-            end: null,
-            color: 'ff0000'
+            color: 'ff0000',
+            groupId: undefined
         });
     }
 
@@ -138,18 +131,6 @@ export default class Appointment extends Component {
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </Form.Group>
-                <Form.Group controlId="startDate">
-                    <Form.Label style={{ paddingRight: 1.3 + 'em' }}>Select a End Date:  </Form.Label>
-                    <DatePicker
-                        selected={this.state.end}
-                        onChange={this.handleEndDateChange}
-                        showTimeSelect
-                        timeFormat= "HH:mm"
-                        timeIntervals={5}
-                        timeCaption="time"
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                    />
-                </Form.Group>
 
                 <Form.Group controlId="slotInterval">
                     <Form.Label>Slot Duration (In Minutes): </Form.Label>
@@ -157,10 +138,19 @@ export default class Appointment extends Component {
                         autoFocus
                         type="number"
                         value={this.state.slotInterval}
-                        onChange={this.handleChange}
+                        onChange={this.handleSlotIntervalChange}
                     />
                 </Form.Group>
-                <Form.Group controlId="description">
+                <Form.Group controlId="slotCount">
+                    <Form.Label>Slot Count: </Form.Label>
+                    <Form.Control
+                        autoFocus
+                        type="number"
+                        value={this.state.slotCount}
+                        onChange={this.handleSlotCountChange}
+                    />
+                </Form.Group>
+                <Form.Group controlId="color">
                     <Form.Label>Color</Form.Label>
                     <select id="color" className="form-control" value={this.state.color} onChange={this.handleChange}>
                         <option value = "ff0000">Red</option>
@@ -183,22 +173,20 @@ export default class Appointment extends Component {
                     </textarea>
                 </Form.Group>
 
-            <div>
-                <header className="App-header">
-                    <h3 className="App-title">What groups time slots are exclusive to</h3> 
-                </header>
-            <Select
-                name="form-field-name"
-                value={this.state.value}
-                isMulti
-                onChange={this.handleOptionChange}
-                clearable={this.state.clearable}
-                searchable={this.state.searchable}
-                labelKey='name'
-                valueKey='last name'                
-                options={this.state.groups} 
-            />
-            </div>
+                <Form.Group controlId="groupId">
+                    <Form.Label>What group be assigned</Form.Label>
+                    <select id="groupId" className="form-control" 
+                        value={this.state.groupId}
+                        onChange={this.handleGroupSelectionChange}>
+                        <option value={undefined}>Select Group...</option>
+                        {  
+                            this.state.groups.map(g => (
+                                <option value={g.id} key={g.id}>{g.label}</option>
+                            ))
+                        }
+                    </select>
+                </Form.Group>
+
                 <Button type="reset" onClick={this.resetState} style={{ marginTop: 0.5 + 'em'}}>
                     Reset
                 </Button>
