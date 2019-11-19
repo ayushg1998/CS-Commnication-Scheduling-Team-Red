@@ -16,8 +16,8 @@ const constants = require('../constants');
 @response {
   success: true,
   data: {
-    appointments: [{start, end, id, name, color, appointer: { fname, lname, id } }],
-    events: [{start, end, name, id, color}],
+    appointments: [{start, end, id, name, color, permission, appointer: { fname, lname, id } }],
+    events: [{start, end, name, id, color, permission}],
     type: 'student'
   }
 }
@@ -30,8 +30,7 @@ module.exports = function(usecase) {
   
       let ret;
       if (userType === constants.USERTYPE_STUDENT) {
-        //ret = await usecase.getStudentCalendarEvents(userId);
-        res.send({success: false, message: 'Only faculties for now'});
+        ret = await usecase.getStudentCalendarEvents(userId);
       } else if (userType === constants.USERTYPE_FACULTY) {
         ret = await usecase.getFacultyCalendarEvents(userId);
       }

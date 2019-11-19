@@ -76,7 +76,8 @@ module.exports = function(usecase) {
     }
 
     @response {
-      success: true
+      success: true,
+      appointmentId
     }
   */
   async function addAppointment(req, res, next) {
@@ -84,8 +85,8 @@ module.exports = function(usecase) {
       const appointeeId = req.user.id;
       const {position, appointmentEventId} = req.body;
 
-      await usecase.addAppointment({position, appointmentEventId, appointeeId});
-      res.send({success: true});
+      const appointmentId = await usecase.addAppointment({position, appointmentEventId, appointeeId});
+      res.send({success: true, appointmentId });
     } catch(error) {
       res.send({success: false, message: error.message});
     }
@@ -201,12 +202,3 @@ module.exports = function(usecase) {
     getSpecificAppointment
   };
 }
-
-// {
-//   "start": "2019-10-13T03:00:00.000Z",
-//   "end": "2019-10-13T04:00:00.000Z",
-//   "name": "London Event",
-//   "color": "fffeee",
-//   "description": null,
-//   "slotInterval": 10
-// }

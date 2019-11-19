@@ -31,6 +31,7 @@ module.exports = function(repository, {resourceUsecase, eventUsecase, appointmen
     const appointmentEventResources = await appointmentUsecase.getAllVisibleAppointmentEventResourcesOfUser(userId);
     const appointmentEventIds = appointmentEventResources.map(o => o.appointmentEventId);
     let appointmentEvents = await repository.getAppointmentEvents(appointmentEventIds);
+
     /*
     Array<{
       eventId: int, 
@@ -48,11 +49,16 @@ module.exports = function(repository, {resourceUsecase, eventUsecase, appointmen
     return {appointmentEvents, events};
   }
 
-  //TODO: needs change
   /*
     @return Promise<{
-      appointments: Array<{start, end, description, id, appointer: { fname, lname, id } }>,
-      events: Array<{start, end, name, id}>
+      appointments: Array<{
+        id, start, end, 
+        name, color, permission
+      }>,
+      events: Array<{
+        id, start, end,
+        name, color, permission
+      }>
     }>
   */
   async function getStudentCalendarEvents(userId) {
@@ -60,11 +66,15 @@ module.exports = function(repository, {resourceUsecase, eventUsecase, appointmen
     const user = await repository.findUserById(userId); assert.ok(user);
     assert.ok(user.userType === constants.USERTYPE_STUDENT);
 
-    let appointments = await repository.getAppointmentsOfAppointee(userId);
-    let events = await repository.getEventsForUser(userId);
+    const appointmentResources = await appointmentUsecase.getAllVisibleAppointmentResourcesOfUser(userId);
+    const appointmentIds = appointmentResources.map(o => o.appointmentId);  
+    let appointments = await repository.getAppointments(appointmentIds);
+    appointments = mapAppointments(appointments, appointmentResources);
 
-    appointments = mapAppointments(appointments);
-    events = mapEvents(events);
+    const eventResources = await eventUsecase.getAllVisibleEventsOfUser(userId);
+    const eventIds = eventResources.map(o => o.eventId);
+    let events = await repository.getEvents(eventIds);
+    events = mapEvents(events, eventResources);
 
     return {appointments, events};
   }
@@ -121,19 +131,19 @@ function mapEvents(events, eventResources) {
   .sort(descSortFn);
 }
 
-function mapAppointments(appointments) {
-  return appointments.map(ap => ({
-    id: ap.id,
-    start: ap.start,
-    end: ap.end,
-    name: ap.name,
-    color: ap.color,
-    appointer: {
-      fname: ap.appointer.fname,
-      lname: ap.appointer.lname,
-      id: ap.appointer.id
+function mapAppointments(appointments, appointmentResources) {
+  return appointments.map(ap => {
+    const permission = appointmentResources.find(r => r.appointmentId === ap.id).permission;
+
+    return {
+      id: ap.id,
+      start: ap.start,
+      end: ap.end,
+      name: ap.name,
+      color: ap.color,
+      permission
     }
-  }))
+  })
   .sort(descSortFn);
 }
 

@@ -56,6 +56,31 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     });
   }
 
+  /*
+    @return Promise<Array<{
+      id: int,
+      appointmentEventId: int,
+      appointeeId: int,
+      position: int,
+      start: moment,
+      end: moment,      
+    }>>
+  */
+  async function getAppointments(ids) {
+    if (!ids.length) return Promise.resolve([]);
+
+    const query = `SELECT * FROM Appointment WHERE id IN ${sqlUtils.sqlValues(ids)}`;
+
+    return new Promise(function(resolve, reject){
+      mysql.query(query, function(err, rows){
+          if (err) {reject(err); return;}
+          if (!rows.length) { resolve([]); return;}
+
+          resolve(rows.map(r => fromDBAppointment(r)));
+      });
+    });
+  }
+
     /*
     @return Promise<{
       id: int,
@@ -215,16 +240,69 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
       }); 
   }
 
+  async function getAppointmentResourcesOfGroups(groupIds) {
+    if (!groupIds.length) return Promise.resolve([]);
+
+    const query = `
+    SELECT URP.groupId,R.appointmentId,URP.permission,URP.resourceId
+    FROM UserGroup_Resource_Permission URP 
+    JOIN Resource R ON R.id=URP.resourceId
+    WHERE URP.groupId IN ${sqlUtils.sqlLikeArray(groupIds)} AND R.appointmentId IS NOT NULL
+    ORDER BY URP.groupId;`;
+
+    return new Promise((resolve, reject) => {
+      
+      mysql.query(query, function(err, rows){
+        if (err) {reject(err); return;}
+        if (!rows.length) { resolve([]); return;}
+
+        const result = []; let currentGroupId = -1;
+        
+        //since every (groupId, resource) pair is unique,
+        //following aggregation method is chosen. Also,
+        //easy one pass aggregation into result array could be done since,
+        //rows are ordered by groupId
+        rows.forEach(row => {
+          if (currentGroupId != row.groupId) {
+            result.push({
+              groupId: row.groupId,
+              resources: [{
+                appointmentId: row.appointmentId,
+                permission: row.permission,
+                resourceId: row.resourceId                  
+              }]
+            });
+            currentGroupId = row.groupId;
+          }
+          else {
+            result[result.length - 1].resources.push({
+              appointmentId: row.appointmentId,
+              permission: row.permission,
+              resourceId: row.resourceId
+            });
+          }
+        });
+
+        resolve(result); 
+      });
+    }); 
+
+  }
+
   return {
     getAppointmentEvent,
     getAppointmentEvents,
     getAppointmentEventResourcesOfGroups,
+    getAppointmentResourcesOfGroups,
     getAppointmentEventsofAppointer,
     addAppointmentEvent,
     getAppointment,
+    getAppointments,
     getAppointmentsOfAppointmentEvent,
+    getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
     addAppointment,
     addAppointmentEventResource: resourceRepository.addAppointmentEventResource,
+    addAppointmentResource: resourceRepository.addAppointmentResource,
     findUserById: userRepository.findUserById
   };
 }

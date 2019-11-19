@@ -42,10 +42,10 @@ app.listen(port, function() {
         const {repository: resourceRepository, usecase: resourceUsecase} = require('./resource')(connection);
         const {controller: userController, repository: userRepository} = require('./user')(connection);
         const {repository: groupRepository, usecase: groupUsecase, controller: groupController} = require('./group')(connection, {resourceUsecase, resourceRepository, userRepository});
-        const {controller: appointmentController, usecase: appointmentUsecase} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
+        const {controller: appointmentController, usecase: appointmentUsecase, repository: appointmentRepository} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);
         const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase, userRepository});
-        const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceUsecase, resourceRepository, eventUsecase, appointmentUsecase});
+        const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceUsecase, resourceRepository, eventUsecase, appointmentUsecase, appointmentRepository});
         const { controller: loginController } = require('./register_login')(connection, {userRepository, resourceRepository, groupRepository});
     
         app.post('/create/student', loginController.registerStudent);

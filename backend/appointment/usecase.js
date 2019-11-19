@@ -1,6 +1,7 @@
 const moment = require('moment');
 const assert = require('assert');
-const AppointmentEventResourceAggregator = require('./collector');
+const AppointmentEventResourceAggregator = require('./collector_appointment_event');
+const AppointmentResourceAggregator = require('./collector_appointment');
 const constants = require('../constants');
 const { READ, JOIN, UPDATE, UPDATE_JOIN } = constants.permissions.appointmentEvent;
 
@@ -45,6 +46,21 @@ module.exports = function(repository, {resourceUsecase}) {
     return collector.getCollection();
   }
 
+  /*
+    @return Promise<Array<{
+      appointmentId: int, 
+      permission: 'READ' || 'UPDATE', 
+      resourceId: int}>>
+  */
+  async function getAllVisibleAppointmentResourcesOfUser(userId) {
+    assert.ok(userId);
+    const collector = new AppointmentResourceAggregator();
+    const fetcher = {fetch: repository.getAppointmentResourcesOfGroups};
+
+    await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
+    return collector.getCollection();
+  }
+
   async function getAllJoinableAppointmentEventsOfUser(userId) {
     let resources = await getAllVisibleAppointmentEventResourcesOfUser(userId);
     resources  = resources.filter(r => r.permission === JOIN
@@ -66,6 +82,7 @@ module.exports = function(repository, {resourceUsecase}) {
   }
 
   //TODO: position should be unique for a given appointmentEventId
+  //TODO: check if user has JOIN permission on appointmentEvent
   async function addAppointment({position, appointmentEventId, appointeeId}) {
     assert.ok(Number.isInteger(position) && position >= 0);
     assert.ok(appointeeId); assert.ok(appointmentEventId);
@@ -85,9 +102,17 @@ module.exports = function(repository, {resourceUsecase}) {
 
     setSecondsToZero(appointmentStart); setSecondsToZero(appointmentEnd);
 
-    await repository.addAppointment({
+    const appointmentId = await repository.addAppointment({
       start: appointmentStart, 
-      end: appointmentEnd, appointeeId, position, appointmentEventId});
+      end: appointmentEnd, appointeeId, position, appointmentEventId });
+
+    const soloGroup = await repository.getSoloGroupOfUser(appointeeId);
+
+    const resourceId = await repository.addAppointmentResource(appointmentId);
+
+    await resourceUsecase.addResourcePermissionToUserGroup({groupId: soloGroup.id, resourceId, permission: UPDATE});
+  
+    return appointmentId;
   }
 
   /*
@@ -140,6 +165,7 @@ module.exports = function(repository, {resourceUsecase}) {
     getAppointmentsOfAppointmentEvent,
     getAppointment,
     getAppointmentEvent,
+    getAllVisibleAppointmentResourcesOfUser,
     getAllVisibleAppointmentEventResourcesOfUser,
     getAllJoinableAppointmentEventsOfUser,
     getUser

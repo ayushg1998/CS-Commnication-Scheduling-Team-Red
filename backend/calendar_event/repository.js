@@ -2,7 +2,7 @@ const assert = require('assert');
 const moment = require('moment');
 const { sqlUtils } = require('../lib');
 
-module.exports = function(mysql, {userRepository, resourceRepository}) {
+module.exports = function(mysql, {userRepository, resourceRepository, appointmentRepository}) {
   assert.ok(userRepository); assert.ok(resourceRepository);
   
   //NOTE: @deprecated?
@@ -74,41 +74,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     });
   }
 
-  /*
-  @return Promise<Array<{
-    id,
-    name,
-    color,
-    description,
-    start: moment,
-    end: moment,
-    slotInterval,
-    appointerId,
-    slotCount,
-    groupId
-  }>>  
-  */
-  async function getAppointmentEvents(appointmentEventIds) {
-    if (!appointmentEventIds.length) return Promise.resolve([]);
-
-    let query = `SELECT * FROM AppointmentEvent WHERE id IN ${sqlUtils.sqlLikeArray(appointmentEventIds)}`;
-    
-    return new Promise(function(resolve, reject) {
-      mysql.query(query, function(err, rows) {
-        if (err) { reject(err); return; }
-  
-        const ret = rows.map(r => ({
-          ...r,
-          start: moment(r.start),
-          end: moment(r.end)
-        }));
-  
-        resolve(ret);
-      });
-    });
-  }
-
-    /*
+   /*
     @return Promise<Array<{
       id,
       name: string,
@@ -143,7 +109,8 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
 
   return {
     getEvents,
-    getAppointmentEvents,
+    getAppointmentEvents: appointmentRepository.getAppointmentEvents,
+    getAppointments: appointmentRepository.getAppointments,
     findUserById: userRepository.findUserById,
     getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
     getUserResourceOfUser: resourceRepository.getUserResourceOfUser

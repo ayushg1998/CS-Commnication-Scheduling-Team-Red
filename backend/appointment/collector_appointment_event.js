@@ -45,7 +45,7 @@ class AppointmentEventResourceAggregator {
         //B
         //updating the existing appointmentEvent permission
         let permission = resolveWithSharedPermission(ape.permission, ape.resource.permission);
-        permission = resolveWithEventPermission(permission, mResource.permission);
+        permission = resolveWithAppointmentEventPermission(permission, mResource.permission);
         mResource.permission = permission;
       }
     })
@@ -79,7 +79,7 @@ function resolveWithSharedPermission(pa, pb) {
 //@param pb, UPDATE || JOIN || READ || UPDATE_JOIN, permission for event resource
 //@return Max_permission(pa, pb). Note, when pa is UPDATE, and pb is JOIN or viceversa,
 //returned permission would be UPDATE_JOIN.
-function resolveWithEventPermission(pa, pb) {
+function resolveWithAppointmentEventPermission(pa, pb) {
   if (pa === READ) {
 
     //READ is lowest priority, whatever's on pb would be good
