@@ -28,6 +28,34 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     });
   }
 
+  /*
+    @return Promise<Array<{
+      id: int,
+      description: string,
+      start: moment,
+      end: moment,
+      slotInterval: int,
+      appointerId: int,
+      slotCount: int,
+      name: string,
+      color: string
+    }>>
+  */
+  async function getAppointmentEvents(ids) {
+    if (!ids.length) return Promise.resolve([]);
+
+    const query = `SELECT * FROM AppointmentEvent WHERE id IN ${sqlUtils.sqlValues(ids)}`;
+
+    return new Promise(function(resolve, reject){
+      mysql.query(query, function(err, rows){
+          if (err) {reject(err); return;}
+          if (!rows.length) { resolve([]); return;}
+
+          resolve(rows.map(r => fromDBAppointmentEvent(r)));
+      });
+    });
+  }
+
     /*
     @return Promise<{
       id: int,
@@ -189,6 +217,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
 
   return {
     getAppointmentEvent,
+    getAppointmentEvents,
     getAppointmentEventResourcesOfGroups,
     getAppointmentEventsofAppointer,
     addAppointmentEvent,

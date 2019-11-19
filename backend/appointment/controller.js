@@ -50,8 +50,17 @@ module.exports = function(usecase) {
   */
   async function getAppointmentEvents(req, res, next) {
     try {
-      const appointerId = req.query.appointerId;
-      const appointmentEvents = await usecase.getAppointmentEventsOfAppointer(appointerId);
+      const queryFilters = req.query.filters || [];
+      const joinableFlag  = queryFilters.indexOf('joinable') >= 0;
+      const userId = parseInt(req.user.id);
+
+      let appointmentEvents;
+      if (joinableFlag) {
+        appointmentEvents = await usecase.getAllJoinableAppointmentEventsOfUser(userId);
+      }
+      else {
+        appointmentEvents = await usecase.getAppointmentEventsOfAppointer(userId);
+      }
 
       res.send({success: true, appointmentEvents});
     } catch(error) {

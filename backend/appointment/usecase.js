@@ -36,13 +36,24 @@ module.exports = function(repository, {resourceUsecase}) {
       permission: 'UPDATE+JOIN' || 'READ' || 'UPDATE' || 'JOIN', 
       resourceId: int}>>
   */
-  async function getAllVisibleAppointmentEventsOfUser(userId) {
+  async function getAllVisibleAppointmentEventResourcesOfUser(userId) {
     assert.ok(userId);
     const collector = new AppointmentEventResourceAggregator();
     const fetcher = {fetch: repository.getAppointmentEventResourcesOfGroups};
 
     await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
     return collector.getCollection();
+  }
+
+  async function getAllJoinableAppointmentEventsOfUser(userId) {
+    let resources = await getAllVisibleAppointmentEventResourcesOfUser(userId);
+    resources  = resources.filter(r => r.permission === JOIN
+      || r.permission === UPDATE_JOIN);
+
+    const apIds = resources.map(r => r.appointmentEventId);
+    const appointmentEvents = await repository.getAppointmentEvents(apIds);
+
+    return appointmentEvents;
   }
 
   async function getAppointmentEventsOfAppointer(appointerId) {
@@ -129,7 +140,8 @@ module.exports = function(repository, {resourceUsecase}) {
     getAppointmentsOfAppointmentEvent,
     getAppointment,
     getAppointmentEvent,
-    getAllVisibleAppointmentEventsOfUser,
+    getAllVisibleAppointmentEventResourcesOfUser,
+    getAllJoinableAppointmentEventsOfUser,
     getUser
   };
 }
