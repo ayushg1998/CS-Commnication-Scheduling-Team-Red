@@ -38,14 +38,15 @@ export function logout() {
 }
 
 
-export function addAppointmentEvent({name, start, end, slotInterval, description,color}) {
+
+export function addAppointmentEvent({name, start, slotCount, slotInterval, description, color, groupId}) {
     return axios
-    .post('/appointment-event', {name, start, end, slotInterval, description, color}, getAuthHeaders())
-    .then(res => res.data)
-    .then(res => {
-        if (!res.success) throw new Error(res.message);
-        return;
-    });
+        .post('/appointment-event', {name, start, slotCount, slotInterval, description, color, groupId}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return;
+        });
 }
 
 export function getAppointmentEvent(id){

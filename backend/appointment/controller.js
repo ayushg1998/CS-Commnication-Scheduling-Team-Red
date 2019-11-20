@@ -18,11 +18,11 @@ module.exports = function(usecase) {
   */
   async function addAppointmentEvent(req, res, next) {
     try {
-      const {start, end, slotInterval, description, name, color} = req.body;
+      const {start, slotCount, slotInterval, description, name, color, groupId} = req.body;
       const appointerId = req.user.id;
 
-      await usecase.addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color});
-      res.send({success: true});
+      const appointmentEventId = await usecase.addAppointmentEvent({start, slotCount, slotInterval, description, appointerId, name, color, groupId});
+      res.send({success: true, appointmentEventId });
     } catch(error) {
       res.send({success: false, message: error.message});
     }

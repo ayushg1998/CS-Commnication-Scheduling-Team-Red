@@ -8,16 +8,15 @@ module.exports = function(repository, {resourceUsecase}) {
   assert.ok(resourceUsecase);
 
   //TODO: sql transaction for series of inserts
-  async function addAppointmentEvent({start, end, slotInterval, description, appointerId, name, color, groupId}) {
-    assert.ok(start); assert.ok(end); assert.ok(slotInterval); assert.ok(appointerId); assert.ok(color); assert.ok(groupId);
+  async function addAppointmentEvent({start, slotCount, slotInterval, description, appointerId, name, color, groupId}) {
+    assert.ok(start); assert.ok(slotCount); assert.ok(slotInterval); assert.ok(appointerId); assert.ok(color); assert.ok(groupId);
     assert.ok(Number.isInteger(slotInterval) && slotInterval > 0);
+    assert.ok(Number.isInteger(slotCount) && slotCount > 0);
     name = name || null;
 
-    start = moment(start); end = moment(end); assert.ok(start.isSameOrBefore(end));
+    const duration = slotCount * slotInterval;
+    start = moment(start); const end = start.clone().add(duration, 'minutes');
     setSecondsToZero(start); setSecondsToZero(end);
-
-    const diffInMinutes = end.diff(start, 'minutes'); assert.ok(diffInMinutes % slotInterval == 0);
-    const slotCount = diffInMinutes / slotInterval; assert.ok(slotCount >= 1);    
 
     const user = await repository.findUserById(appointerId);
     assert.ok(user); assert.ok(user.userType === constants.USERTYPE_FACULTY);
@@ -27,6 +26,8 @@ module.exports = function(repository, {resourceUsecase}) {
     const resourceId = await repository.addAppointmentEventResource(appointmentEventId);
 
     await resourceUsecase.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+
+    return appointmentEventId;
   }
 
   /*
