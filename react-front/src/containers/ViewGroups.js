@@ -78,7 +78,8 @@ class ViewGroups extends Component {
         width: '100%',
         height: '150px',
         backgroundColor: '#d3d3d3',
-      }) {
+      }) 
+      {
         console.log(this.state.groups);
         const gro = this.state.groups.map((group,i) => {
             return (
