@@ -8,6 +8,7 @@ class ViewGroups extends Component {
             groups: [],
             mem: [""],
             click: false,
+            groupName: ""
         };
     }
     
@@ -43,7 +44,7 @@ class ViewGroups extends Component {
             .then(group => {       
                              
                    
-                             
+                this.setState({groupName: group.name})            
                 for(let i = 0; i< group.members.length; i++)
                 {
                    
@@ -113,20 +114,40 @@ control()
     
         {this.state.groups.map((group,i) => {
             return (
-                <div key={i} style={{margin: '20px'}, {width: '100%'},{height: '150px'},
-{backgroundColor: 'gray',}} >
-                 <a onClick={() => this.groupMembers(group.id)}>
-                <div>
-                <ul>
-                <h5><li>Name: {group.name}</li></h5>
-                <ul>
-                <h5><li>Description: {group.description}</li></h5>
-                <h5><li>Created By: {group.creator}</li></h5>
-                <h5><li>Group ID: {group.id}</li></h5>
-                </ul>
-                </ul>
-                </div>
-                 </a>
+                <div key={i} className="card" style={{ marginBottom: 3 + 'em' }}>
+                    <h5 className="card-header">{group.name}</h5>
+                    <div className="card-body">
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item">
+                                <h6 className="card-title">Description:</h6>
+                                <p className="card-text">{group.description}</p>
+                            </li>
+                            <li className="list-group-item">
+                                <h5 className="card-title">Created By:</h5>
+                                <p className="card-text">{group.creator}</p>
+                            </li>
+                            <li className="list-group-item">
+                                <h5 className="card-title">Group ID:</h5>
+                                <p className="card-text">{group.id}</p>
+                            </li>
+                        </ul>
+                        <a 
+                            href="#" 
+                            className="btn btn-primary" 
+                            onClick={() => this.groupMembers(group.id)}
+                            style={{ marginTop: 1 + 'em' }}
+                        >View Members</a>
+                        <a 
+                            href="#" 
+                            className="btn btn-primary" 
+                            style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
+                        >Add Members</a>
+                        <a 
+                            href="#" 
+                            className="btn btn-primary" 
+                            style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
+                        >Remove Members</a>
+                    </div>
                 </div>
                 );
         })}       
@@ -135,24 +156,29 @@ control()
         }
         if(enter = true)
         {
-                 enter= false
+            enter= false
             for(let i = 0; i < this.state.mem.length; i++){
                 console.log(this.state.mem.length);
                     members += this.state.mem[i] + "\n";
                     
             }
             return (
-                <div style={styles} >
-                        <a onClick={() => this.onclick()}>
-                        <div>
-                     <ul>
-                         <h5><li>Members: {members}</li></h5>
-                     </ul>         
-                     </div>
-                     </a>
-                 </div>
-                 
-                 );
+                <div className="card">
+                    <h5 className="card-header">{this.state.groupName}</h5>
+                    <div className="card-body">
+                        <h5 className="card-title">Members:</h5>
+                        <ul>
+                            <li>{members}</li>
+                        </ul>
+                        <a 
+                            href="#" 
+                            className="btn btn-primary" 
+                            onClick={() => this.onclick()}
+                            style={{ marginTop: 1 + 'em' }}
+                        >Bo Back</a>
+                    </div>
+                </div>
+            );
         }
 }
     render () {
