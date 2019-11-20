@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import * as viewGroups from '../shared/api';
-
 class ViewGroups extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             groups: [],
-            members: [],
+            mem: [""],
+            click: false,
         };
     }
-
+    
 
     componentDidMount(){
         console.log(viewGroups.getAllVisibleGroups());
@@ -34,77 +34,137 @@ class ViewGroups extends Component {
     }
 
     groupMembers(groupNumber){
+   let styles = {
+            margin: '20px',
+            width: '100%',
+            height: '150px',
+            backgroundColor: '#d3d3d3',
+          }     
+          let membersInGroup = [];
         viewGroups.getSpecificGroup(groupNumber)
-            .then(group => {
-                
-                
-                    console.log(group.members); 
-                    //console.log(group.members[i].lname);
-                    this.setState({members: group.members});
-                  /*return(
-                  <div>
-                    <ul>
-                        <h5><li>Name: {group.members[i].fname} {group.members[i].lname}</li></h5>
-                        </ul>
-                        </div>
-                  );*/
-                
-               
-             //   {onclick(group.members)}
-                
-            }) 
-    }
-    
-    onclick()
-    {
-       let groupMembers = this.state.members;
-
-        for(let i = 0; i < groupMembers.length; i ++)
+            .then(group => {       
+                             
+                   
+                             
+                for(let i = 0; i< group.members.length; i++)
                 {
-                    console.log(groupMembers[i].fname);
-                   return(
-                        <div>
-                        <ul>
-                        <h5><li>Name: {groupMembers[i].fname} {groupMembers[i].lname}</li></h5>
-                        </ul>
-                        </div>
-                   )
-                }
+                   
+                   console.log(groupNumber +" look here " + group.members[i].fname+ " "+group.members[i].lname);
+                   membersInGroup.push(group.members[i].fname+" "+group.members[i].lname);
+                   
+                }            
+                
+                this.setState({mem: membersInGroup})
+                return (
+                    this.setState({click: true}),
+                    console.log(this.state.mem)
+                    );
+             
+            })
+            
     }
 
-    render (
-        styles = {
-        margin: '20px',
-        width: '100%',
-        height: '150px',
-        backgroundColor: '#d3d3d3',
-      }) {
-        console.log(this.state.groups);
-        const gro = this.state.groups.map((group,i) => {
+
+   /* members()
+    {
+        let styles = {
+            margin: '20px',
+            width: '100%',
+            height: '150px',
+            backgroundColor: '#d3d3d3',
+        }
+        for(let i = 0; i < this.state.mem.length; i++){
             return (
-               <div key={i} style={styles} onClick={() => this.groupMembers(group.id)}>
-                       <a>
-                       <div >
+               <div key={i} style={styles} >
+                       <a onClick={() => this.control()}>
+                       <div>
                     <ul>
-                        <h5><li>Name: {group.name}</li></h5>
-                        <ul>
-                        <h5><li>Description: {group.description}</li></h5>
-                        <h5><li>Created By: {group.creator}</li></h5>
-                        </ul>
+                        <h5><li>Name: {this.state.mem[i]}</li></h5>
                     </ul>
-                    {this.onclick()}
+                    
                     </div>
                     </a>
                 </div>
                 );
-        });
-        return (
+    }
+}*/
+    
+    onclick()
+    {
+        return(
+        this.setState({click: false}),
+        console.log(this.state.click)
+        )
+    }
+control()
+{
+        let members = "";
+        let enter = this.state.click;
+    let styles = {
+        margin: '20px',
+        width: '100%',
+        height: '150px',
+        backgroundColor: 'gray',
+    }
+     
+      if(enter === false)
+        {
+    return(
             <div className="container" >
-                <h1>just testing</h1>
-                {gro}
-                
-            </div>
-        );
+            <h1>just testing</h1>
+    
+        {this.state.groups.map((group,i) => {
+            return (
+                <div key={i} style={{margin: '20px'}, {width: '100%'},{height: '150px'},
+{backgroundColor: 'gray',}} >
+                 <a onClick={() => this.groupMembers(group.id)}>
+                <div>
+                <ul>
+                <h5><li>Name: {group.name}</li></h5>
+                <ul>
+                <h5><li>Description: {group.description}</li></h5>
+                <h5><li>Created By: {group.creator}</li></h5>
+                <h5><li>Group ID: {group.id}</li></h5>
+                </ul>
+                </ul>
+                </div>
+                 </a>
+                </div>
+                );
+        })}       
+                 </div>
+  )
+        }
+        if(enter = true)
+        {
+                 enter= false
+            for(let i = 0; i < this.state.mem.length; i++){
+                console.log(this.state.mem.length);
+                    members += this.state.mem[i] + "\n";
+                    
+            }
+            return (
+                <div style={styles} >
+                        <a onClick={() => this.onclick()}>
+                        <div>
+                     <ul>
+                         <h5><li>Members: {members}</li></h5>
+                     </ul>         
+                     </div>
+                     </a>
+                 </div>
+                 
+                 );
+        }
+}
+    render () {
+        return (
+           <div className="container" >
+                {this.control()}              
+              </div>              
+        )
+        
+        
     }
 }
 
