@@ -11,7 +11,6 @@ class ViewGroups extends Component {
         };
     }
     
-
     componentDidMount(){
         console.log(viewGroups.getAllVisibleGroups());
         viewGroups.getAllVisibleGroups()
@@ -29,8 +28,7 @@ class ViewGroups extends Component {
         })
         .catch(error => {
             alert(error.message);
-        }) 
-               
+        })           
     }
 
     groupMembers(groupNumber){
@@ -162,9 +160,7 @@ control()
            <div className="container" >
                 {this.control()}              
               </div>              
-        )
-        
-        
+        )      
     }
 }
 
