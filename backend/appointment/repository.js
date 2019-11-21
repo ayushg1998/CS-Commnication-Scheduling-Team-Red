@@ -152,6 +152,21 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     });
   }
 
+  async function updateAppointment({start, end, position, appointmentId}) {
+    const sqv = sqlUtils.sqlValue;
+
+    const setParam = `SET start=${sqv(start)},end=${sqv(end)},position=${sqv(position)}`;
+
+    const query = `UPDATE Appointment ${setParam} WHERE id=${appointmentId};`;
+
+    return new Promise((resolve, reject) => {
+      mysql.query(query, err => {
+          if (err) { reject(err); return; }
+          resolve();
+      });            
+    });
+  }
+
   /*
     @return Promise<Array<{
       id: int,
@@ -299,8 +314,9 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     getAppointment,
     getAppointments,
     getAppointmentsOfAppointmentEvent,
-    getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
     addAppointment,
+    updateAppointment,
+    getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
     addAppointmentEventResource: resourceRepository.addAppointmentEventResource,
     addAppointmentResource: resourceRepository.addAppointmentResource,
     findUserById: userRepository.findUserById

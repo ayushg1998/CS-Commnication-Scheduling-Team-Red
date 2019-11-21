@@ -93,6 +93,29 @@ module.exports = function(usecase) {
   }
 
   /*
+    @body {
+      appointmentId, 
+      position
+    }
+    
+    @response {
+      success: true
+    }
+  */
+  async function changeAppointment(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const appointmentId = parseInt(req.params.id);
+      const {position} = req.body;
+
+      await usecase.changeAppointment({userId, appointmentId, position});
+      res.send({ success: true });
+    } catch(error) {
+      res.send({success: true, message: error.message});
+    }
+  }
+
+  /*
     @response {
       success: true,
       appointmentEvent: {
@@ -198,6 +221,7 @@ module.exports = function(usecase) {
     addAppointmentEvent,
     getAppointmentEvents,
     addAppointment,
+    changeAppointment,
     getSpecificAppointmentEvent,
     getSpecificAppointment
   };

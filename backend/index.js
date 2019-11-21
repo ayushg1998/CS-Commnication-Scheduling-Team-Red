@@ -71,6 +71,7 @@ app.listen(port, function() {
         app.post('/appointment-event', appointmentController.addAppointmentEvent);
 
         app.post('/appointment', appointmentController.addAppointment);
+        app.put('/appointment/:id', appointmentController.changeAppointment);
         app.get('/appointment/:id', appointmentController.getSpecificAppointment);
 
         app.get('/user/faculty', userController.getFaculties);

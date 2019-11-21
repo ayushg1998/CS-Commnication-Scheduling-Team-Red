@@ -72,6 +72,17 @@ module.exports = function(repository, {resourceUsecase}) {
     return appointmentEvents;
   }
 
+  async function hasAppointmentPermission({appointmentId, userId, permission}) {
+    assert.ok(appointmentId); assert.ok(userId);
+    assert.ok([READ, UPDATE].indexOf(permission) >= 0);
+
+    const collector = new AppointmentResourceAggregator();
+    const fetcher = {fetch: repository.getAppointmentResourcesOfGroups};
+
+    await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
+    return collector.hasPermission(appointmentId, permission);
+  }
+
   async function getAppointmentEventsOfAppointer(appointerId) {
     assert.ok(appointerId);
     const appointer = await getUser(appointerId); assert.ok(appointer);
@@ -97,8 +108,7 @@ module.exports = function(repository, {resourceUsecase}) {
     const appointmentEnd = ae.start.clone().add(endOffset, 'minutes');
 
     //TODO: HACK for demo
-    appointmentStart.add(-5, 'hours');
-    appointmentEnd.add(-5, 'hours');
+    appointmentStart.add(-6, 'hours'); appointmentEnd.add(-6, 'hours');
 
     setSecondsToZero(appointmentStart); setSecondsToZero(appointmentEnd);
 
@@ -113,6 +123,37 @@ module.exports = function(repository, {resourceUsecase}) {
     await resourceUsecase.addResourcePermissionToUserGroup({groupId: soloGroup.id, resourceId, permission: UPDATE});
   
     return appointmentId;
+  }
+
+  async function changeAppointment({userId, appointmentId, position}) {
+    assert.ok(userId); assert.ok(appointmentId); assert.ok(position >= 0);
+
+    const hasPermission = await hasAppointmentPermission({userId, appointmentId, permission: UPDATE});
+    if (!hasPermission) throw new Error('Not permitted to change the appointment');
+
+    const appointment = await repository.getAppointment(appointmentId); assert.ok(appointment);
+    const appointmentEventId = appointment.appointmentEventId;
+
+    const appointmentEvent = await repository.getAppointmentEvent(appointmentEventId); assert.ok(appointmentEventId);
+    const existingAppointments = await repository.getAppointmentsOfAppointmentEvent(appointmentEventId);
+
+    const filledPositions = existingAppointments.filter(ap => ap.id !== appointmentId).map(ap => ap.position);
+    
+    if (filledPositions.indexOf(position) >= 0) throw new Error('Position already occupied');
+    if (position >= appointmentEvent.slotCount) throw new Error('Position out of range');
+
+    const startOffset = appointmentEvent.slotInterval * position;
+    const endOffset = startOffset + appointmentEvent.slotInterval;
+
+    const start = appointmentEvent.start.clone().add(startOffset, 'minutes');
+    const end = appointmentEvent.start.clone().add(endOffset, 'minutes');
+
+    //TODO: HACK for demo
+    start.add(-6, 'hours'); end.add(-6, 'hours');
+
+    setSecondsToZero(start); setSecondsToZero(end);
+
+    await repository.updateAppointment({appointmentId, position, start, end});
   }
 
   /*
@@ -160,6 +201,7 @@ module.exports = function(repository, {resourceUsecase}) {
   return {
     addAppointmentEvent,
     addAppointment,
+    changeAppointment,
     getAppointmentEventsOfAppointer,
     getAppointerOfAppointmentEvent,
     getAppointmentsOfAppointmentEvent,
