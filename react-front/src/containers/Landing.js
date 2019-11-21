@@ -5,10 +5,11 @@ import './Landing.css';
 export default class Landing extends Component {
     render() {
         return (
-            <div className="Landing">
-                <div className="lander">
-                    <h1>CS Communication System</h1>
-                    <p>This is a work in Progress</p>
+            <div className="bg">
+                <div className="Landing container-custom">
+                    <div className="lander">
+                        <h1>CS Communication System</h1>
+                    </div>
                 </div>
             </div>
         );

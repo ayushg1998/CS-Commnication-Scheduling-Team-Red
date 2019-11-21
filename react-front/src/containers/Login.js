@@ -41,31 +41,31 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div className="Login">
-                <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
-                    <Form.Group controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            autoFocus
-                            type="username"
-                            value={this.state.username}
-                            onChange={this.handleChange}
-                        />
-                    </Form.Group>
+            <div className="Login bg">
+                    <Form className="panel-default" onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                        <Form.Group controlId="username">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                autoFocus
+                                type="username"
+                                value={this.state.username}
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
 
-                    <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                        />
-                    </Form.Group>
+                        <Form.Group controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
 
-                    <Button type="submit" variant="primary">
-                        Login
-                    </Button>
-                </Form>
+                        <Button type="submit" variant="primary">
+                            Login
+                        </Button>
+                    </Form>
             </div>
         );
     }

@@ -3,6 +3,7 @@ import * as api from '../shared/api';
 import Select from 'react-select';
 
 import './CreateEvent.css';
+import './Login.css';
 
 import Button from "react-bootstrap/Button";
 
@@ -147,7 +148,8 @@ class EditGroups extends Component {
 
 
         return (
-            <div className="container">
+            <div className="bg">
+            <div className="container panel-default">
                 <h3>Select Groups to edit</h3>
                 <select onChange={this.handleGroupSelectChange}>
                     <option value={-1}>Select Group</option>
@@ -191,6 +193,7 @@ class EditGroups extends Component {
                 <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.handleSubmit2}>
                     Submit
                 </Button>
+            </div>
             </div>
         );
     }

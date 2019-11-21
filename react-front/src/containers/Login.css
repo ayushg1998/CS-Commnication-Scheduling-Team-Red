@@ -8,3 +8,19 @@
         max-width: 320px;
     }
 }
+
+.bg {
+    background: url("ULM Background.jpg") #862633;
+    height:100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.panel-default {
+    opacity: 0.9;
+    background-color: gainsboro;
+    border-radius: 25px;
+}
+
+
