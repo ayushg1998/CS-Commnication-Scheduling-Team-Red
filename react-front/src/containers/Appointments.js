@@ -5,8 +5,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import * as api from '../shared/api';
 import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
+import './Login.css';
 
 export default class Appointment extends Component {
     constructor(props) {
@@ -106,7 +108,8 @@ export default class Appointment extends Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit} className="container">
+            <div className="bg">
+            <Form onSubmit={this.handleSubmit} className="container panel-default">
                 
                 <Form.Group controlId="startDate">
                     <Form.Label style={{ paddingRight: 1 + 'em' }}>Title:  </Form.Label>
@@ -194,6 +197,7 @@ export default class Appointment extends Component {
                     Submit
                 </Button>
             </Form>
+            </div>
         );
     }
 }

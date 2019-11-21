@@ -3,6 +3,7 @@ import * as api from '../shared/api';
 import Select from 'react-select';
 import './ShareCalendar.css';
 import './CreateEvent.css';
+import './Login.css';
 
 import Button from 'react-bootstrap/Button';
 
@@ -62,29 +63,31 @@ export default class ShareCalendar extends Component {
     render() {
         //console.log(this.state.faculty);
         return(
-            <div className="container">
-            <header className="App-header">
-                    <h3 className="App-title">Share Group</h3>
-                    <br />
-                    <h4 className="App-title">Search for Faculty by Name</h4>
-            </header>
-                
-            <Select
-                name="form-field-name"
-                value={this.state.value}
-                isMulti
-                onChange={this.handleChange}
-                clearable={this.state.clearable}
-                searchable={this.state.searchable}
-                labelKey='name'
-                valueKey='last name'                
-                options={this.state.faculty} 
-            />
+            <div className="bg">
+                <div className="container panel-default">
+                    <header className="App-header">
+                            <h3 className="App-title">Share Group</h3>
+                            <br />
+                            <h4 className="App-title">Search for Faculty by Name</h4>
+                    </header>
+                        
+                    <Select
+                        name="form-field-name"
+                        value={this.state.value}
+                        isMulti
+                        onChange={this.handleChange}
+                        clearable={this.state.clearable}
+                        searchable={this.state.searchable}
+                        labelKey='name'
+                        valueKey='last name'                
+                        options={this.state.faculty} 
+                    />
 
-            <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.share}>
-                Share
-            </Button>
-            </div>    
+                    <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.share}>
+                        Share
+                    </Button>
+                </div>   
+            </div> 
         );
     }
 }

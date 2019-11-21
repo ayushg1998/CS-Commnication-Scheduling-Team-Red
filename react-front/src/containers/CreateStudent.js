@@ -5,6 +5,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import * as api from '../shared/api';
 
+import './CreateEvent.css';
+import './Login.css';
+
 export default class CreateStudent extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +40,8 @@ export default class CreateStudent extends Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+            <div className="bg">
+            <Form className="container panel-default" onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
                 <Form.Group controlId="cwid">
                     <Form.Label>CWID:</Form.Label>
                     <Form.Control
@@ -96,10 +100,11 @@ export default class CreateStudent extends Component {
                     Reset
                 </Button>
 
-                <Button variant="primary" type="submit">
+                <Button className="button-padding" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>
+            </div>
         );
     }
 }

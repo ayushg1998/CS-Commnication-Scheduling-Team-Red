@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as displayFaculty from '../shared/api';
 import Select from 'react-select';
 
+import './Login.css';
 import './CreateEvent.css';
 import * as displayEvents from '../shared/api';
 //import Card from 'react-ui-cards';
@@ -114,26 +115,26 @@ export default class MakeAppointment extends Component {
         
         console.log(this.state.faculty);
         return(
-
-            
-            <div className="container">
-            <header className="App-header">
-                    <h3 className="App-title">Search for Faculty by Name</h3>
-            </header>
+            <div className="bg">
+                <div className="container panel-default">
+                <header className="App-header">
+                        <h3 className="App-title">Search for Faculty by Name</h3>
+                </header>
+                    
+                <Select
+                    name="form-field-name"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    clearable={this.state.clearable}
+                    searchable={this.state.searchable}
+                    labelKey='name'
+                    valueKey='last name'                
+                    options={this.state.faculty} 
+                />
                 
-            <Select
-                name="form-field-name"
-                value={this.state.value}
-                onChange={this.handleChange}
-                clearable={this.state.clearable}
-                searchable={this.state.searchable}
-                labelKey='name'
-                valueKey='last name'                
-                options={this.state.faculty} 
-            />
-            
-            {apps}
-    </div>    
+                {apps}
+                </div>
+            </div>    
         );
     }
 }

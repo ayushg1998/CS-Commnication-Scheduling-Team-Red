@@ -10,7 +10,7 @@
 }
 
 .bg {
-    background-image: url("ULM Background.jpg");
+    background: url("ULM Background.jpg") #862633;
     height:100vh;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,7 +19,8 @@
 
 .panel-default {
     opacity: 0.9;
-    margin-top: 30px;
     background-color: gainsboro;
     border-radius: 25px;
 }
+
+

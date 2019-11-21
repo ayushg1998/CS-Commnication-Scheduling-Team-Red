@@ -9,6 +9,7 @@ import * as api from '../shared/api';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CreateEvent.css';
+import './Login.css';
 
 export default class CreateEvent extends Component {
     constructor(props) {
@@ -84,7 +85,8 @@ export default class CreateEvent extends Component {
 
     render() {
         return(
-            <Form onSubmit={this.handleSubmit} className="container">
+            <div className="bg">
+            <Form onSubmit={this.handleSubmit} className="container panel-default">
                 <Form.Group controlId="title">
                     <Form.Label>Event Title:</Form.Label>
                     <Form.Control
@@ -152,6 +154,7 @@ export default class CreateEvent extends Component {
                     Submit
                 </Button>
             </Form>
+            </div>
         );
     }
 }

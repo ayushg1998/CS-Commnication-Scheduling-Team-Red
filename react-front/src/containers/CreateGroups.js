@@ -3,6 +3,7 @@ import * as api from "../shared/api";
 import Select from "react-select";
 import "./ShareCalendar.css";
 import "./CreateEvent.css";
+import './Login.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -110,7 +111,8 @@ export default class CreateGroups extends Component {
   render() {
     //console.log(this.state.faculty);
     return (
-      <div className="container">
+      <div className="bg">
+      <div className="container panel-default">
         <header className="App-header">
           <h3 className="App-title">Create A Group</h3>
         </header>
@@ -155,6 +157,7 @@ export default class CreateGroups extends Component {
             Submit
           </Button>
         </Form>
+      </div>
       </div>
     );
   }

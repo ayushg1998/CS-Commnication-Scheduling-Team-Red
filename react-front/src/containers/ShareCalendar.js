@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import * as api from '../shared/api';
 import Select from 'react-select';
+
 import './ShareCalendar.css';
 import './CreateEvent.css';
+import './Login.css';
 
 import Button from "react-bootstrap/Button";
 
@@ -62,7 +64,8 @@ export default class ShareCalendar extends Component {
     render() {
         //console.log(this.state.faculty);
         return(
-            <div className="container">
+            <div className="bg">
+            <div className="container panel-default">
             <header className="App-header">
                     <h3 className="App-title">Share Calendar</h3>
                     <br />
@@ -84,7 +87,8 @@ export default class ShareCalendar extends Component {
             <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.share}>
                 Share
             </Button>
-            </div>    
+            </div> 
+            </div>   
         );
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as viewGroups from '../shared/api';
+
 class ViewGroups extends Component {
     constructor(props) {
         super(props);
@@ -108,47 +109,47 @@ control()
      
       if(enter === false)
         {
-    return(
-            <div className="container" >
-            <h1>just testing</h1>
+            return(
+                <div className="container" >
+                <h1>just testing</h1>
     
-        {this.state.groups.map((group,i) => {
-            return (
-                <div key={i} className="card" style={{ marginBottom: 3 + 'em' }}>
-                    <h5 className="card-header">{group.name}</h5>
-                    <div className="card-body">
-                        <ul className="list-group list-group-flush">
-                            <li className="list-group-item">
-                                <h6 className="card-title">Description:</h6>
-                                <p className="card-text">{group.description}</p>
-                            </li>
-                            <li className="list-group-item">
-                                <h5 className="card-title">Created By:</h5>
-                                <p className="card-text">{group.creator}</p>
-                            </li>
-                            <li className="list-group-item">
-                                <h5 className="card-title">Group ID:</h5>
-                                <p className="card-text">{group.id}</p>
-                            </li>
-                        </ul>
-                        <a 
-                            href="#" 
-                            className="btn btn-primary" 
-                            onClick={() => this.groupMembers(group.id)}
-                            style={{ marginTop: 1 + 'em' }}
-                        >View Members</a>
-                        <a 
-                            href="#" 
-                            className="btn btn-primary" 
-                            style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
-                        >Add Members</a>
-                        <a 
-                            href="#" 
-                            className="btn btn-primary" 
-                            style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
-                        >Remove Members</a>
-                    </div>
-                </div>
+                {this.state.groups.map((group,i) => {
+                    return (
+                        <div key={i} className="card" style={{ marginBottom: 3 + 'em' }}>
+                            <h5 className="card-header">{group.name}</h5>
+                            <div className="card-body">
+                                <ul className="list-group list-group-flush">
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Description:</h5>
+                                        <p className="card-text">{group.description}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Created By:</h5>
+                                        <p className="card-text">{group.creator}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Group ID:</h5>
+                                        <p className="card-text">{group.id}</p>
+                                    </li>
+                                </ul>
+                                <a 
+                                    href="#" 
+                                    className="btn btn-primary" 
+                                    onClick={() => this.groupMembers(group.id)}
+                                    style={{ marginTop: 1 + 'em' }}
+                                >View Members</a>
+                                <a 
+                                    href="#" 
+                                    className="btn btn-primary" 
+                                    style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
+                                >Add Members</a>
+                                <a 
+                                    href="#" 
+                                    className="btn btn-primary" 
+                                    style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
+                                >Remove Members</a>
+                            </div>
+                        </div>
                 );
         })}       
                  </div>
@@ -185,7 +186,7 @@ control()
         return (
            <div className="container" >
                 {this.control()}              
-              </div>              
+            </div>              
         )      
     }
 }

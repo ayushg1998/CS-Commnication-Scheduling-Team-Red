@@ -104,7 +104,8 @@ export default class UploadGroup extends Component {
         };
 
         return (
-            <div className="container">
+            <div className="bg">
+            <div className="container panel-default">
                 <h3>Select Groups to add members:</h3>
                 <select onChange={this.handleGroupSelectChange}>
                     <option value={-1}>Select Group</option>
@@ -133,6 +134,7 @@ export default class UploadGroup extends Component {
                 <Button variant="primary" type="submit" onClick={this.handleSubmit}>
                     Submit
                 </Button>
+            </div>
             </div>
         );
     }
