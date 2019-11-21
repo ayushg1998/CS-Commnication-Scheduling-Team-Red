@@ -59,6 +59,29 @@ export function getAppointmentEvent(id){
         });
 }
 
+/*
+    @return Promise<Array<{
+        id,
+        description,
+        name,
+        color,
+        start,
+        end,
+        slotInterval,
+        slotCount,
+        appointerId
+    }>>
+*/
+export function getJoinableAppointmentEvents() {
+    return axios
+        .get('/appointment-event?filters=joinable', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointmentEvents;
+        });
+}
+
 export function shareCalendar({userId, permission}) {
     return axios
         .post('/calendar-events/share', {userId, permission}, getAuthHeaders())
