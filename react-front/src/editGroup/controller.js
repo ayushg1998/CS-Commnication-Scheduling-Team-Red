@@ -182,6 +182,14 @@ export default class Controller {
   }
 }
 
+/*any group from `groups` may be active in a given time.
+  upon calling `setActiveGroup`, one of those group from the groups
+  may be active. other operations like: `setGroupMembers`, `setAddGroupMembers`,
+  `getMembersToRemove`, etc. are specific to that activeGroup. If activeGroup was null,
+  and those operations are called, then assertion error is thrown.
+  In order to avoid such error, check hasActiveGroup before
+  calling those operations.
+*/
 class GroupStateManager {
   constructor(groups, memberPool) {
     this.groups = groups;
@@ -269,14 +277,24 @@ class GroupStateManager {
   }
 }
 
+/*
+  @param g, group recieved from repository
+  @return group that is desirable to view
+*/
 function groupToView(g) {
   return {name: g.name, id: g.id};
 }
 
+/*
+  @see groupToView
+*/
 function mapGroupsToView(groups) {
   return groups.map(groupToView);
 }
 
+/*
+  Similar to @see groupToView, but for members/users
+*/
 function mapMembersToView(members) {
   return members.map(u => ({id: u.id, name: `${u.fname} ${u.lname}`}));
 }
