@@ -1,6 +1,6 @@
 import * as api from '../shared/api';
 
-class Repository {
+export default class Repository {
   
   getAllVisibleGroups() {
     return api.getAllVisibleGroups();

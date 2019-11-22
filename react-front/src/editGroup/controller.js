@@ -1,104 +1,6 @@
 import * as assert from 'assert';
 
-class GroupStateManager {
-  constructor(groups, memberPool) {
-    this.groups = groups;
-    this.memberPool = memberPool;
-    this.activeGroup = null;
-  }
-
-  setActiveGroup(groupId) {
-    const activeGroup = this.groups.find(g => g.id === groupId); assert.ok(activeGroup);
-
-    if (!activeGroup.activeBefore) {
-      activeGroup.members = [];
-      activeGroup.membersToAdd = [];
-      activeGroup.membersToRemove = [];
-      activeGroup.addableMembers = [];
-      activeGroup.removableMembers = [];
-      activeGroup.activeBefore = true;
-    }
-    
-    this.activeGroup = activeGroup;
-  }
-
-  setGroupMembers(members) {
-    assert.ok(members);
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    activeGroup.members = members;
-    activeGroup.membersToAdd = [];
-    activeGroup.membersToRemove = [];
-
-    activeGroup.removableMembers = [...members];
-    activeGroup.addableMembers = this.memberPool.filter(m => !members.find(m_ => m_.id === m.id));
-    activeGroup.isMembersSet = true;
-  }
-
-  addGroupMember(memberId) {
-    assert.ok(memberId);
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    const isAddable = !!activeGroup.addableMembers.find(m => m.id === memberId);
-    const memberToAddAlready = !!activeGroup.membersToAdd.find(m => m.id === memberId);
-
-    if (isAddable && !memberToAddAlready){
-      const member = memberPool.find(m => m.id === memberId); assert.ok(member);
-      activeGroup.membersToAdd.push(member);
-    }
-  }
-
-  unaddGroupMember(memberId) {
-    assert.ok(memberId);
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    activeGroup.membersToAdd = activeGroup.membersToAdd.filter(m => m.id !== memberId);
-  }
-
-  removeGroupMember(memberId) {
-    assert.ok(memberId);
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    const isRemovable = !!activeGroup.removableMembers.find(m => m.id === memberId);
-    const memberToRemoveAlready = !!activeGroup.membersToRemove.find(m => m.id === memberId);
-    
-    if (isRemovable && !memberToRemoveAlready){
-      const member = memberPool.find(m => m.id === memberId); assert.ok(member);
-      activeGroup.membersToRemove.push(member);
-    }
-  }
-
-  getAddableMembers() {
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    return [...activeGroup.addableMembers];
-  }
-
-  getRemoveableMembers() {
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    return [...activeGroup.removableMembers];
-  }
-
-  getMembersToAdd() {
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    return [...activeGroup.membersToAdd];
-  }
-
-  getMembersToRemove() {
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    return [...activeGroup.membersToRemove];
-  }
-
-  getGroups() {
-    return [...this.groups];
-  }
-
-  getActiveGroup() {
-    return this.activeGroup;
-  }
-
-  hasMembersBeenSet() {
-    const activeGroup = this.activeGroup; assert.ok(activeGroup);
-    return !!activeGroup.isMembersSet;
-  }
-}
-
-class Controller {
+export default class Controller {
   constructor({repository}) {
     assert.ok(repository); 
     this.repo = repository;
@@ -114,25 +16,25 @@ class Controller {
     this.view = view;
   }
 
-  onAddGroupMemberSelected(memberId) {
-    assertFunctioning();
-    const v = this.view, gsm = this.groupStateManager;
-    gsm.addGroupMember(memberId);
-    v.setSelectedGroupMembersToAdd(
-      mapMembersToView(gsm.getMembersToAdd()));
+  onSelectedAddGroupMembersChanged(memberIds) {
+    this.assertFunctioning();
+    const v = this.view; const gsm = this.groupStateManager;
+    gsm.setAddGroupMembers(memberIds);
+    v.setSelectedGroupMembersToAdd(mapMembersToView(gsm.getMembersToAdd()));
   }
 
-  onRemoveGroupMemberSelected(memberId) {
-    assertFunctioning();
-    const v = this.view, gsm = this.groupStateManager;
-    gsm.removeGroupMember(memberId);
-    v.setSelectedGroupMembersToAdd(
-      mapMembersToView(gsm.getMembersToRemove()));
+  onSelectedRemoveGroupMembersChanged(memberIds) {
+    this.assertFunctioning();
+    const v = this.view; const gsm = this.groupStateManager;
+    gsm.setRemoveGroupMembers(memberIds);
+    v.setSelectedGroupMembersToRemove(mapMembersToView(gsm.getMembersToRemove()));
   }
 
   async onAddGroupMemberSubmit() {
-    assertFunctioning();
+    this.assertFunctioning();
     const v = this.view, gsm = this.groupStateManager;
+    if (!gsm.hasActiveGroup()) return;
+
     const members = gsm.getMembersToAdd(), groupId = gsm.getActiveGroup().id;
     const cwids = members.map(m => m.cwid);
 
@@ -146,7 +48,7 @@ class Controller {
         this.refreshMembers();
       })
       .catch(err => {
-        showAlert(err.message);
+        v.showAlert(err.message);
       })
       .finally(() => {
         this.busy = false; v.enableAllInteraction();
@@ -154,9 +56,11 @@ class Controller {
   }
 
   async onRemoveGroupMemberSubmit() {
-    assertFunctioning();
+    this.assertFunctioning();
     const v = this.view, gsm = this.groupStateManager;
-    const members = gsm.getMembersToRemove(), groupId = gsm.getActiveGroup().groupId;
+    if (!gsm.hasActiveGroup()) return;
+
+    const members = gsm.getMembersToRemove(), groupId = gsm.getActiveGroup().id;
     const cwids = members.map(m => m.cwid);
 
     if (!cwids.length) return;
@@ -169,7 +73,7 @@ class Controller {
         this.refreshMembers();
       })
       .catch(err => {
-        showAlert(err.message);
+        v.showAlert(err.message);
       })
       .finally(() => {
         this.busy = false; v.enableAllInteraction();
@@ -177,7 +81,7 @@ class Controller {
   }
 
   async refreshMembers() {
-    assertFunctioning();
+    this.assertFunctioning();
     const v = this.view, gsm = this.groupStateManager;
     this.busy = true; v.disableAllInteraction();
 
@@ -204,10 +108,19 @@ class Controller {
   }
 
   async onGroupSelected(groupId) {
-    assertFunctioning();
+    this.assertFunctioning();
     const v = this.view, gsm = this.groupStateManager;
 
     gsm.setActiveGroup(groupId);
+    if (!gsm.hasActiveGroup()) {
+      v.setTotalGroupMembersToAdd([]);
+      v.setTotalGroupMembersToRemove([]);
+      v.setSelectedGroupMembersToAdd([]);
+      v.setSelectedGroupMembersToRemove([]);
+      v.setSelectedGroup(null);
+      return;
+    }
+
     if (!gsm.hasMembersBeenSet()) {
       this.busy = true;
       v.disableAllInteraction();
@@ -223,6 +136,7 @@ class Controller {
         });
     }
 
+    v.setSelectedGroup(groupToView(gsm.getActiveGroup()));
     v.setTotalGroupMembersToAdd(
       mapMembersToView(gsm.getAddableMembers()));
     v.setTotalGroupMembersToRemove(
@@ -253,7 +167,8 @@ class Controller {
             let groups_ = this.groupStateManager.getGroups();
             groups_ = mapGroupsToView(groups_);
 
-            this.view.setGroups(groups_);            
+            this.view.setGroups(groups_);
+            this.view.setSelectedGroup(null);
             this.view.enableAllInteraction();
           });
       })
@@ -267,8 +182,99 @@ class Controller {
   }
 }
 
+class GroupStateManager {
+  constructor(groups, memberPool) {
+    this.groups = groups;
+    this.memberPool = memberPool;
+    this.activeGroup = null;
+  }
+
+  setActiveGroup(groupId) {
+    const activeGroup = this.groups.find(g => g.id === groupId);
+    if (!activeGroup) { this.activeGroup = null; return; }
+
+    if (!activeGroup.activeBefore) {
+      activeGroup.members = [];
+      activeGroup.membersToAdd = [];
+      activeGroup.membersToRemove = [];
+      activeGroup.addableMembers = [];
+      activeGroup.removableMembers = [];
+      activeGroup.activeBefore = true;
+    }
+    
+    this.activeGroup = activeGroup;
+  }
+
+  setGroupMembers(members) {
+    assert.ok(members);
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    activeGroup.members = members;
+    activeGroup.membersToAdd = [];
+    activeGroup.membersToRemove = [];
+
+    activeGroup.removableMembers = [...members];
+    activeGroup.addableMembers = this.memberPool.filter(m => !members.find(m_ => m_.id === m.id));
+    activeGroup.isMembersSet = true;
+  }
+
+  setAddGroupMembers(memberIds) {
+    assert.ok(memberIds);
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    const addables = activeGroup.addableMembers.filter(m => memberIds.indexOf(m.id) >= 0);
+    activeGroup.membersToAdd = addables;    
+  }
+
+  setRemoveGroupMembers(memberIds) {
+    assert.ok(memberIds);
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    const removables = activeGroup.removableMembers.filter(m => memberIds.indexOf(m.id) >= 0);    
+    activeGroup.membersToRemove = removables;
+  }
+
+  getAddableMembers() {
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    return [...activeGroup.addableMembers];
+  }
+
+  getRemovableMembers() {
+    const activeGroup = this.activeGroup; assert.ok(activeGroup)
+    return [...activeGroup.removableMembers];
+  }
+
+  getMembersToAdd() {
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    return [...activeGroup.membersToAdd];
+  }
+
+  getMembersToRemove() {
+    const activeGroup = this.activeGroup; assert.ok(activeGroup);
+    return [...activeGroup.membersToRemove];
+  }
+
+  getGroups() {
+    return [...this.groups];
+  }
+
+  getActiveGroup() {
+    return this.activeGroup;
+  }
+
+  hasActiveGroup() {
+    return !!this.activeGroup;
+  }
+
+  hasMembersBeenSet() {
+    const activeGroup = this.activeGroup;
+    return activeGroup? !!activeGroup.isMembersSet: false;
+  }
+}
+
+function groupToView(g) {
+  return {name: g.name, id: g.id};
+}
+
 function mapGroupsToView(groups) {
-  return groups.map(g => ({name: g.name, id: g.id}));
+  return groups.map(groupToView);
 }
 
 function mapMembersToView(members) {

@@ -103,7 +103,7 @@ export function shareCalendar({userId, permission}) {
 */
 export function getAllUsers() {
     return axios
-        .get('/user?filters=faculty,student', {userId, permission}, getAuthHeaders())
+        .get('/user?filters=faculty,student', getAuthHeaders())
         .then(res => res.data)
         .then(res => {
             if(!res.success) throw new Error(res.message);
@@ -249,10 +249,15 @@ export function addGroupMembers(groupId, cwids) {
         });
 }
 
+/*
+    @return Promise<void>
+    NOTE: axios delete needs special treatment for DELETE requests
+    @see  https://github.com/axios/axios/issues/897#issuecomment-343715381
+*/
 export function removeGroupMembers(groupId, cwids) {
     const url = `/groups/${groupId}/members`;
     return axios
-        .delete(url, {cwids}, getAuthHeaders())
+        .delete(url, {data: { cwids }, headers: getAuthHeaders().headers }, )
         .then(res => res.data)
         .catch(res => {
             if(!res.success) throw new Error(res.message);
