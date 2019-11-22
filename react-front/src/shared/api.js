@@ -20,6 +20,8 @@ export function createEvent({ name, description, image, start, end, color, group
         });
 }
 
+
+
 export function getCalendarEvents() {
     return axios
         .get('/calendar-events', getAuthHeaders())
@@ -82,6 +84,16 @@ export function getJoinableAppointmentEvents() {
         });
 }
 
+export function getAppointmentEventAndItsAppointments(id) {
+    return axios
+        .get(`/appointment-event/${id}`, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointmentEvent;
+        });
+}
+
 export function shareCalendar({userId, permission}) {
     return axios
         .post('/calendar-events/share', {userId, permission}, getAuthHeaders())
@@ -92,6 +104,54 @@ export function shareCalendar({userId, permission}) {
 }
 
 /*
+    @return Promise<Array<{
+        id: number,
+        cwid: number,
+        fname: string,
+        lname: string,
+        email: string,
+        userType: string
+    }>>
+*/
+export function getAllUsers() {
+    return axios
+        .get('/user?filters=faculty,student', {userId, permission}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.users;
+        });
+}
+
+/*
+    @see getAllUsers
+*/
+export function getStudents() {
+    return axios
+        .get('/user?filters=student', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.users;
+        });
+}
+
+/*
+    @see getAllUsers
+*/
+export function getFaculties() {
+    return axios
+        .get('/user?filters=faculty', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.users;
+        });
+}
+
+
+/*
+    NOTE: @deprecated, use getFaculites instead
     @return faculties field would have, Promise<Array<{
         id,
         fname,
@@ -102,7 +162,7 @@ export function shareCalendar({userId, permission}) {
 */
 export function getFaculty() {
     return axios
-    .get('/user/faculty', getAuthHeaders())
+    .get('/user?filters=faculty', getAuthHeaders())
     .then(res => res.data)
     .catch(res => {
         if(!res.success) throw new Error(res.message);

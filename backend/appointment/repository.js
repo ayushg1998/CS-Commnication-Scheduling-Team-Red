@@ -192,7 +192,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
           end: moment(r.end),
           position: r.position,
           appointmentEventId: appointmentEventId,
-          apointee: {
+          appointee: {
             fname: r.fname,
             lname: r.lname,
             id: r.appointeeId

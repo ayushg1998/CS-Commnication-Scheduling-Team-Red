@@ -9,6 +9,13 @@ module.exports = function(repository) {
     return repository.getFaculties();
   }
 
+  /*
+    @return @see repository.getStudents
+  */
+  async function getStudents() {
+    return repository.getStudents();
+  }
+
   async function addStudents(students) {
     students = students.filter(s => {
       s.fname &&
@@ -41,6 +48,7 @@ module.exports = function(repository) {
   }
   
   return {
-    getFaculties
+    getFaculties,
+    getStudents
   };
 }
