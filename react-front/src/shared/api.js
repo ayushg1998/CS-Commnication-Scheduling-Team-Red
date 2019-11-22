@@ -20,6 +20,8 @@ export function createEvent({ name, description, image, start, end, color, group
         });
 }
 
+
+
 export function getCalendarEvents() {
     return axios
         .get('/calendar-events', getAuthHeaders())
@@ -79,6 +81,16 @@ export function getJoinableAppointmentEvents() {
         .then(res => {
             if(!res.success) throw new Error(res.message);
             return res.appointmentEvents;
+        });
+}
+
+export function getAppointmentEventAndItsAppointments(id) {
+    return axios
+        .get(`/appointment-event/${id}`, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointmentEvent;
         });
 }
 
