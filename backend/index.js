@@ -74,7 +74,7 @@ app.listen(port, function() {
         app.put('/appointment/:id', appointmentController.changeAppointment);
         app.get('/appointment/:id', appointmentController.getSpecificAppointment);
 
-        app.get('/user/faculty', userController.getFaculties);
+        app.get('/user', userController.getUsers);
 
         app.get('/calendar-events', calendarEventController.getCalendarEvents);
         app.post('/calendar-events/share', calendarEventController.shareCalendarWithUser);

@@ -1,4 +1,4 @@
-const { USERTYPE_FACULTY } = require('../constants');
+const { USERTYPE_FACULTY, USERTYPE_STUDENT  } = require('../constants');
 const { sqlUtils } = require('../lib');
 
 module.exports = function(mysql) {
@@ -52,6 +52,16 @@ module.exports = function(mysql) {
   function getFaculties() {
     return new Promise(function(resolve, reject){
         mysql.query(`SELECT * FROM User WHERE userType='${USERTYPE_FACULTY}'`, function(err, rows){
+            if (err) {reject(err);return;}
+            if (!rows.length) { resolve(null); return;}
+            resolve(rows.map(r => toUserDomain(r)));
+        });
+    });
+  }
+
+  function getStudents() {
+    return new Promise(function(resolve, reject){
+        mysql.query(`SELECT * FROM User WHERE userType='${USERTYPE_STUDENT}'`, function(err, rows){
             if (err) {reject(err);return;}
             if (!rows.length) { resolve(null); return;}
             resolve(rows.map(r => toUserDomain(r)));
@@ -120,6 +130,7 @@ module.exports = function(mysql) {
     findUserById,
     findUserByLoginToken,
     getFaculties,
+    getStudents,
     getUsersByCwids,
     getSoloGroupOfUser
   };  
