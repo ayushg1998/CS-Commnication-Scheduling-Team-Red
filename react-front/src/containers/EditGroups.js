@@ -29,23 +29,34 @@ class EditGroups extends Component {
                 
                 this.setState({groups: groups});
             });
+            
+            // api.getStudents().then(res => {
+            //     let objectApp = [];
+            //     console.log(res);
+            //     for (let i = 0; i < res.length; i++) {
+            //       const stu = res[i];
+          
+            //       objectApp.push({
+            //         label: stu.fname + " " + stu.lname,
+            //         value: stu.lname,
+            //         id: stu.id,
+            //         cwid: stu.cwid
+            //       });
+            //     }
 
-            api.getFaculty().then(res => {
-                let objectApp = [];
-          
-                for (let i = 0; i < res.faculties.length; i++) {
-                  const fac = res.faculties[i];
-          
-                  objectApp.push({
-                    label: fac.fname + " " + fac.lname,
-                    value: fac.lname,
-                    id: fac.id,
-                    cwid: fac.cwid
-                  });
-                }
-          
-                this.setState({ faculty: objectApp });
-              });
+            
+            // });
+            
+            api.getStudents().then(res => {
+                const students = res.map(student => ({label: student.fname + " " + student.lname,
+                                                    value: student.lname, 
+                                                    id: student.id,
+                                                    cwid: student.cwid}));
+            
+                this.setState({ faculty: students});
+            });
+
+
             
     }
 
