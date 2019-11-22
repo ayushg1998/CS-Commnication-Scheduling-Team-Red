@@ -27,7 +27,7 @@ class Dashboard extends Component {
 
     componentDidMount(){
         
-        let getObject = JSON.parse(localStorage.getItem('user'));
+        // let getObject = JSON.parse(localStorage.getItem('user'));
         displayEvents.getCalendarEvents()
             .then(data => {            
                 const events = data.events.map(e => ({

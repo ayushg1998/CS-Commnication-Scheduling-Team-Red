@@ -21,9 +21,9 @@ import ViewGroups from './containers/ViewGroups';
 
 
 class Logout extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     componentDidMount() {
         authService.logout();

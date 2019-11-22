@@ -34,12 +34,7 @@ class ViewGroups extends Component {
     }
 
     groupMembers(groupNumber){
-   let styles = {
-            margin: '20px',
-            width: '100%',
-            height: '150px',
-            backgroundColor: '#d3d3d3',
-          }     
+        
           let membersInGroup = [];
         viewGroups.getSpecificGroup(groupNumber)
             .then(group => {       
@@ -84,14 +79,8 @@ class ViewGroups extends Component {
     }
 control()
 {
-        let members = "";
         let enter = this.state.click;
-    let styles = {
-        margin: '20px',
-        width: '100%',
-        height: '150px',
-        backgroundColor: 'gray',
-    }
+    
      
       if(enter === false)
         {

@@ -113,15 +113,15 @@ export function shareCalendar({userId, permission}) {
         userType: string
     }>>
 */
-export function getAllUsers() {
-    return axios
-        .get('/user?filters=faculty,student', {userId, permission}, getAuthHeaders())
-        .then(res => res.data)
-        .then(res => {
-            if(!res.success) throw new Error(res.message);
-            return res.users;
-        });
-}
+// export function getAllUsers() {
+//     return axios
+//         .get('/user?filters=faculty,student', {userId, permission}, getAuthHeaders())
+//         .then(res => res.data)
+//         .then(res => {
+//             if(!res.success) throw new Error(res.message);
+//             return res.users;
+//         });
+// }
 
 /*
     @see getAllUsers
