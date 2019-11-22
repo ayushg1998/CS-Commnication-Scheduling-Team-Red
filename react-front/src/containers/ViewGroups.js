@@ -34,17 +34,11 @@ class ViewGroups extends Component {
     }
 
     groupMembers(groupNumber){
-   let styles = {
-            margin: '20px',
-            width: '100%',
-            height: '150px',
-            backgroundColor: '#d3d3d3',
-          }     
+        
           let membersInGroup = [];
         viewGroups.getSpecificGroup(groupNumber)
             .then(group => {       
                              
-                   
                 this.setState({groupName: group.name})            
                 for(let i = 0; i< group.members.length; i++)
                 {
@@ -52,42 +46,14 @@ class ViewGroups extends Component {
                    console.log(groupNumber +" look here " + group.members[i].fname+ " "+group.members[i].lname);
                    membersInGroup.push(group.members[i].fname+" "+group.members[i].lname);
                    
-                }            
-                
+                }             
                 this.setState({mem: membersInGroup})
                 return (
                     this.setState({click: true}),
                     console.log(this.state.mem)
-                    );
-             
-            })
-            
+                    ); 
+            })        
     }
-
-
-   /* members()
-    {
-        let styles = {
-            margin: '20px',
-            width: '100%',
-            height: '150px',
-            backgroundColor: '#d3d3d3',
-        }
-        for(let i = 0; i < this.state.mem.length; i++){
-            return (
-               <div key={i} style={styles} >
-                       <a onClick={() => this.control()}>
-                       <div>
-                    <ul>
-                        <h5><li>Name: {this.state.mem[i]}</li></h5>
-                    </ul>
-                    
-                    </div>
-                    </a>
-                </div>
-                );
-    }
-}*/
     
     onclick()
     {
@@ -96,16 +62,25 @@ class ViewGroups extends Component {
         console.log(this.state.click)
         )
     }
+
+    members()
+    {
+        if(this.state.mem.length > 0)
+            {
+                return(
+                <li>{this.state.mem.map((member) => (
+                <li>{member}</li>
+                    ))}</li>
+                    )
+            }
+        else{
+                return(<p>Currently there are no members in this group!</p>)
+            }
+    }
 control()
 {
-        let members = "";
         let enter = this.state.click;
-    let styles = {
-        margin: '20px',
-        width: '100%',
-        height: '150px',
-        backgroundColor: 'gray',
-    }
+    
      
       if(enter === false)
         {
@@ -158,18 +133,13 @@ control()
         if(enter = true)
         {
             enter= false
-            for(let i = 0; i < this.state.mem.length; i++){
-                console.log(this.state.mem.length);
-                    members += this.state.mem[i] + "\n";
-                    
-            }
             return (
                 <div className="card">
                     <h5 className="card-header">{this.state.groupName}</h5>
                     <div className="card-body">
                         <h5 className="card-title">Members:</h5>
                         <ul>
-                            <li>{members}</li>
+                            <li>{this.members()}</li>
                         </ul>
                         <a 
                             href="#" 

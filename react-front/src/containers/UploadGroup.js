@@ -68,7 +68,7 @@ export default class UploadGroup extends Component {
         if (submitting) return;
 
         this.setState({submitting: true}, () => {
-            if (selectedGroup == -1) {
+            if (selectedGroup === -1) {
                 alert('Please select group'); 
                 this.setState({submitting: false});
                 return;
