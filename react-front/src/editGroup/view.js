@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
+import '../containers/Login.css'
+import Button from "react-bootstrap/Button";
+
 export default class View extends Component {
 
   /*expectes a controller to be passed as props*/
@@ -103,7 +106,8 @@ export default class View extends Component {
       totalGroupMembersToRemove, selectedGroupMembersToRemove,
       selectedGroup, groups, disableUI } = this.state;
 
-    return <div>
+    return <div className="bg">
+        <div className="container panel-default">
         <Select
           disabled={disableUI}
           value={selectedGroup}
@@ -135,8 +139,13 @@ export default class View extends Component {
           valueKey="id"
         />
 
-        <button disabled={disableUI} onClick={this.handleAddGroupMember}>Add group members</button>
-        <button disabled={disableUI} onClick={this.handleRemoveGroupMember}>Remove group members</button>
+        <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" onClick={this.handleAddGroupMember}>
+          Add Group Members
+        </Button>
+        <Button className="button-padding" style={{ marginTop: 0.5 + 'em' }} variant="primary" onClick={this.handleRemoveGroupMember}>
+          Remove Group Members
+        </Button>
+        </div>
     </div>
   }
 }
