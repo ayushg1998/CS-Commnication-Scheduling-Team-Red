@@ -12,33 +12,33 @@ export default class CreateGroups extends Component {
     super(props);
     this.state = {
       groupName: "",
-      facultySelect: [],
-      faculty: [],
+      userSelect: [],
+      userPool: [],
       description: ""
     };
   }
 
   validateForm() {
     return (
-      this.state.groupName.length > 0 && this.state.facultySelect.Length > 0
+      this.state.groupName.length > 0 && this.state.userSelect.Length > 0
     );
   }
 
   componentDidMount() {
     //change this to getEmail api
-    api.getStudents().then(res => {
-      const students = res.map(student => ({label: student.fname + " " + student.lname,
-                                          value: student.lname, 
-                                          id: student.id,
-                                          cwid: student.cwid}));
+    api.getAllUsers().then(res => {
+      const userPool = res.map(user => ({label: user.fname + " " + user.lname,
+                                          value: user.lname, 
+                                          id: user.id,
+                                          cwid: user.cwid}));
   
-      this.setState({ faculty: students});
+      this.setState({ userPool });
   });
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    const { groupName, description, facultySelect } = this.state;
+    const { groupName, description, userSelect } = this.state;
 
     const groupData = {
       name: groupName,
@@ -47,7 +47,7 @@ export default class CreateGroups extends Component {
 
     api.createGroup(groupData)
         .then(groupId => {
-            const cwids = facultySelect.map(f => f.cwid);
+            const cwids = userSelect.map(f => f.cwid);
             return api.addGroupMembers(groupId, cwids)
         })
         .then(() => {
@@ -62,24 +62,8 @@ export default class CreateGroups extends Component {
     });
   };
 
-  handleFacultySelectChange = (k, change) => {
-      let facultySelect = this.state.facultySelect;
-
-      if (change.action === 'remove-value' || change.action === 'pop-value') {
-        const optionData = change.removedValue;
-
-        facultySelect = facultySelect.filter(f => f.id !== optionData.id);
-      } else if (change.action === 'select-option') {
-        const optionData = change.option;
-        
-        facultySelect = [...facultySelect, optionData];
-      } else if (change.action === 'clear') {
-          facultySelect = [];
-      }
-
-      this.setState({
-          facultySelect
-      });
+  handleUserSelectChange = userSelect => {
+    this.setState({ userSelect });
   }
 
   handleGroupNameChange = ev => {
@@ -95,13 +79,12 @@ export default class CreateGroups extends Component {
   resetState = () => {
     this.setState({
         groupName: "",
-        facultySelect: [],
+        userSelect: [],
         description: ""
     });
   };
 
   render() {
-    //console.log(this.state.faculty);
     return (
       <div className="bg">
       <div className="container panel-default">
@@ -123,12 +106,13 @@ export default class CreateGroups extends Component {
             <h3 className="App-title">Select email</h3>
           </header>
           <Select
-            name="form-field-name"
-            value={this.state.facultySelect}
-            isMulti
-            onChange={this.handleFacultySelectChange}
-            searchable={this.state.searchable}
-            options={this.state.faculty}
+            value={this.state.userSelect}
+            multi
+            options={this.state.userPool}
+            onChange={this.handleUserSelectChange}
+            placeholder="Select users to have em' as members"
+            labelKey="label"
+            valueKey="id"
           />
 
           <Form.Group controlId="description">
