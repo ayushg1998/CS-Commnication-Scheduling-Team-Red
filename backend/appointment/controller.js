@@ -178,6 +178,15 @@ module.exports = function(usecase) {
   }
 
   /*
+    get appointments, user is part of
+  */
+  async function getAppointments(req, res, next) {
+    const userId = req.user.id;
+    const appointments = await usecase.getAppointmentsOfAppointee(userId);
+    res.send({success: true, appointments});
+  }
+
+  /*
     @response {
       success: true,
       appointment: {
@@ -223,6 +232,7 @@ module.exports = function(usecase) {
     addAppointment,
     changeAppointment,
     getSpecificAppointmentEvent,
-    getSpecificAppointment
+    getSpecificAppointment,
+    getAppointments
   };
 }

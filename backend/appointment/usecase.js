@@ -172,6 +172,13 @@ module.exports = function(repository, {resourceUsecase}) {
     return repository.getAppointmentsOfAppointmentEvent(appointmentEventId);
   }
 
+  async function getAppointmentsOfAppointee(userId) {
+    assert.ok(userId);
+    return repository.getAppointmentsOfAppointee(userId);
+  }
+
+
+
   /*
     @return @see getUser
   */
@@ -209,6 +216,7 @@ module.exports = function(repository, {resourceUsecase}) {
     getAppointmentEvent,
     getAllVisibleAppointmentResourcesOfUser,
     getAllVisibleAppointmentEventResourcesOfUser,
+    getAppointmentsOfAppointee,
     getAllJoinableAppointmentEventsOfUser,
     getUser
   };

@@ -203,6 +203,16 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     });
   }
 
+  async function getAppointmentsOfAppointee(appointeeId) {
+    const query = `SELECT * FROM Appointment WHERE appointeeId=${appointeeId}`;
+    return new Promise(function(resolve, reject) {
+      mysql.query(query, function(err, rows) {
+        if (err) { reject(err); return; }
+        resolve(rows.map(r => fromDBAppointment(r)));
+      });
+    });
+  }
+
   /*
     @param groupIds: Array<int>
     @return Array<{appointmentEventId, permission, resourceId}>
@@ -313,6 +323,7 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
     addAppointmentEvent,
     getAppointment,
     getAppointments,
+    getAppointmentsOfAppointee,
     getAppointmentsOfAppointmentEvent,
     addAppointment,
     updateAppointment,
