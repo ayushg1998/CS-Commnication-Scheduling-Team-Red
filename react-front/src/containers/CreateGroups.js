@@ -26,22 +26,14 @@ export default class CreateGroups extends Component {
 
   componentDidMount() {
     //change this to getEmail api
-    api.getFaculty().then(res => {
-      let objectApp = [];
-
-      for (let i = 0; i < res.faculties.length; i++) {
-        const fac = res.faculties[i];
-
-        objectApp.push({
-          label: fac.fname + " " + fac.lname,
-          value: fac.lname,
-          id: fac.id,
-          cwid: fac.cwid
-        });
-      }
-
-      this.setState({ faculty: objectApp });
-    });
+    api.getStudents().then(res => {
+      const students = res.map(student => ({label: student.fname + " " + student.lname,
+                                          value: student.lname, 
+                                          id: student.id,
+                                          cwid: student.cwid}));
+  
+      this.setState({ faculty: students});
+  });
   }
 
   handleSubmit = event => {
