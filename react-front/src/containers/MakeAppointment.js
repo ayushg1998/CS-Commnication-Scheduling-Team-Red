@@ -71,18 +71,14 @@ export default class MakeAppointment extends Component {
     }
     appointmentPosition(pos){
               return (
-                this.setState({position: pos}),
-                  console.log(this.state.position)
+                this.setState({position: pos})
                   ); 
   }
 
-  handleSubmit = pos => {
-    //event.preventDefault();
-    console.log(this.state.activeAppointments);
-    const { groupId, position, appointmentEventId } = this.state;
+handleSubmit() {
 
     const appData = {
-      position: pos,
+      position: this.state.position,
       appointmentEventId: this.state.activeAppointmentEvent.id
     };
 
@@ -97,7 +93,8 @@ export default class MakeAppointment extends Component {
   };
 
     appointmentCards()
-    {   const {activeAppointer, activeAppointments, activeAppointmentEvent, hasActiveAppointmentData} = this.state;
+    {   
+        const {activeAppointer, activeAppointments, activeAppointmentEvent, hasActiveAppointmentData} = this.state;
         return(
         hasActiveAppointmentData?
         (
@@ -173,8 +170,9 @@ export default class MakeAppointment extends Component {
             <a 
                                 href="#" 
                                 className="btn btn-primary" 
+                                onClick = { () => this.handleSubmit()}
                                 style={{ marginTop: 1 + 'em' }}
-                            >Select this appointment slot to sign up</a>
+                            >Submit</a>
             </div>)
         }
         else{
