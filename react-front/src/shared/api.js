@@ -39,7 +39,15 @@ export function logout() {
         });
 }
 
-
+export function addAppointment({position, appointmentEventId}) {
+    return axios
+        .post('/appointment', {position, appointmentEventId}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return res.appointmentId;
+        });
+}
 
 export function addAppointmentEvent({name, start, slotCount, slotInterval, description, color, groupId}) {
     return axios
@@ -53,11 +61,30 @@ export function addAppointmentEvent({name, start, slotCount, slotInterval, descr
 
 export function getAppointmentEvent(id){
     return axios
-        .get('/appointment-event?appointerId='+id, getAuthHeaders())
+        .get(`/appointment-event/${id}`, getAuthHeaders())
         .then(res => res.data)
-        .catch(res => {
+        .then(res => {
             if(!res.success) throw new Error(res.message);
-            return "Error";
+            return res.appointmentEvent;
+        });
+}
+
+export function getAppointment(id){
+    return axios
+        .get(`/appointment/${id}`, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointment;
+        });
+}
+
+export function updateAppointment({appointmentId, position}) {
+    return axios
+        .put(`/appointment/${appointmentId}`, {appointmentId, position}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
         });
 }
 

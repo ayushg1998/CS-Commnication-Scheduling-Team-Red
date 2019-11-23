@@ -1,0 +1,4 @@
+/*hack to fix ui bug, inherent in library that floats content*/
+.ui-dialog .ui-dialog-content {
+  clear: both;
+}
