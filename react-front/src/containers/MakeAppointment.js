@@ -75,6 +75,27 @@ export default class MakeAppointment extends Component {
                   console.log(this.state.position)
                   ); 
   }
+
+  handleSubmit = pos => {
+    //event.preventDefault();
+    console.log(this.state.activeAppointments);
+    const { groupId, position, appointmentEventId } = this.state;
+
+    const appData = {
+      position: pos,
+      appointmentEventId: this.state.activeAppointmentEvent.id
+    };
+
+    api.addAppointment(appData)
+        .then(() =>{
+            alert("success");                
+        })
+        .catch(res => {
+            if (!res.success) throw new Error(res.message);
+            return;
+        });       
+  };
+
     appointmentCards()
     {   const {activeAppointer, activeAppointments, activeAppointmentEvent, hasActiveAppointmentData} = this.state;
         return(
@@ -125,7 +146,7 @@ export default class MakeAppointment extends Component {
                                     className="btn btn-primary" 
                                     onClick={() => this.appointmentPosition(ap.position)}
                                     style={{ marginTop: 1 + 'em' }}
-                                >submit</a>
+                                >Select this appointment slot to sign up</a>
                             </div>
                         </div>
                             ))
@@ -144,6 +165,19 @@ export default class MakeAppointment extends Component {
     //then open a model/dialogue, that shows list of appointments
     render() {
         const apes = this.state.appointmentEvents;
+        
+        if(this.state.hasActiveAppointmentData === true){
+            return(<div>
+                
+                {this.appointmentCards()}
+            <a 
+                                href="#" 
+                                className="btn btn-primary" 
+                                style={{ marginTop: 1 + 'em' }}
+                            >Select this appointment slot to sign up</a>
+            </div>)
+        }
+        else{
         return (
             <div>
                 <div>
@@ -159,8 +193,7 @@ export default class MakeAppointment extends Component {
                         }
                     </ul>
                 </div>
-                {this.appointmentCards()}
             </div>        
-        );
-    }
+        );}
+                    }
 }
