@@ -16,7 +16,8 @@ export default class MakeAppointment extends Component {
             activeAppointmentEvent: null,
             activeAppointments: [],
             activeAppointer: null,
-            hasActiveAppointmentData: false
+            hasActiveAppointmentData: false,
+            posistion: -1
         };
     }
 
@@ -68,13 +69,81 @@ export default class MakeAppointment extends Component {
             });
 
     }
-
+    appointmentPosition(pos){
+              return (
+                this.setState({position: pos}),
+                  console.log(this.state.position)
+                  ); 
+  }
+    appointmentCards()
+    {   const {activeAppointer, activeAppointments, activeAppointmentEvent, hasActiveAppointmentData} = this.state;
+        return(
+        hasActiveAppointmentData?
+        (
+            <div>
+                <div>
+                    <h2>Appointment Event:</h2>
+                <p>Name: {activeAppointmentEvent.name}</p>
+                <p>Description: {activeAppointmentEvent.description}</p>
+                <p style={{backgroundColor: `#${activeAppointmentEvent.color}`}}>Color: {activeAppointmentEvent.color}</p>
+                <p>Start: {activeAppointmentEvent.start}</p>
+                <p>End: {activeAppointmentEvent.end}</p>
+                <p>Slot Interval: {activeAppointmentEvent.slotInterval}</p>
+                <p>Slot Count: {activeAppointmentEvent.slotCount}</p>
+                </div>
+                <div>
+                    <h2>Appointer of this Appointment Event:</h2>
+                </div>
+                <div>
+                    <h2>Appointments that have been registered</h2>
+                    <ul>
+                        {
+                            activeAppointments.map((ap, index) => (
+                                <div key={index} className="card" style={{ marginBottom: 3 + 'em' }}>
+                            <h5 className="card-header">Appointment Time Slot</h5>
+                            <div className="card-body">
+                                <ul className="list-group list-group-flush">
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Start:</h5>
+                                        <p className="card-text">{ap.start}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">End:</h5>
+                                        <p className="card-text">{ap.end}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Position:</h5>
+                                        <p className="card-text">{ap.position}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                        <h5 className="card-title">Appointee:</h5>
+                                        <p className="card-text">{ap.appointee? ap.appointee.fname: NA}{ap.appointee? ap.appointee.lname: NA}</p>
+                                    </li>
+                                </ul>
+                                <a 
+                                    href="#" 
+                                    className="btn btn-primary" 
+                                    onClick={() => this.appointmentPosition(ap.position)}
+                                    style={{ marginTop: 1 + 'em' }}
+                                >submit</a>
+                            </div>
+                        </div>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+                
+        ): (
+            null
+        )
+        )
+    }
     //TODO: do this
     //then upon click appointment event from list, getSpecificAppointmentEvent api should be called
     //then open a model/dialogue, that shows list of appointments
     render() {
         const apes = this.state.appointmentEvents;
-        const {activeAppointer, activeAppointments, activeAppointmentEvent, hasActiveAppointmentData} = this.state;
         return (
             <div>
                 <div>
@@ -90,43 +159,7 @@ export default class MakeAppointment extends Component {
                         }
                     </ul>
                 </div>
-                {
-                    hasActiveAppointmentData?
-                    (
-                        <div>
-                            <div>
-                                <h2>Appointment Event:</h2>
-                            <p>Name: {activeAppointmentEvent.name}</p>
-                            <p>Description: {activeAppointmentEvent.description}</p>
-                            <p style={{backgroundColor: `#${activeAppointmentEvent.color}`}}>Color: {activeAppointmentEvent.color}</p>
-                            <p>Start: {activeAppointmentEvent.start}</p>
-                            <p>End: {activeAppointmentEvent.end}</p>
-                            <p>Slot Interval: {activeAppointmentEvent.slotInterval}</p>
-                            <p>Slot Count: {activeAppointmentEvent.slotCount}</p>
-                            </div>
-                            <div>
-                                <h2>Appointer of this Appointment Event:</h2>
-                            </div>
-                            <div>
-                                <h2>Appointments that have been registered</h2>
-                                <ul>
-                                    {
-                                        activeAppointments.map((ap, index) => (
-                                            <li key={index} style={{backgroundColor: ap.unoccupied? 'red': 'green', marginBottom: '4px'}}>
-                                                <div>Start: {ap.start}</div>
-                                                <div>End: {ap.end}</div>
-                                                <div>Position: {ap.position}</div>
-                                                <div>Appointee: {ap.appointee? ap.appointee.fname: NA} {ap.appointee? ap.appointee.lname: NA}</div>
-                                            </li>
-                                        ))
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    ): (
-                        null
-                    )
-                }
+                {this.appointmentCards()}
             </div>        
         );
     }
