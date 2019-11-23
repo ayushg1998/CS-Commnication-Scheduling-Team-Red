@@ -285,6 +285,16 @@ export function shareGroup({groupId, userId, permission}) {
         });
 }
 
+export function addAppointment({position, appointmentEventId}) {
+    return axios
+        .post('/appointment-event', {position, appointmentEventId}, getAuthHeaders())
+        .then(res => res.data)
+        .catch(res => {
+            if (!res.success) throw new Error(res.message);
+            return;
+        });
+}
+
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
     return {
