@@ -4,9 +4,6 @@ import './App.css';
 import Routes from './Routes';
 import Navigation from './components/Navigation';
 
-import MakeAppointment from './makeAppointment';
-//import ViewDataMapper from './makeAppointment/view_data_mapper';
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,17 +12,18 @@ class App extends Component {
   render () {
     return (
       <div className="App custom-container">
-        {/* <Navigation />
-        <Routes /> */}
-
-        <MakeAppointment
-          request={'editAppointment'}
-          appointmentEventId={1} 
-          appointmentId={6} />
+        <Navigation />
+        <Routes />
       </div>
     );
   }
 }
 
-//export default withRouter(App);
-export default App;
+/*
+  <MakeAppointment
+  request={'editAppointment'}
+  appointmentEventId={1} 
+  appointmentId={6} />
+*/
+
+export default withRouter(App);
