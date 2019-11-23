@@ -79,6 +79,16 @@ export function getAppointment(id){
         });
 }
 
+export function getMyAppointments(){
+    return axios
+        .get(`/appointment`, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointments;
+        });
+}
+
 export function updateAppointment({appointmentId, position}) {
     return axios
         .put(`/appointment/${appointmentId}`, {appointmentId, position}, getAuthHeaders())

@@ -136,7 +136,7 @@ class AuthenticatedNavigation extends React.Component {
             </NavDropdown>
 
             <NavDropdown name="Appointment">
-                <a className="dropdown-item" href="/MakeAppointment">Sign Up For an Appointment</a>
+                <a className="dropdown-item" href="/SignupForAppointment">Sign Up For an Appointment</a>
             </NavDropdown>
 
             <NavDropdown name="Groups">
