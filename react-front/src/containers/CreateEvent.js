@@ -19,8 +19,22 @@ export default class CreateEvent extends Component {
             description: "",
             start: null,
             end: null,
-            color: 'Select a Color'
+            color: 'Select a Color',
+            groups: [],
+            groupId: undefined
         }
+    }
+
+    componentDidMount() {
+        api.getAllVisibleGroups()
+        .then(groups_ => {
+            //groups with UPDATE permission
+            //only concerned with name and id
+            const groups = groups_.filter(g => g.permission === 'UPDATE')
+                .map(g => ({id:g.id, label: g.name}));
+            
+            this.setState({groups: groups});
+        });    
     }
 
     validateForm() {
@@ -28,7 +42,8 @@ export default class CreateEvent extends Component {
             this.state.title.length > 0 &&
             this.state.start !== null &&
             this.state.end !== null &&
-            this.state.color.length > 0
+            this.state.color.length > 0 &&
+            Number.isNumber(this.state.groupId)
         );
     }
 
@@ -52,15 +67,17 @@ export default class CreateEvent extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
+        const {title, description,
+        start, end, color, groupId} = this.state;
 
         const eventData = {
-            name: this.state.title,
-            description: this.state.description,
-            start: this.state.start,
-            end: this.state.end,
-            color: this.state.color,
+            name: title,
+            description: description,
+            start: start,
+            end: end,
+            color: color,
             image: null,
-            groupId: 5//TODO: change this static value later.
+            groupId: groupId//TODO: change this static value later.
         };
 
         return api.createEvent(eventData)
@@ -79,9 +96,14 @@ export default class CreateEvent extends Component {
             description: "",
             start: null,
             end: null,
-            color: 'Select a Color'
+            color: 'Select a Color',
+            groupId: undefined
         });
     }
+        
+    handleGroupSelectionChange = e => {
+        this.setState({groupId: parseInt(e.target.value)});
+    }    
 
     render() {
         return(
@@ -134,6 +156,20 @@ export default class CreateEvent extends Component {
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
+                </Form.Group>
+
+                <Form.Group controlId="groupId">
+                    <Form.Label>What group be assigned</Form.Label>
+                    <select id="groupId" className="form-control" 
+                        value={this.state.groupId}
+                        onChange={this.handleGroupSelectionChange}>
+                        <option value={undefined}>Select Group...</option>
+                        {  
+                            this.state.groups.map(g => (
+                                <option value={g.id} key={g.id}>{g.label}</option>
+                            ))
+                        }
+                    </select>
                 </Form.Group>
 
                 <Form.Group controlId="description">

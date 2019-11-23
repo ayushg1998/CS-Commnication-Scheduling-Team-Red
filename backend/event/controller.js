@@ -2,6 +2,19 @@ const constants = require('../constants');
 const { READ, JOIN, UPDATE, UPDATE_JOIN } = constants.permissions.event;
 
 module.exports = function(usecase) {
+
+  /*
+    @body {
+      name: string,
+      description: null | string,
+      image: null,
+      start: Date,
+      end: Date,
+      color: string,
+      creatorId: int,
+      groupId: int
+    }
+  */
   async function addEvent(req, res, next) {
     try {
       const userId = req.user.id;

@@ -4,6 +4,7 @@ import './App.css';
 import Routes from './Routes';
 import Navigation from './components/Navigation';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,11 +20,6 @@ class App extends Component {
   }
 }
 
-/*
-  <MakeAppointment
-  request={'editAppointment'}
-  appointmentEventId={1} 
-  appointmentId={6} />
-*/
 
+//export default App;
 export default withRouter(App);
