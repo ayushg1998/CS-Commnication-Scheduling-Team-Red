@@ -86,7 +86,7 @@ control()
         {
             return(
                 <div className="container" >
-                <h1>just testing</h1>
+                <h1>Current Groups</h1>
     
                 {this.state.groups.map((group,i) => {
                     return (
@@ -146,7 +146,7 @@ control()
                             className="btn btn-primary" 
                             onClick={() => this.onclick()}
                             style={{ marginTop: 1 + 'em' }}
-                        >Bo Back</a>
+                        >Go Back</a>
                     </div>
                 </div>
             );

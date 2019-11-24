@@ -2,6 +2,8 @@ import * as assert from 'assert';
 import React, { Component } from 'react';
 import Dialog from '../components/Dialog';
 
+import Button from "react-bootstrap/Button";
+
 export default class View extends Component {
 
   /*@param controller
@@ -110,7 +112,8 @@ export default class View extends Component {
         width={500}
         height={400}
         title={modalTitle}
-        onClose={this.handleCloseClick}>
+        onClose={this.handleCloseClick}
+        style={{ fontFaimly: "Segoe UI" }}>
         <div>
           <p>Appointment Event Name: {appointmentEventName}</p>
           <p>Description: {description}</p>
@@ -125,7 +128,9 @@ export default class View extends Component {
               />
           </div>
 
-          <button onClick={this.handleSubmit}>Submit</button>
+          <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.handleSubmit}>
+                Submit
+          </Button>
         </div>
       </Dialog>
     );    
