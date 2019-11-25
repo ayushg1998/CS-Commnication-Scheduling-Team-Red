@@ -46,6 +46,19 @@ module.exports = function(repository, {resourceUsecase}) {
     return collector.getCollection();
   }
 
+  async function getAllVisibleAppointmentEventsOfUser(userId) {
+    assert.ok(userId);
+
+    const resources = await getAllVisibleAppointmentEventResourcesOfUser(userId);
+    const appointmentEventIds = resources.map(r => r.appointmentEventId);
+    const appointmentEvents = await repository.getAppointmentEvents(appointmentEventIds);
+
+    return appointmentEvents.map(ape => {
+      const permission = resources.find(r => r.appointmentEventId === ape.id).permission;
+      ape.permission = permission; return ape;
+    });
+  }
+
   /*
     @return Promise<Array<{
       appointmentId: int, 
@@ -81,6 +94,17 @@ module.exports = function(repository, {resourceUsecase}) {
 
     await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
     return collector.hasPermission(appointmentId, permission);
+  }
+  
+  async function hasAppointmentEventPermission({appointmentEventId, userId, permission}) {
+    assert.ok(appointmentEventId); assert.ok(userId);
+    assert.ok([READ, UPDATE].indexOf(permission) >= 0);
+
+    const collector = new AppointmentEventResourceAggregator();
+    const fetcher = {fetch: repository.getAppointmentEventResourcesOfGroups};
+
+    await resourceUsecase.getAccessibleResources(userId, collector, fetcher);
+    return collector.hasPermission(appointmentEventId, permission);
   }
 
   async function getAppointmentEventsOfAppointer(appointerId) {
@@ -156,6 +180,24 @@ module.exports = function(repository, {resourceUsecase}) {
     await repository.updateAppointment({appointmentId, position, start, end});
   }
 
+  async function shareAppointmentEventWithUser({sharerId, shareeId, permission, appointmentEventId}) {
+    assert.ok(sharerId); assert.ok(shareeId); assert.ok(appointmentEventId);
+    assert.ok(resourceUsecase.checkPermissionCompatible({appointmentEventId}, permission));
+
+    //sharer should atlest have permission that he attempts to share
+    const sharerHasPermission = await hasAppointmentEventPermission({userId: sharerId, appointmentEventId, permission});
+    if (!sharerHasPermission)
+      throw new Error('Sharer does not have sufficient permission, to grant the permission');
+    
+    const resource = await repository.getAppointmentEventResource(appointmentEventId);
+
+    const group = await repository.getSoloGroupOfUser(shareeId);
+
+    await resourceUsecase.addResourcePermissionToUserGroup({
+      groupId: group.id,
+      resourceId: resource.id, permission});
+  }
+
   /*
     @return @see repository.getAppointmentEvent
   */
@@ -218,6 +260,8 @@ module.exports = function(repository, {resourceUsecase}) {
     getAllVisibleAppointmentEventResourcesOfUser,
     getAppointmentsOfAppointee,
     getAllJoinableAppointmentEventsOfUser,
+    getAllVisibleAppointmentEventsOfUser,
+    shareAppointmentEventWithUser,
     getUser
   };
 }

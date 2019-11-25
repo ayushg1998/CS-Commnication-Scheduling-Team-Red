@@ -1,4 +1,5 @@
 const { sqlUtils } = require('../lib');
+const sqv = sqlUtils.sqlValue;
 const assert = require('assert');
 const moment = require('moment');
 
@@ -314,9 +315,31 @@ module.exports = function(mysql, {userRepository, resourceRepository}) {
 
   }
 
+   /*
+    @return Promsise<{
+      appointmentEventId: int,
+      id: int
+    }>, whose groupId matches
+  */
+ function getAppointmentEventResource(id) {
+  const query = `SELECT * FROM Resource
+    WHERE appointmentEventId=${sqv(id)};`
+
+    return new Promise((resolve, reject) => {
+    
+      mysql.query(query, function(err, rows) {
+        if (err) { reject(err); return; }
+        if (!rows.length) { resolve(null); return; }
+        resolve(rows[0]);
+      });
+    });      
+  }
+
+
   return {
     getAppointmentEvent,
     getAppointmentEvents,
+    getAppointmentEventResource,
     getAppointmentEventResourcesOfGroups,
     getAppointmentResourcesOfGroups,
     getAppointmentEventsofAppointer,

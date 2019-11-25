@@ -44,7 +44,8 @@ module.exports = function(usecase) {
         end,
         slotInterval,
         slotCount,
-        appointerId
+        appointerId,
+        permission (for flag based queries)
       }>
     }
   */
@@ -52,10 +53,14 @@ module.exports = function(usecase) {
     try {
       const queryFilters = req.query.filters || [];
       const joinableFlag  = queryFilters.indexOf('joinable') >= 0;
+      const allVisibleFlag  = queryFilters.indexOf('all_visible') >= 0;
       const userId = parseInt(req.user.id);
 
       let appointmentEvents;
-      if (joinableFlag) {
+      if (allVisibleFlag) {
+        appointmentEvents = await usecase.getAllVisibleAppointmentEventsOfUser(userId);
+      }
+      else if (joinableFlag) {
         appointmentEvents = await usecase.getAllJoinableAppointmentEventsOfUser(userId);
       }
       else {
@@ -67,6 +72,24 @@ module.exports = function(usecase) {
       res.send({success: false, message: error.message});
     }
   }
+
+  async function shareAppointmentEvent(req, res, next) {
+    try {
+      const appointmentEventId = req.body.appointmentEventId;
+      const permission = req.body.permission;
+      const sharerId = req.user.id;
+      const shareeId = req.body.userId;
+
+      await usecase.shareAppointmentEventWithUser({
+        sharerId, shareeId, permission, appointmentEventId});
+
+      res.send({success: true});
+    }
+    catch(err) {
+      res.send({success: false, message: err.message});
+    }
+  }
+
 
   
   /*
@@ -232,6 +255,7 @@ module.exports = function(usecase) {
     addAppointment,
     changeAppointment,
     getSpecificAppointmentEvent,
+    shareAppointmentEvent,
     getSpecificAppointment,
     getAppointments
   };

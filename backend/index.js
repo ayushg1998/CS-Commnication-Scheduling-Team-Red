@@ -70,6 +70,7 @@ app.listen(port, function() {
         app.get('/appointment-event', appointmentController.getAppointmentEvents);
         app.get('/appointment-event/:id', appointmentController.getSpecificAppointmentEvent);
         app.post('/appointment-event', appointmentController.addAppointmentEvent);
+        app.post('/appointment-event/share', appointmentController.shareAppointmentEvent);
 
         app.post('/appointment', appointmentController.addAppointment);
         app.get('/appointment', appointmentController.getAppointments);
