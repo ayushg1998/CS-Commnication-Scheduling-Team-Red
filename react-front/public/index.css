@@ -1,0 +1,29 @@
+/*overriding bootstrap styles, for parkstash theme*/
+/**todo remove the green shadow after mouseup**/
+.btn-primary {
+  color: #fff;
+  background-color: #862633 !important;
+  border-color: #862633  !important;
+  font-weight: bold;
+}
+
+.btn-primary.focus,
+.btn-primary:focus {
+  box-shadow: 0 0 0 0;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus {
+  box-shadow: 0 0 0 0.2rem #5e212180 !important;
+}
+
+.btn-primary:hover {
+  background-color: #7c222e !important;
+  border-color: #682424 !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: #7a2e2e !important;
+  border-color: #682424 !important;
+}

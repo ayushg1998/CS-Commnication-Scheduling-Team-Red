@@ -16,8 +16,8 @@ export default class ShareCalendar extends Component {
             faculty: [],
             selectedFaculty: null,
             permissions: [
-                {label: 'Update', value: 'UPDATE'},
-                {label: 'Read', value: 'READ'}
+                {label: 'Edit/View', value: 'UPDATE'},
+                {label: 'View only', value: 'READ'}
             ],
             selectedPermission: null
         }
