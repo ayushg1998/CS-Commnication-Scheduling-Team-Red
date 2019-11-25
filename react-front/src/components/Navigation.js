@@ -77,6 +77,9 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/CreateStudent">
                 Create Student
               </a>
+              <a className="dropdown-item" href="/CreateFaculty">
+                Create Faculty
+              </a>
               <a className="dropdown-item" href="/UploadUser">
                 Upload Student File
               </a>

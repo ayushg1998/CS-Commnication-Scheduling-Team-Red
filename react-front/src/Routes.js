@@ -6,6 +6,7 @@ import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import Register from './containers/Register';
 import CreateStudent from './containers/CreateStudent';
+import CreateFaculty from './containers/CreateFaculty';
 import CreateEvent from './containers/CreateEvent';
 import AppliedRoute from './components/AppliedRoute';
 import * as authService from './shared/authService';
@@ -19,7 +20,6 @@ import ShareEvent from './containers/ShareEvent';
 import ShareAppointmentEvent from './containers/ShareAppointmentEvent';
 import UploadGroup from './containers/UploadGroup';
 import UploadUser from './containers/UploadUser';
-import CreateFaculty from './containers/CreateFaculty';
 import EditGroup from './editGroup';
 import ViewGroups from './containers/ViewGroups';
 import ViewAppointments from './containers/viewAppointments';
@@ -90,6 +90,7 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/" exact component={WrappedDashboard} />
                 <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
                 <AppliedRoute path="/CreateStudent" exact component={WrappedCreateStudent} />
+                <AppliedRoute path="/CreateFaculty" exact component={WrappedCreateFaculty} />
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
                 <AppliedRoute path="/shareEvent" exact component={WrappedShareEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
@@ -97,7 +98,6 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/SignupForAppointment" exact component={WrappedSignupForAppointment} />
                 <AppliedRoute path="/ViewAppointments" exact component={WrappedViewAppointments} />
                 <AppliedRoute path="/CreateGroups" exact component={WrappedCreateGroups} />
-                <AppliedRoute path="/CreateFaculty" exact component={WrappedCreateFaculty} />
                 <AppliedRoute path="/ViewGroups" exact component={WrappedViewGroups} />
                 <AppliedRoute path="/ShareGroups" exact component={WrappedShareGroups} />
                 <AppliedRoute path="/UploadGroup" exact component={WrappedUploadGroup} />

@@ -38,14 +38,25 @@ export default class CreateStudent extends Component {
         });
     }
 
+    handleSubmit = e => {
+        e.preventDefault();
+        const { cwid, fname, lname, username, email, password } = this.state;
+
+        api.createStudent({cwid, fname, lname, username, email, password})
+            .then(() => { alert('success'); this.resetState(); })
+            .catch(err => { alert(err.message); })
+    }
+
     render() {
         return(
             <div className="bg">
             <Form className="container panel-default" onSubmit={this.handleSubmit} style={{ padding: 1 + 'em' }}>
+                <h2>Create Student</h2><br />
                 <Form.Group controlId="cwid">
                     <Form.Label>CWID:</Form.Label>
                     <Form.Control
                         autoFocus
+                        type="number"
                         value={this.state.cwid}
                         onChange={this.handleChange}
                     />

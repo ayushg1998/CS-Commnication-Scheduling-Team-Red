@@ -373,6 +373,27 @@ export function shareAppointmentEvent({appointmentEventId, userId, permission}) 
             if(!res.success) throw new Error(res.message);
         });
 }
+/*TODO: createEvent, createFaculty and createStudent here*/
+export function createStudent({cwid, fname, lname, username, email, password}) {
+    return axios
+        .post('/create/student', {cwid, fname, lname, username, email, password}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return res.user;
+        })    
+}
+
+export function createFaculty({cwid, fname, lname, username, email, password}) {
+    return axios
+        .post('/create/faculty', {cwid, fname, lname, username, email, password}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            return res.user;
+        })
+}
+
 
 function getAuthHeaders() {
     const { loginToken: authtoken } = JSON.parse(localStorage.getItem('user'));
@@ -380,5 +401,3 @@ function getAuthHeaders() {
         headers: { 'Content-Type': 'application/json', 'authtoken': authtoken },
     }
 }
-
-/*TODO: createEvent, createFaculty and createStudent here*/
