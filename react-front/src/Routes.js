@@ -16,6 +16,7 @@ import ShareCalendar from './containers/ShareCalendar';
 import CreateGroups from './containers/CreateGroups';
 import ShareGroups from './containers/ShareGroups';
 import UploadGroup from './containers/UploadGroup';
+import CreateFaculty from './containers/CreateFaculty';
 import EditGroup from './editGroup';
 import ViewGroups from './containers/ViewGroups';
 
@@ -42,6 +43,7 @@ const WrappedDashboard = authAwareComponent(Dashboard, true);
 const WrappedCreateStudent = authAwareComponent(CreateStudent, true);
 const WrappedCreateEvent = authAwareComponent(CreateEvent, true);
 const WrappedAppointment = authAwareComponent(Appointment, true);
+const WrappedCreateFaculty = authAwareComponent(CreateFaculty, true);
 const WrappedSignupForAppointment = authAwareComponent(SignupForAppointment, true);
 const WrappedShareCalendar = authAwareComponent(ShareCalendar, true);
 const WrappedCreateGroups = authAwareComponent(CreateGroups, true);
@@ -85,6 +87,7 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
                 <AppliedRoute path="/SignupForAppointment" exact component={WrappedSignupForAppointment} />
                 <AppliedRoute path="/CreateGroups" exact component={WrappedCreateGroups} />
+                <AppliedRoute path='/CreateFaculty' exact component={WrappedCreateFaculty} />
                 <AppliedRoute path="/ViewGroups" exact component={WrappedViewGroups} />
                 <AppliedRoute path="/ShareGroups" exact component={WrappedShareGroups} />
                 <AppliedRoute path="/UploadGroup" exact component={WrappedUploadGroup} />
