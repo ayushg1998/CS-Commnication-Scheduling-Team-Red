@@ -43,7 +43,7 @@ export function addAppointment({position, appointmentEventId}) {
     return axios
         .post('/appointment', {position, appointmentEventId}, getAuthHeaders())
         .then(res => res.data)
-        .then(res => {
+        .catch(res => {
             if (!res.success) throw new Error(res.message);
             return res.appointmentId;
         });
