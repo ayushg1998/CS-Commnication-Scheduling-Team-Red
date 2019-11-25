@@ -78,12 +78,32 @@ module.exports = function(repository, {resourceUsecase}) {
     });
   }
 
+
+  async function shareEventWithUser({sharerId, shareeId, eventId, permission}) {
+    assert.ok(sharerId); assert.ok(shareeId); assert.ok(eventId);
+    assert.ok(resourceUsecase.checkPermissionCompatible({eventId}, permission));
+
+    //sharer should atlest have permission that he attempts to share
+    const sharerHasPermission = await hasPermission({userId: sharerId, eventId, permission});
+    if (!sharerHasPermission)
+      throw new Error('Sharer does not have sufficient permission, to grant the permission');
+    
+    const resource = await repository.getEventResource(eventId);
+
+    const group = await repository.getSoloGroupOfUser(shareeId);
+
+    await resourceUsecase.addResourcePermissionToUserGroup({
+      groupId: group.id,
+      resourceId: resource.id, permission});
+  }
+
+
   return {
     getAllVisibleEventResourcesOfUser,
     addEvent,
     updateEvent,
     hasPermission,
-    getAllVisibleEventsOfUser
+    getAllVisibleEventsOfUser,
+    shareEventWithUser
   }
 }
-

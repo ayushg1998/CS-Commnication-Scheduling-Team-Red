@@ -75,10 +75,28 @@ module.exports = function(usecase) {
       res.send({success: false, message: err.message});
     }
   }
+  
+  async function shareEvent(req, res, next) {
+    try {
+      const eventId = req.body.eventId;
+      const permission = req.body.permission;
+      const sharerId = req.user.id;
+      const shareeId = req.body.userId;
+
+      await usecase.shareEventWithUser({
+        sharerId, shareeId, permission, eventId});
+
+      res.send({success: true});
+    }
+    catch(err) {
+      res.send({success: false, message: err.message});
+    }
+  }
 
   return {
     addEvent,
     editEvent,
-    getEvents
+    getEvents,
+    shareEvent
   };
 }

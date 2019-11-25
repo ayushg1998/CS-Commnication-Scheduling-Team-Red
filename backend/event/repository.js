@@ -1,6 +1,7 @@
 const assert = require('assert');
 const moment = require('moment');
 const { sqlUtils } = require('../lib');
+const sqv = sqlUtils.sqlValue;
 
 module.exports = function(mysql, {resourceRepository, userRepository}) {
   assert.ok(resourceRepository); assert.ok(userRepository);
@@ -128,6 +129,26 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     });
   }
 
+  /*
+    @return Promsise<{
+      eventId: int,
+      id: int
+    }>, whose groupId matches
+  */
+ function getEventResource(eventId) {
+  const query = `SELECT * FROM Resource
+    WHERE eventId=${sqv(eventId)};`
+
+    return new Promise((resolve, reject) => {
+    
+      mysql.query(query, function(err, rows) {
+        if (err) {reject(err); return;}
+        if (!rows.length) { resolve(null); return;}
+        resolve(rows[0])
+      });
+    });      
+  }
+
   return {
     getEventResourcesOfGroups,
     addEvent,
@@ -135,7 +156,8 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     getEvent,
     addEventResource: resourceRepository.addEventResource,
     getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
-    getEvents
+    getEvents,
+    getEventResource,
   };
 }
 
