@@ -218,12 +218,32 @@ export function getFaculty() {
 */
 export function getAllVisibleGroups() {
     return axios
-    .get('/groups/me?filters=all_visible', getAuthHeaders())
-    .then(res => res.data)
-    .then(res => {
-        if(!res.success) throw new Error(res.message);
-        return res.groups;
-    });
+        .get('/groups/me?filters=all_visible', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.groups;
+        });
+}
+
+export function getAllVisibleEvents() {
+    return axios
+        .get('/events', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.events;
+        });
+}
+
+export function getAllVisibleAppointmentEvents() {
+    return axios
+        .get('/appointment-event?filters=all_visible', getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+            return res.appointmentEvents;
+        });
 }
 
 /*
@@ -330,6 +350,24 @@ export function removeGroupMembers(groupId, cwids) {
 export function shareGroup({groupId, userId, permission}) {
     return axios
         .post('/groups/share', {groupId, userId, permission}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+        });
+}
+
+export function shareEvent({eventId, userId, permission}) {
+    return axios
+        .post('/events/share', {eventId, userId, permission}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+        });
+}
+
+export function shareAppointmentEvent({appointmentEventId, userId, permission}) {
+    return axios
+        .post('/appointment-event/share', {appointmentEventId, userId, permission}, getAuthHeaders())
         .then(res => res.data)
         .then(res => {
             if(!res.success) throw new Error(res.message);

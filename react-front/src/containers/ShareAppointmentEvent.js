@@ -8,19 +8,32 @@ const PERMISSION_OPTIONS_READ = [
     {label: 'View only', value: 'READ'}
 ];
 
+const PERMISSION_OPTIONS_JOIN = [
+    {label: 'Join/View', value: 'JOIN'},
+    {label: 'View only', value: 'READ'}
+];
+
 const PERMISSION_OPTIONS_UPDATE = [
     {label: 'Edit/View', value: 'UPDATE'},
     {label: 'View only', value: 'READ'}
 ];
 
-export default class ShareCalendar extends Component {
+const PERMISSION_OPTIONS_UPDATE_JOIN = [
+    {label: 'Edit/Join/View', value: 'UPDATE+JOIN'},
+    {label: 'Edit/View', value: 'UPDATE'},
+    {label: 'Join/View', value: 'JOIN'},
+    {label: 'View only', value: 'READ'}
+];
+
+
+export default class ShareAppointmentEvent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groups: [],
+            appointmentEvents: [],
             permissions: [],
             faculties: [],
-            selectedGroup: null,
+            selectedAppointmentEvent: null,
             selectedPermission: null,
             selectedFaculty: null
         }
@@ -34,26 +47,26 @@ export default class ShareCalendar extends Component {
                 value: f.id,
             }));
 
-            api.getAllVisibleGroups().then(groups => {
-                groups = groups.map(g => ({
-                    label: g.name,
-                    value: g.id,
-                    permission: g.permission
+            api.getAllVisibleAppointmentEvents().then(appointmentEvents => {
+                appointmentEvents = appointmentEvents.map(e => ({
+                    label: e.name,
+                    value: e.id,
+                    permission: e.permission
                 }));
 
-                this.setState({faculties, groups, permissions: [] });
+                this.setState({faculties, appointmentEvents, permissions: [] });
             })
         })
     }
 
     share = () => {
-        const { selectedGroup, selectedPermission, selectedFaculty } = this.state;
-        if (!selectedGroup) { alert('Please select group'); return; }
+        const { selectedAppointmentEvent, selectedPermission, selectedFaculty } = this.state;
+        if (!selectedAppointmentEvent) { alert('Please select appointmentEvent'); return; }
         if (!selectedPermission) { alert('Please select permission'); return; }
         if (!selectedFaculty) { alert('Please select faculty'); return; }
 
-        api.shareGroup({
-            groupId: selectedGroup.value,
+        api.shareAppointmentEvent({
+            appointmentEventId: selectedAppointmentEvent.value,
             userId: selectedFaculty.value,
             permission: selectedPermission.value
         })
@@ -65,13 +78,25 @@ export default class ShareCalendar extends Component {
             });
     }
 
-    handleGroupSelectionChange = selectedGroup => {
-        const permissions = selectedGroup? 
-            (selectedGroup.permission === 'UPDATE'? 
-                PERMISSION_OPTIONS_UPDATE: 
-                PERMISSION_OPTIONS_READ): [];
-        const selectedPermission = null;
-        this.setState({selectedGroup, permissions, selectedPermission});        
+    handleAppointmentEventSelectionChange = selectedAppointmentEvent => {
+      const p = selectedAppointmentEvent? selectedAppointmentEvent.permission: null;
+      let permissions;
+      switch(p) {
+        case 'JOIN': {
+          permissions = PERMISSION_OPTIONS_JOIN;       
+        } break;
+        case 'UPDATE': {
+          permissions = PERMISSION_OPTIONS_UPDATE;
+        } break;
+        case 'UPDATE+JOIN': {
+          permissions = PERMISSION_OPTIONS_UPDATE_JOIN;
+        } break;
+        default: {
+          permissions = PERMISSION_OPTIONS_READ;
+        }
+      }
+
+      this.setState({selectedAppointmentEvent, permissions, selectedPermission: null});
     }
 
     handlePermissionSelectionChange = selectedPermission => {
@@ -88,15 +113,15 @@ export default class ShareCalendar extends Component {
             <div className="bg">
                 <div className="container panel-default">
                     <header className="App-header">
-                            <h3 className="App-title">Share Group</h3>
+                            <h3 className="App-title">Share Appointment Event</h3>
                     </header>
                         
                     <div>
-                        <h4>Select Group</h4>
+                        <h4>Select Appointment Event</h4>
                         <Select
-                            onChange={this.handleGroupSelectionChange}
-                            value={this.state.selectedGroup}
-                            options={this.state.groups}
+                            onChange={this.handleAppointmentEventSelectionChange}
+                            value={this.state.selectedAppointmentEvent}
+                            options={this.state.appointmentEvents}
                         />
                     </div>
 

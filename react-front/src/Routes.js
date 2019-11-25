@@ -15,6 +15,8 @@ import SignupForAppointment from './containers/SignupForAppointment';
 import ShareCalendar from './containers/ShareCalendar';
 import CreateGroups from './containers/CreateGroups';
 import ShareGroups from './containers/ShareGroups';
+import ShareEvent from './containers/ShareEvent';
+import ShareAppointmentEvent from './containers/ShareAppointmentEvent';
 import UploadGroup from './containers/UploadGroup';
 import UploadUser from './containers/UploadUser';
 import CreateFaculty from './containers/CreateFaculty';
@@ -49,6 +51,8 @@ const WrappedSignupForAppointment = authAwareComponent(SignupForAppointment, tru
 const WrappedShareCalendar = authAwareComponent(ShareCalendar, true);
 const WrappedCreateGroups = authAwareComponent(CreateGroups, true);
 const WrappedShareGroups = authAwareComponent(ShareGroups, true);
+const WrappedShareEvent = authAwareComponent(ShareEvent, true);
+const WrappedShareAppointmentEvent = authAwareComponent(ShareAppointmentEvent, true);
 const WrappedViewGroups = authAwareComponent(ViewGroups, true);
 const WrappedUploadGroup = authAwareComponent(UploadGroup, true);
 const WrappedUploadUser = authAwareComponent(UploadUser, true);
@@ -86,7 +90,9 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/dashboard" exact component={WrappedDashboard} />
                 <AppliedRoute path="/CreateStudent" exact component={WrappedCreateStudent} />
                 <AppliedRoute path="/createEvent" exact component={WrappedCreateEvent} />
+                <AppliedRoute path="/shareEvent" exact component={WrappedShareEvent} />
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
+                <AppliedRoute path="/shareAppointment" exact component={WrappedShareAppointmentEvent} />
                 <AppliedRoute path="/SignupForAppointment" exact component={WrappedSignupForAppointment} />
                 <AppliedRoute path="/CreateGroups" exact component={WrappedCreateGroups} />
                 <AppliedRoute path='/CreateFaculty' exact component={WrappedCreateFaculty} />
