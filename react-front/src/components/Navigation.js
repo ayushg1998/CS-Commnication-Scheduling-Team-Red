@@ -3,6 +3,8 @@ import * as authService from "../shared/authService";
 
 import "./Navigation.css";
 
+const ADMIN_EMAIL = "london@warhawks.ulm.edu";
+
 const NavItem = props => {
   const pageURI = window.location.pathname + window.location.search;
   const liClassName = props.path === pageURI ? "nav-item active" : "nav-item";
@@ -63,11 +65,12 @@ class NavDropdown extends React.Component {
 
 class AuthenticatedNavigation extends React.Component {
   display() {
-    let userType = JSON.parse(localStorage.getItem("user"));
-    console.log(userType.userType);
+    let user = JSON.parse(localStorage.getItem("user"));
+    console.log(user.userType);
 
-    if (userType.userType === "faculty") {
+    if (user.email === ADMIN_EMAIL) {
       return (
+
         <div>
           <ul className="navbar-nav mr-auto">
             <NavDropdown name="User">
@@ -75,7 +78,7 @@ class AuthenticatedNavigation extends React.Component {
                 Create Student
               </a>
               <a className="dropdown-item" href="/UploadUser">
-                Upload User File
+                Upload Student File
               </a>
             </NavDropdown>
 
@@ -129,22 +132,10 @@ class AuthenticatedNavigation extends React.Component {
           </ul>
         </div>
       );
-    } else if (userType.userType === "admin") {
+    } else if (user.userType === "faculty") {
       return (
         <div>
           <ul className="navbar-nav mr-auto">
-            <NavDropdown name="User">
-              <a className="dropdown-item" href="/CreateFaculty">
-                Create Faculty
-              </a>
-              <a className="dropdown-item" href="/CreateStudent">
-                Create Student
-              </a>
-              <a className="dropdown-item" href="/UploadUser">
-                Upload User File
-              </a>
-            </NavDropdown>
-
             <NavDropdown name="Calendar">
               <a className="dropdown-item" href="/ShareCalendar">
                 Share
@@ -160,29 +151,42 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/createEvent">
                 Create Event
               </a>
+              <a className="dropdown-item" href="/shareEvent">
+                Share Event
+              </a>
             </NavDropdown>
 
             <NavDropdown name="Appointment">
               <a className="dropdown-item" href="/Appointment">
                 Make Appointment Slots
               </a>
+              <a className="dropdown-item" href="/shareAppointment">
+                Share Appointment Event
+              </a>
+
             </NavDropdown>
 
             <NavDropdown name="Groups">
-              <a className="dropdown-item" href="/notfound">
+              <a className="dropdown-item" href="/ViewGroups">
                 View Current Groups
               </a>
               <a className="dropdown-item" href="/CreateGroups">
                 Create New Group
               </a>
-              <a className="dropdown-item" href="/notfound">
+              <a className="dropdown-item" href="/ShareGroups">
+                Share Groups
+              </a>
+              <a className="dropdown-item" href="/UploadGroup">
+                Upload Group File
+              </a>
+              <a className="dropdown-item" href="/EditGroups">
                 Edit Group
               </a>
             </NavDropdown>
           </ul>
         </div>
       );
-    } else if (userType.userType === "student") {
+    }  else if (user.userType === "student") {
       return (
         <div>
           <ul className="navbar-nav mr-auto">
