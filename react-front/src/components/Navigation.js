@@ -61,6 +61,7 @@ class AuthenticatedNavigation extends React.Component {
 
                           <NavDropdown name="User">
                             <a className="dropdown-item" href="/CreateStudent">Create Student</a>
+                            <a className="dropdown-item" href="/UploadUser">Upload User File</a>
                           </NavDropdown>
 
 
@@ -97,6 +98,7 @@ class AuthenticatedNavigation extends React.Component {
                         <NavDropdown name="User">
                             <a className="dropdown-item" href="/CreateFaculty">Create Faculty</a>
                             <a className="dropdown-item" href="/CreateStudent">Create Student</a>
+                            <a className="dropdown-item" href="/UploadUser">Upload User File</a>
                           </NavDropdown>
 
             <NavDropdown name="Calendar">
