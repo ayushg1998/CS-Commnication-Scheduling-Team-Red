@@ -30,9 +30,18 @@ class ViewAppointments extends Component {
           let appoint = [];
               viewGroups.getAppointmentEventAndItsAppointments(id)
               .then(ap => {
-               let name = {
-                 name: ap.appointments}
-                 appoint.push(name)               
+                  console.log(ap.appointments);
+                  console.log(ap.appointments[0].appointee.fname);
+                  const apps = ap.appointments;
+                  const names = apps.map(app => (
+                      { fname: app.appointee.fname,
+                    lname: app.appointee.lname}
+                  ))
+
+                  console.log(names);
+               
+                 appoint = names; 
+                 console.log(appoint);              
               })
             this.setState({groups: appoint})
                 return (
