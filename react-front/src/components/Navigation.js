@@ -187,7 +187,7 @@ class UnaunthenticatedNavigation extends React.Component {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto">
-          <NavItem path="/register" name="Register" />
+          {/* <NavItem path="/register" name="Register" /> */}
           <NavItem path="/login" name="Login" />
         </ul>
       </div>
