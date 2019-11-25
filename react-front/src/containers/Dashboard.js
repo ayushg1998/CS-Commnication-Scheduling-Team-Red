@@ -26,7 +26,7 @@ class Dashboard extends Component {
     }
 
     componentDidMount(){
-        
+        if(this.state.events.length>0){
         // let getObject = JSON.parse(localStorage.getItem('user'));
         displayEvents.getCalendarEvents()
             .then(data => {            
@@ -57,6 +57,7 @@ class Dashboard extends Component {
             .catch(error => {
                 alert(error.message);
             })
+        }
     }
 
     render () {

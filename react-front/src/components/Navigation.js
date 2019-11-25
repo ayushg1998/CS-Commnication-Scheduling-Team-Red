@@ -61,6 +61,7 @@ class AuthenticatedNavigation extends React.Component {
 
                           <NavDropdown name="User">
                             <a className="dropdown-item" href="/CreateStudent">Create Student</a>
+                            <a className="dropdown-item" href="/UploadUser">Upload User File</a>
                           </NavDropdown>
 
 
@@ -95,8 +96,9 @@ class AuthenticatedNavigation extends React.Component {
                         <ul className="navbar-nav mr-auto"> 
 
                         <NavDropdown name="User">
-                            <a className="dropdown-item" href="/notfound">Create Faculty</a>
+                            <a className="dropdown-item" href="/CreateFaculty">Create Faculty</a>
                             <a className="dropdown-item" href="/CreateStudent">Create Student</a>
+                            <a className="dropdown-item" href="/UploadUser">Upload User File</a>
                           </NavDropdown>
 
             <NavDropdown name="Calendar">
@@ -185,7 +187,7 @@ class UnaunthenticatedNavigation extends React.Component {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto">
-          <NavItem path="/register" name="Register" />
+          {/* <NavItem path="/register" name="Register" /> */}
           <NavItem path="/login" name="Login" />
         </ul>
       </div>
