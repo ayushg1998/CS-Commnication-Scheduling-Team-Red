@@ -12,20 +12,24 @@ export default class ShareCalendar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedOption: '',
             clearable: true,    
-            faculty: []
+            faculty: [],
+            selectedFaculty: null,
+            permissions: [
+                {label: 'Edit/View', value: 'UPDATE'},
+                {label: 'View only', value: 'READ'}
+            ],
+            selectedPermission: null
         }
     }
 
     componentDidMount(){
-        api.getFaculty()
-            .then(res => {
+        api.getFaculties()
+            .then(faculties => {
                 let objectApp = [];
-                console.log(res.faculties.length);
 
-                for(let i =0; i<res.faculties.length; i++){
-                    const fac = res.faculties[i];
+                for(let i =0; i< faculties.length; i++){
+                    const fac = faculties[i];
 
                     objectApp.push({
                         label: fac.fname + " " + fac.lname,
@@ -34,31 +38,35 @@ export default class ShareCalendar extends Component {
                     });
                 }
 
-                console.log("This is objectApp: " + objectApp);
-
                 this.setState({faculty:objectApp});
-                console.log(this.state.faculty);
-                return res;
             })
     }
 
-    handleChange = selectedOption => {
-        console.log(selectedOption);
-        this.setState({
-            selectedOption
-        });
+    handleFacultyChange = selectedFaculty => {
+        this.setState({selectedFaculty});
     }
 
     share = () => {
-        const facultyId = this.state.selectedOption && this.state.selectedOption.id;
-        if (!facultyId) alert('please select faculty first');
-        api.shareCalendar({userId: facultyId, permission: 'UPDATE'})
+        const facultyId = this.state.selectedFaculty && this.state.selectedFaculty.id;
+        const permission = this.state.selectedPermission && this.state.selectedPermission.value;
+
+        if (!facultyId) {
+            alert('please select faculty first'); return;
+        }
+        if (!permission) {
+            alert('please select permission first'); return;
+        }
+        api.shareCalendar({userId: facultyId, permission })
             .then(() => {
                 alert('success');
             })
             .catch((err) => {
                 alert('failed: ' + err.message);
             })
+    }
+
+    handlePermissionChange = selectedPermission => {
+        this.setState({selectedPermission});
     }
 
     render() {
@@ -68,21 +76,24 @@ export default class ShareCalendar extends Component {
             <div className="container panel-default">
             <header className="App-header">
                     <h3 className="App-title">Share Calendar</h3>
-                    <br />
-                    <h4 className="App-title">Search for Faculty by Name</h4>
             </header>
+
+
+            <h4 className="App-title">Search for Faculty by Name</h4>
                 
             <Select
-                name="form-field-name"
-                value={this.state.value}
-                isMulti
-                onChange={this.handleChange}
-                clearable={this.state.clearable}
-                searchable={this.state.searchable}
-                labelKey='name'
-                valueKey='last name'                
+                value={this.state.selectedFaculty}
+                onChange={this.handleFacultyChange}       
                 options={this.state.faculty} 
             />
+
+            <h4 className="App-title">Permission</h4>
+
+            <Select
+                value={this.state.selectedPermission}
+                onChange={this.handlePermissionChange}       
+                options={this.state.permissions} 
+            />            
 
             <Button style={{ marginTop: 0.5 + 'em' }} variant="primary" type="submit" onClick={this.share}>
                 Share
