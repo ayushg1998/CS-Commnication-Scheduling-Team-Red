@@ -22,7 +22,7 @@ import UploadUser from './containers/UploadUser';
 import CreateFaculty from './containers/CreateFaculty';
 import EditGroup from './editGroup';
 import ViewGroups from './containers/ViewGroups';
-
+import ViewAppointments from './containers/viewAppointments';
 
 class Logout extends React.Component {
     // constructor(props) {
@@ -54,6 +54,7 @@ const WrappedShareGroups = authAwareComponent(ShareGroups, true);
 const WrappedShareEvent = authAwareComponent(ShareEvent, true);
 const WrappedShareAppointmentEvent = authAwareComponent(ShareAppointmentEvent, true);
 const WrappedViewGroups = authAwareComponent(ViewGroups, true);
+const WrappedViewAppointments = authAwareComponent(ViewAppointments, true);
 const WrappedUploadGroup = authAwareComponent(UploadGroup, true);
 const WrappedUploadUser = authAwareComponent(UploadUser, true);
 const WrappedEditGroup = authAwareComponent(EditGroup, true);
@@ -94,8 +95,9 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/Appointment" exact component={WrappedAppointment} />
                 <AppliedRoute path="/shareAppointment" exact component={WrappedShareAppointmentEvent} />
                 <AppliedRoute path="/SignupForAppointment" exact component={WrappedSignupForAppointment} />
+                <AppliedRoute path="/ViewAppointments" exact component={WrappedViewAppointments} />
                 <AppliedRoute path="/CreateGroups" exact component={WrappedCreateGroups} />
-                <AppliedRoute path='/CreateFaculty' exact component={WrappedCreateFaculty} />
+                <AppliedRoute path="/CreateFaculty" exact component={WrappedCreateFaculty} />
                 <AppliedRoute path="/ViewGroups" exact component={WrappedViewGroups} />
                 <AppliedRoute path="/ShareGroups" exact component={WrappedShareGroups} />
                 <AppliedRoute path="/UploadGroup" exact component={WrappedUploadGroup} />
