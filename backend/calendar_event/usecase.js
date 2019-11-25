@@ -39,7 +39,7 @@ module.exports = function(repository, {resourceUsecase, eventUsecase, appointmen
       resourceId: int
     }>
     */
-    const eventResources = await eventUsecase.getAllVisibleEventsOfUser(userId);
+    const eventResources = await eventUsecase.getAllVisibleEventResourcesOfUser(userId);
     const eventIds = eventResources.map(o => o.eventId);
     let events = await repository.getEvents(eventIds);
 

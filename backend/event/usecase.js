@@ -12,7 +12,7 @@ module.exports = function(repository, {resourceUsecase}) {
       resourceId: int
     }>>
   */
-  async function getAllVisibleEventsOfUser(userId) {
+  async function getAllVisibleEventResourcesOfUser(userId) {
     const collector = new EventResourceAggregator();
     const fetcher = {fetch: repository.getEventResourcesOfGroups};
 
@@ -65,11 +65,25 @@ module.exports = function(repository, {resourceUsecase}) {
     return collector.hasPermission(eventId, permission);
   }
 
+  async function getAllVisibleEventsOfUser({userId}) {
+    assert.ok(userId);
+
+    const eventResources = await getAllVisibleEventResourcesOfUser(userId);
+    const eventIds = eventResources.map(e => e.eventId);
+    const events = await repository.getEvents(eventIds);
+
+    return events.map(e => {
+      const permission = eventResources.find(er => er.eventId === e.id).permission;
+      e.permission = permission; return e;
+    });
+  }
+
   return {
-    getAllVisibleEventsOfUser,
+    getAllVisibleEventResourcesOfUser,
     addEvent,
     updateEvent,
-    hasPermission
+    hasPermission,
+    getAllVisibleEventsOfUser
   }
 }
 

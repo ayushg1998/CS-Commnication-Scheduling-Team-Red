@@ -101,13 +101,41 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
     });
   }
 
+    /*
+  @return Promise<Array<{
+    id: int,
+    name: null | string,
+    description: null | string,
+    image: null | string,
+    start: moment,
+    end: moment,
+    color: string,
+    creatorId: int,
+    groupId: int
+  }>>
+  */
+  function getEvents(ids) {
+    if (!ids.length) return Promise.resolve([]);
+
+    const query = `SELECT * FROM Event WHERE id IN ${sqlUtils.sqlValues(ids)}`;
+
+    return new Promise(function(resolve, reject){
+      mysql.query(query, function(err, rows){
+          if (err) {reject(err); return;}
+          if (!rows.length) { resolve([]); return;}
+          resolve(rows);
+      });
+    });
+  }
+
   return {
     getEventResourcesOfGroups,
     addEvent,
     updateEvent,
     getEvent,
     addEventResource: resourceRepository.addEventResource,
-    getSoloGroupOfUser: userRepository.getSoloGroupOfUser
+    getSoloGroupOfUser: userRepository.getSoloGroupOfUser,
+    getEvents
   };
 }
 

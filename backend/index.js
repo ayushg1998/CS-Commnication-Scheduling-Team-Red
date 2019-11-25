@@ -82,6 +82,8 @@ app.listen(port, function() {
         app.post('/calendar-events/share', calendarEventController.shareCalendarWithUser);
 
         app.post('/events', eventController.addEvent);
+        app.get('/events', eventController.getEvents);
+        app.put('/events/:id', eventController.editEvent);
 
         app.post('/groups/share', groupController.shareGroupWithUser);
         app.get('/groups/me', groupController.getMyGroups);

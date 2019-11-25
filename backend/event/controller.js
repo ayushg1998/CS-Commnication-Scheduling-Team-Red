@@ -63,8 +63,22 @@ module.exports = function(usecase) {
     }
   }
 
+  async function getEvents(req, res, next) {
+    try {
+      const userId = req.user.id;
+
+      const events = await usecase.getAllVisibleEventsOfUser({userId});
+
+      res.send({success: true, events});
+    }
+    catch(err) {
+      res.send({success: false, message: err.message});
+    }
+  }
+
   return {
     addEvent,
-    editEvent
+    editEvent,
+    getEvents
   };
 }
