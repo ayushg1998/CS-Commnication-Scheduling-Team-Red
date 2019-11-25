@@ -20,14 +20,17 @@ class Dashboard extends Component {
     eventStyle = (event) => {
         console.log(event);
         const backgroundColor = '#' + event.color;
-        const style = { backgroundColor };
+        const style = { backgroundColor};
         console.log(style);
-        return { style };
+        return { style,
+                };
     }
 
-    componentDidMount(){
-        
-        // let getObject = JSON.parse(localStorage.getItem('user'));
+    componentDidMount(){      
+        let getObject = JSON.parse(localStorage.getItem('user'));
+
+        if(getObject.userType === "faculty" || getObject.userType === "admin")
+        {
         displayEvents.getCalendarEvents()
             .then(data => {            
                 const events = data.events.map(e => ({
@@ -57,6 +60,24 @@ class Dashboard extends Component {
             .catch(error => {
                 alert(error.message);
             })
+        }
+        if(getObject.userType === "student")
+        {
+            displayEvents.getMyAppointments()
+                .then(data => {                         
+                    console.log(data)     
+                    const event = data.map(e => ({
+                        title: e.appointmentEventId +" Start: " +new Date(e.start)+" End: "+new Date(e.end),
+                        start: new Date(e.start),
+                        end: new Date(e.end),
+                    }));
+                 this.setState({events: event});
+                   console.log(this.state.events)
+                })
+                .catch(error => {
+                    alert(error.message);
+                })  
+        }       
     }
 
     render () {

@@ -75,6 +75,7 @@ class AuthenticatedNavigation extends React.Component {
                 
                             <NavDropdown name="Appointment">
                                 <a className="dropdown-item" href="/Appointment">Make Appointment Slots</a>
+                                <a className="dropdown-item" href="/viewAppointments">View Appointment Slots</a>
                             </NavDropdown>
                 
                             <NavDropdown name="Groups">
@@ -110,6 +111,7 @@ class AuthenticatedNavigation extends React.Component {
 
             <NavDropdown name="Appointment">
                 <a className="dropdown-item" href="/Appointment">Make Appointment Slots</a>
+                <a className="dropdown-item" href="/viewAppointment">View Appointment Slots</a>
             </NavDropdown>
 
             <NavDropdown name="Groups">
