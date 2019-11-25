@@ -4,5 +4,6 @@ module.exports = {
     loginToken: require('./login_token'),
     validateFormat: require('./validate-format'),
     sqlUtils: require('./sqlUtils'),
-    password: require('./password')
+    password: require('./password'),
+    username: require('./username')
 };

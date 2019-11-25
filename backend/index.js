@@ -41,16 +41,17 @@ app.listen(port, function() {
 
         const {repository: resourceRepository, usecase: resourceUsecase} = require('./resource')(connection);
         const {controller: userController, repository: userRepository} = require('./user')(connection);
-        const {repository: groupRepository, usecase: groupUsecase, controller: groupController} = require('./group')(connection, {resourceUsecase, resourceRepository, userRepository});
+        const { controller: registerController, usecase: registerUsecase } = require('./register_login')(connection, {userRepository, resourceRepository});
+        const {repository: groupRepository, usecase: groupUsecase, controller: groupController} = require('./group')(connection, {resourceUsecase, resourceRepository, userRepository, registerUsecase });
         const {controller: appointmentController, usecase: appointmentUsecase, repository: appointmentRepository} = require('./appointment')(connection, {userRepository, resourceRepository, resourceUsecase});
         const {controller: colorController} = require('./color')(connection);
         const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase, userRepository});
         const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceUsecase, resourceRepository, eventUsecase, appointmentUsecase, appointmentRepository});
-        const { controller: loginController } = require('./register_login')(connection, {userRepository, resourceRepository, groupRepository});
     
-        app.post('/create/student', loginController.registerStudent);
-        app.post('/create/faculty', loginController.registerFaculty);
-        app.post('/login', loginController.login);
+        app.post('/create/student', registerController.registerStudent);
+        app.post('/create/student/csv', registerController.registerStudentAsCsv);
+        app.post('/create/faculty', registerController.registerFaculty);
+        app.post('/login', registerController.login);
         app.get('/colors', colorController.getColors);
 
         //thou shall not pass
@@ -154,4 +155,3 @@ app.listen(port, function() {
 //             }
 //         });  
 });
-

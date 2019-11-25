@@ -1,9 +1,9 @@
 const assert = require('assert');
 
-module.exports = function(mysql, {userRepository, resourceRepository, groupRepository}) {
-  assert.ok(userRepository);assert.ok(resourceRepository);assert.ok(groupRepository);
+module.exports = function(mysql, {userRepository, resourceRepository}) {
+  assert.ok(userRepository);assert.ok(resourceRepository);
   
-  const repository = require('./repository')(mysql, {userRepository, resourceRepository, groupRepository});
+  const repository = require('./repository')(mysql, {userRepository, resourceRepository});
   const usecase = require('./usecase')(repository);
   const controller = require('./controller')(usecase);
 

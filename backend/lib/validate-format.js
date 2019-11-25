@@ -15,7 +15,7 @@ function checkStudentEmail(email) {
 }
 
 function checkUsername(username) {
-    return !!(username && typeof username === 'string' && username.length >= 5);
+    return !!(username && typeof username === 'string' && username.length >= 4);
 }
 
 function checkPassword(pwd) {

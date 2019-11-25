@@ -1,5 +1,6 @@
 module.exports = {
-    createRandomPassword: function () {
-        return 'password_' + Math.round(Math.random() * 1000000);
+    /*@return e.g. hello_123*/
+    createPasswordFromUsername: function (username) {
+        return username + '_' +  Math.round(Math.random() * 1000);
     }
 }

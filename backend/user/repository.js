@@ -125,6 +125,7 @@ module.exports = function(mysql) {
 
   return {
     createUser,
+    createUsers,
     findUserByCWID,
     findUserByUsername,
     findUserById,
@@ -139,7 +140,7 @@ module.exports = function(mysql) {
 function toUserDomain(row) {
   return {
       id: row.id,
-      cwid: row.cwid,
+      cwid: parseInt(row.cwid),
       fname: row.fname,
       lname: row.lname,
       username: row.username,

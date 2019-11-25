@@ -98,5 +98,25 @@ module.exports = function(usecase) {
     }
   }
 
-  return { registerStudent, registerFaculty, login };
+  /*
+    @body: {
+      csv: string
+    }
+    @response: {
+      success: true,
+      insertedCwids: Array<number>,
+      existingCwids: Array<number>
+    }
+  */
+ async function registerStudentAsCsv(req, res, next) {
+  try {
+    const csv = req.body.csv;
+    const { insertedCwids, existingCwids } = await usecase.addStudentsAsCsv(csv);
+    res.send({success: true, insertedCwids, existingCwids });
+  } catch(error) {
+    res.send({success: false, error: error.message});
+  }
+}
+
+  return { registerStudent, registerFaculty, login, registerStudentAsCsv };
 }

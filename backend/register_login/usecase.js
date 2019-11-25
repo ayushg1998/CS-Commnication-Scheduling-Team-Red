@@ -77,9 +77,55 @@ module.exports = function(repository) {
     return user;
   }
 
+  /*@return Promise<{
+    insertedCwids: Array<string>,
+    existingCwids: Array<string>
+  }>
+  */
+  async function addStudentsAsCsv(csv) {
+    assert.ok(csv);
+    const { csvParser, username: usernameUtils, password: passwordUtils } = lib;
+    
+    //1. parse, which returns
+    //Array<{email: string, cwid: number, fname: string, lname: string}>
+    let students = csvParser.parseUsersFromCsv(csv);
+
+    const cwids = students.map(s => s.cwid);
+    const existingCwids = await (async function() {
+      const users = await repository.getUsersByCwids(cwids);
+      return users.map(u => u.cwid);
+    })();
+    
+    //2. filter only those students that need be inserted
+    students = students.filter(s => existingCwids.indexOf(s.cwid) < 0);
+    const toBeInsertedCwids = students.map(s => s.cwid);
+      
+    //3. add more fields, and prepare for insertion
+    students = students.map(s => {
+      const username = usernameUtils.parseUsernameFromEmail(s.email);
+      const password = passwordUtils.createPasswordFromUsername(username);
+
+      return { ...s, username, password }
+    });
+    
+    //4. insert 
+    //TODO: make bulk insertion instead, this way is slower
+    await Promise.all(students.map(s => registerStudent(s))).catch(err => { console.log(err.message); });
+
+    //5. some insertions may have failed; this way we report correct inserted Cwids
+    const insertedCwids = await (async function() {
+      const users = await repository.getUsersByCwids(toBeInsertedCwids);
+      return users.map(u => u.cwid);
+    })();
+    
+    return { insertedCwids, existingCwids };
+  }
+
+
   return {
     registerStudent,
     registerFaculty,
-    loginByUsername
+    loginByUsername,
+    addStudentsAsCsv
   }
 }

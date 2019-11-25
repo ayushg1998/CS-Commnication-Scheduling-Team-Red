@@ -37,6 +37,50 @@ function parse(str) {
   return result;
 }
 
+const parseUsersFromCsv = (function() {
+  const validateFormat = require('./validate-format');
+
+  //change EMAIL_ADDRESS AND ID_NUMBER constant values, if the csv format header value changes
+  const EMAIL_ADDRESS = 'Email address',
+    ID_NUMBER = 'ID number',
+    FIRST_NAME = 'First name',
+    LAST_NAME = 'Last name';
+
+  /*@param str, csv with following headers:
+  First name,Last name,ID number,Institution,Department,Email address,Last downloaded from this course
+
+  Avoids duplicate rows in return result
+  Avoids rows with invalid cwid or email
+  @return Array<{email: string, cwid: number, fname: string, lname: string}>
+  */
+  return function(str) {
+    const rawParse = parse(str);
+
+    //to avoid duplicate cwids
+    //{[key: number]: {cwid, email, fname, lname}}
+    const map = {};
+
+    for(let r of rawParse) {
+      const cwid = parseInt(r[ID_NUMBER]);
+      const email = r[EMAIL_ADDRESS];
+      const fname = r[FIRST_NAME];
+      const lname = r[LAST_NAME];
+
+      const isValid = validateFormat.checkCWID(cwid) && 
+        validateFormat.checkStudentEmail(email) &&
+        validateFormat.checkFname(fname) &&
+        validateFormat.checkLname(lname);
+
+      if (!isValid) continue;
+
+      map[cwid] = {fname, lname, email, cwid};
+    }
+
+    return Object.values(map);
+  }
+})();
+
 module.exports = {
-  parse
+  parse,
+  parseUsersFromCsv
 }

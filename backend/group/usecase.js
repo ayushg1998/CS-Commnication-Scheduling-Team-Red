@@ -1,9 +1,8 @@
 const GroupResourceAggregator = require('./collector');
 const assert = require('assert');
-const utils = require('./utils');
 const {UPDATE, READ} = require('../constants').permissions.group;
 
-module.exports = function(repository, {resourceUsecase}) {
+module.exports = function(repository, {resourceUsecase, registerUsecase}) {
   //@return Array<{groupId: int, permission: 'READ' || 'UPDATE', resourceId: int}>
   async function getAllVisibleGroupResourcesOfUser(userId) {
     assert.ok(userId);
@@ -190,13 +189,27 @@ module.exports = function(repository, {resourceUsecase}) {
       g.permission = permission; return g;
     });
   }
-
+  
   async function addGroupMembersAsCsv({csv, groupId, editorId}) {
-    const cwids = utils.parseUsersFromCsv(csv).map(each => each.cwid);
+    const editorCanEdit = await hasPermission(editorId, groupId, UPDATE);
+    if (!editorCanEdit) throw new Error('Editor does not have sufficient permission.');
+
+    //1. add students
+    const { insertedCwids, existingCwids } = await registerUsecase.addStudentsAsCsv(csv);
+
+    console.log({insertedCwids, existingCwids});
+    //2. merge insertedCwids, existingCwids
+    const cwids = [...insertedCwids, ...existingCwids ];
+
+    //3. addGroupMembers
     return addGroupMembers({cwids, groupId, editorId});
   }
 
+  //TODO: NOT TESTED!!
   async function removeGroupMembersAsCsv({csv, groupId, editorId}) {
+    const editorCanEdit = await hasPermission(editorId, groupId, UPDATE);
+    if (!editorCanEdit) throw new Error('Editor does not have sufficient permission.');
+
     const cwids = utils.parseUsersFromCsv(csv).map(each => each.cwid);
     return removeGroupMembers({cwids, groupId, editorId});
   }

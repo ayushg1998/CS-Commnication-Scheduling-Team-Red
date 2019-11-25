@@ -44,7 +44,6 @@ function sqlManyValues(arrOfArr) {
     return index >= len - 1?
     `${sqlValues(arr)};`: `${sqlValues(arr)},`;
   })
-  .filter(r => typeof r === 'string')//omit null
   .join(' ');
 }
 
