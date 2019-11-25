@@ -300,6 +300,20 @@ export function addGroupMembers(groupId, cwids) {
 
 /*
     @return Promise<void>
+*/
+export function addGroupMembersAsCsv(groupId, csv) {
+    
+    const url = `/groups/${groupId}/members/csv`;
+    return axios
+        .post(url, {csv}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if(!res.success) throw new Error(res.message);
+        });
+}
+
+/*
+    @return Promise<void>
     NOTE: axios delete needs special treatment for DELETE requests
     @see  https://github.com/axios/axios/issues/897#issuecomment-343715381
 */

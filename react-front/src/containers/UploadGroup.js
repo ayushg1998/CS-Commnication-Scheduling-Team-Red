@@ -4,27 +4,18 @@ import './ShareCalendar.css';
 import './CreateEvent.css';
 
 import Button from "react-bootstrap/Button";
-
-import CSVReader from "react-csv-reader";
-
-const CSV_HEADER_CWID = "ID number";
-const CSV_HEADER_EMAIL = "Email address";
-
-const csvInputStyle = { 
-    border: '1px solid black', 
-    width: 600, 
-    color: 'black', 
-    padding: 20 
-};
+import CSVReader from '../components/CsvReader';
+import { parseWarhawkEmailsFromCsv } from '../shared/parser';
 
 export default class UploadGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
             groups: [],
-            csvData: [],
             selectedGroup: -1,
-            submitting: false
+            submitting: false,
+            emails: [],
+            csv: null
         }
     }
 
@@ -48,23 +39,15 @@ export default class UploadGroup extends Component {
     resetState = () => {
         this.setState({
             groups: [],
-            csvData: [],
             selectedGroup: -1,
-            submitting: false
+            submitting: false,
+            csv: null,
+            emails: []
         });
     }
 
-    onCsvLoaded = data => {
-        data = data.map(item => ({
-            cwid: item[CSV_HEADER_CWID],
-            email: item[CSV_HEADER_EMAIL],
-        }));
-
-        this.setState({csvData: data});
-    }
-
     handleSubmit = () => {
-        const { selectedGroup, csvData, submitting } = this.state;
+        const { selectedGroup, csv, submitting } = this.state;
         if (submitting) return;
 
         this.setState({submitting: true}, () => {
@@ -73,15 +56,14 @@ export default class UploadGroup extends Component {
                 this.setState({submitting: false});
                 return;
             }
-            if (!csvData.length) {
-                alert('0 members found'); 
+            if (!csv) {
+                alert('Select csv');
                 this.setState({submitting: false});
                 return;
             }
-            const cwids = csvData.map(d => d.cwid);
             const groupId = selectedGroup;
 
-            api.addGroupMembers(groupId, cwids)
+            api.addGroupMembersAsCsv(groupId, csv)
                 .then(() => {
                     alert('success');
                 })
@@ -89,19 +71,21 @@ export default class UploadGroup extends Component {
                     alert(error.message);
                 })
                 .finally(() => {
-                    this.setState({submitting: false, csvData: []});
+                    this.setState({ submitting: false, csv: null, emails: [] });
                 })
         })        
     }
 
-    render() {
-        const { csvData, groups } = this.state;
+    handleCsvRead = csv => {
+        console.log(csv);
+        this.setState({
+            emails: parseWarhawkEmailsFromCsv(csv),
+            csv
+        });
+    }
 
-        const papaparseOptions = {
-            header: true,
-            dynamicTyping: true,
-            skipEmptyLines: true
-        };
+    render() {
+        const { emails, groups } = this.state;
 
         return (
             <div className="bg">
@@ -119,14 +103,14 @@ export default class UploadGroup extends Component {
 
                 <h3>Select CSV file to upload:</h3>
                 <CSVReader
-                    cssClass=""
-                    onFileLoaded={this.onCsvLoaded}
-                    parserOptions={papaparseOptions}
-                    inputStyle={csvInputStyle} />
+                    onRead={this.handleCsvRead}>
+                    <button>Pick CSV file</button>
+                </CSVReader>
+
                 <ul>
                     {
-                        csvData.map(d => (
-                            <li key={d.cwid}>{d.cwid}: {d.email}</li>
+                        emails.map((d, index) => (
+                            <li key={index}>{d}</li>
                         ))
                     }
                 </ul>
