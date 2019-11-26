@@ -351,7 +351,7 @@ export function shareGroup({groupId, userId, permission}) {
     return axios
         .post('/groups/share', {groupId, userId, permission}, getAuthHeaders())
         .then(res => res.data)
-        .then(res => {
+        .catch(res => {
             if(!res.success) throw new Error(res.message);
         });
 }
@@ -360,7 +360,7 @@ export function shareEvent({eventId, userId, permission}) {
     return axios
         .post('/events/share', {eventId, userId, permission}, getAuthHeaders())
         .then(res => res.data)
-        .then(res => {
+        .catch(res => {
             if(!res.success) throw new Error(res.message);
         });
 }
