@@ -4,6 +4,8 @@ import MakeAppointment from '../makeAppointment';
 
 import './Login.css';
 import './CreateEvent.css';
+import Button from "react-bootstrap/Button";
+
 //import Card from 'react-ui-cards';
 import moment from 'moment';
 
@@ -80,18 +82,27 @@ export default class SignupForAppointment extends Component {
 
         const {openMakeAppointmentDialog, appointmentEventId, appointmentId, isAddable} = this.state;
         return (
-            <div>
+            <div className="bg">
+            <div className="container panel-default">
                 <div>
                     <h2>Edit Appointments</h2>
                     <ul>
                         {
                             editableAppointmentEvent.map(ape => <li key={ape.id}>
-                                {ape.name} | 
-                                {ape.description} | 
-                                {ape.start} | 
-                                {ape.end}
-                                <button onClick={() => this.handleApeEventClicked(ape.id, ape.appointmentId)}>Edit Appointment</button>
-                                </li>)
+                                <li>{ape.name}</li>
+                                <ul>
+                                    <li>Description: {ape.description}</li>
+                                    <li>Start: {ape.start}</li>
+                                    <li>End: {ape.end}</li>
+                                </ul>
+                                <Button 
+                                    style={{ marginTop: 0.5 + 'em' }}
+                                    variant="primary" 
+                                    onClick={() => this.handleApeEventClicked(ape.id, ape.appointmentId)}
+                                >
+                                    Edit Appointment
+                                </Button>
+                            </li>)
                         }
                     </ul>
                 </div>
@@ -101,12 +112,20 @@ export default class SignupForAppointment extends Component {
                     <ul>
                         {
                             addableAppointmentEvent.map(ape => <li key={ape.id}>
-                                {ape.name} | 
-                                {ape.description} | 
-                                {ape.start} | 
-                                {ape.end}
-                                <button onClick={() => this.handleApeEventClicked(ape.id)}>Add Appointment</button>
-                                </li>)
+                                <li>{ape.name}</li>
+                                <ul>
+                                    <li>Description: {ape.description}</li>
+                                    <li>Start: {ape.start}</li>
+                                    <li>End: {ape.end}</li>
+                                </ul>
+                                <Button 
+                                    style={{ marginTop: 0.5 + 'em' }}
+                                    variant="primary" 
+                                    onClick={() => this.handleApeEventClicked(ape.id)}
+                                >
+                                    Add Appointment
+                                </Button>
+                            </li>)
                         }
                     </ul>
                 </div>
@@ -123,7 +142,8 @@ export default class SignupForAppointment extends Component {
                         </div> 
                     ): null
                 }
-            </div>        
+            </div>    
+            </div>    
         );
     }
 }
