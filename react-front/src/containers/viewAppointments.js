@@ -32,13 +32,15 @@ class ViewAppointments extends Component {
           let appoint = [];
               viewGroups.getAppointmentEventAndItsAppointments(id)
               .then(ap => {
-                 appoint.push(ap.appointments.map(name => name.appointee.fname+" "+name.appointee.lname))               
-              
+                  for(let i = 0; i < ap.appointments.length; i++)
+                  {
+                    appoint.push(ap.appointments[i].appointee.fname+" "+ap.appointments[i].appointee.lname)
+                  }
+                /* appoint.push(ap.appointments.map(name => name.appointee.fname+" "+name.appointee.lname))  */             
+                 console.log(ap)
             this.setState({groups: appoint})
-            appoint = this.state.groups;
             console.log(this.state.groups)
             
-            let cl = this.state.click
                 return (
                   this.setState({click: true}),
                     console.log(this.state.click)
@@ -61,7 +63,9 @@ class ViewAppointments extends Component {
             {
                 return(
                 <li>{this.state.groups.map((member) => (
+                    <div>
                 <li>{member}</li>
+                </div>
                     ))}</li>
                     )
             }
