@@ -11,6 +11,8 @@
 .container-custom {
     background: rgba(192, 192, 192, 0.7);
     border-radius: 25px;
+    position: relative;
+    top: 2em;
 }
 
 .bg {
