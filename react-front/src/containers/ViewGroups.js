@@ -86,7 +86,7 @@ control()
         {
             return(
                 <div className="container" >
-                <h1>just testing</h1>
+                <h1>Current Groups</h1>
     
                 {this.state.groups.map((group,i) => {
                     return (
