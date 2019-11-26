@@ -1,4 +1,5 @@
-import moment from 'moment';
+import * as DateUtils from '../shared/dateUtils';
+const moment = DateUtils.moment;
 
 const NA = 'NA';
 
@@ -40,13 +41,14 @@ export default class ViewDataMapper {
     vm.appointmentEventName = ape.name || NA;
     vm.description = ape.description || NA;
     
-    vm.time = (function() {
-      const start = moment(ape.start);
-      const end = moment(ape.end);
-      const f = t => t.format('MMM DD') + ', ' + 
-        t.format('YYYY') + ', ' + t.format('hh:mma');
-      return `${f(start)} - ${f(end)}`
-    })();
+    // vm.time = (function() {
+    //   const start = moment(ape.start);
+    //   const end = moment(ape.end);
+    //   const f = t => t.format('MMM DD') + ', ' + 
+    //     t.format('YYYY') + ', ' + t.format('hh:mma');
+    //   return `${f(start)} - ${f(end)}`
+    // })();
+    vm.time = `${DateUtils.format_ymdh(ape.start)} - ${DateUtils.format_ymdh(ape.end)}`;
 
     vm.appointerName = ape.appointer.fname + ' ' + ape.appointer.lname;
 

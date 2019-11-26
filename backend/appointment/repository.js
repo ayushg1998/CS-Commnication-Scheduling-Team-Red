@@ -1,7 +1,7 @@
 const { sqlUtils } = require('../lib');
 const sqv = sqlUtils.sqlValue;
 const assert = require('assert');
-const moment = require('moment');
+const moment = require('moment-timezone'); moment.tz.setDefault('utc');
 
 module.exports = function(mysql, {userRepository, resourceRepository}) {
   assert.ok(userRepository); assert.ok(resourceRepository);
@@ -375,6 +375,8 @@ function toDBAppointment(ae) {
 }
 
 function fromDBAppointmentEvent(ae) {
+  console.log(ae.start instanceof Date);
+  console.log(moment(ae.start).toISOString());
   return {
     ...ae,
     start: moment(ae.start),

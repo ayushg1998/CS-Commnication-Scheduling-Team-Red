@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require('moment-timezone'); moment.tz.setDefault('utc');
 const assert = require('assert');
 const AppointmentEventResourceAggregator = require('./collector_appointment_event');
 const AppointmentResourceAggregator = require('./collector_appointment');

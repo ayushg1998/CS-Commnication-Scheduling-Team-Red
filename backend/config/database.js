@@ -18,5 +18,6 @@ module.exports=
         'password':''
     },
     'database':'calendar',
-    'user_table':'login'
+    'user_table':'login',
+    'timezone': '+00:00'
 };

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as api from '../shared/api';
+import * as DateUtils from '../shared/dateUtils';
 import MakeAppointment from '../makeAppointment';
 
 import './Login.css';
@@ -31,6 +32,11 @@ export default class SignupForAppointment extends Component {
 
         api.getJoinableAppointmentEvents()
             .then(appointmentEvents => {
+                appointmentEvents = appointmentEvents.map(ape => ({
+                    ...ape,
+                    start: DateUtils.format_ymdh(ape.start),
+                    end: DateUtils.format_ymdh(ape.end)
+                }));
                 
                 api.getMyAppointments()
                     .then(appointments => {

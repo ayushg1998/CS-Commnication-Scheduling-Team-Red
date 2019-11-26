@@ -1,5 +1,5 @@
 const assert = require('assert');
-const moment = require('moment');
+const moment = require('moment-timezone'); moment.tz.setDefault('utc');
 const { sqlUtils } = require('../lib');
 const sqv = sqlUtils.sqlValue;
 
