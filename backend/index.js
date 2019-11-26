@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const app = express();
 const port = process.env.PORT || 8080;
 const cors = require('cors');
+const constants = require('./constants');
 
 //HTTP: application/json Content-type headers are automatically made available in req.body
 app.use(bodyParser.json());
@@ -48,9 +49,6 @@ app.listen(port, function() {
         const { controller: eventController, usecase: eventUsecase} = require('./event')(connection, {resourceRepository, resourceUsecase, userRepository});
         const {controller: calendarEventController, usecase: calendarEventUsecase} = require('./calendar_event')(connection, {userRepository, resourceUsecase, resourceRepository, eventUsecase, appointmentUsecase, appointmentRepository});
     
-        app.post('/create/student', registerController.registerStudent);
-        app.post('/create/student/csv', registerController.registerStudentAsCsv);
-        app.post('/create/faculty', registerController.registerFaculty);
         app.post('/login', registerController.login);
         app.get('/colors', colorController.getColors);
 
@@ -96,6 +94,18 @@ app.listen(port, function() {
         app.delete('/groups/:id/members', groupController.removeGroupMembers);
         app.post('/groups/:id/members/csv', groupController.addGroupMembersAsCsv);
         app.delete('/groups/:id/members/csv', groupController.removeGroupMembersAsCsv);
+
+        app.use(async function(req, res, next) {
+            if (req.user.email !== constants.ADMIN_EMAIL) {
+                res.send({success: false, message: 'Only Admin access'});
+                return;
+            }
+            next();
+        });
+
+        app.post('/create/student', registerController.registerStudent);
+        app.post('/create/student/csv', registerController.registerStudentAsCsv);
+        app.post('/create/faculty', registerController.registerFaculty);
     });
 
     //sql TCP connection

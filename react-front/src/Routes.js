@@ -101,7 +101,7 @@ export default class Route extends React.Component {
                 <AppliedRoute path="/ViewGroups" exact component={WrappedViewGroups} />
                 <AppliedRoute path="/ShareGroups" exact component={WrappedShareGroups} />
                 <AppliedRoute path="/UploadGroup" exact component={WrappedUploadGroup} />
-                <AppliedRoute path="/UploadUser" exact component={WrappedUploadUser} />
+                <AppliedRoute path="/UploadStudent" exact component={WrappedUploadUser} />
                 <AppliedRoute path="/EditGroups" exact component={WrappedEditGroup} />
                 <AppliedRoute path="/ShareCalendar" exact component={WrappedShareCalendar} />
                 <AppliedRoute path="/logout" exact component={WrappedLogout} />

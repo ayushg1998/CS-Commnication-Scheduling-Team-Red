@@ -373,7 +373,7 @@ export function shareAppointmentEvent({appointmentEventId, userId, permission}) 
             if(!res.success) throw new Error(res.message);
         });
 }
-/*TODO: createEvent, createFaculty and createStudent here*/
+
 export function createStudent({cwid, fname, lname, username, email, password}) {
     return axios
         .post('/create/student', {cwid, fname, lname, username, email, password}, getAuthHeaders())
@@ -381,6 +381,17 @@ export function createStudent({cwid, fname, lname, username, email, password}) {
         .then(res => {
             if (!res.success) throw new Error(res.message);
             return res.user;
+        })    
+}
+
+export function createStudentsAsCsv(csv) {
+    return axios
+        .post('/create/student/csv', {csv}, getAuthHeaders())
+        .then(res => res.data)
+        .then(res => {
+            if (!res.success) throw new Error(res.message);
+            const { insertedCwids, existingCwids } = res;
+            return { insertedCwids, existingCwids };
         })    
 }
 

@@ -80,7 +80,7 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/CreateFaculty">
                 Create Faculty
               </a>
-              <a className="dropdown-item" href="/UploadUser">
+              <a className="dropdown-item" href="/UploadStudent">
                 Upload Student File
               </a>
             </NavDropdown>

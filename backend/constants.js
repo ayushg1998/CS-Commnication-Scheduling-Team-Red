@@ -33,5 +33,6 @@ module.exports = {
     APPOINTMENT_EVENT: 'APPOINTMENT_EVENT',
     APPOINTMENT: 'APPOINTMENT',
     GROUP: 'GROUP'
-  }
+  },
+  ADMIN_EMAIL: 'london@warhawks.ulm.edu'
 }
