@@ -85,7 +85,7 @@ export default class SignupForAppointment extends Component {
             <div className="bg">
             <div className="container panel-default">
                 <div>
-                    <h2>Edit Appointments</h2>
+                    <h2>My Current Appointments</h2>
                     <ul>
                         {
                             editableAppointmentEvent.map(ape => <li key={ape.id}>
@@ -108,7 +108,7 @@ export default class SignupForAppointment extends Component {
                 </div>
 
                 <div>
-                    <h2>Add Appointments</h2>
+                    <h2>Sign Up for a New Appointment</h2>
                     <ul>
                         {
                             addableAppointmentEvent.map(ape => <li key={ape.id}>

@@ -89,12 +89,12 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/ShareCalendar">
                 Share
               </a>
-              <a className="dropdown-item" href="/notfound">
+              {/* <a className="dropdown-item" href="/notfound">
                 Export
               </a>
               <a className="dropdown-item" href="/notfound">
                 Edit
-              </a>
+              </a> */}
             </NavDropdown>
             <NavDropdown name="Events">
               <a className="dropdown-item" href="/createEvent">
@@ -143,12 +143,12 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/ShareCalendar">
                 Share
               </a>
-              <a className="dropdown-item" href="/notfound">
+              {/* <a className="dropdown-item" href="/notfound">
                 Export
               </a>
               <a className="dropdown-item" href="/notfound">
                 Edit
-              </a>
+              </a> */}
             </NavDropdown>
             <NavDropdown name="Events">
               <a className="dropdown-item" href="/createEvent">
@@ -195,17 +195,17 @@ class AuthenticatedNavigation extends React.Component {
       return (
         <div>
           <ul className="navbar-nav mr-auto">
-            <NavDropdown name="Calendar">
+            {/* <NavDropdown name="Calendar">
               <a className="dropdown-item" href="/notfound">
                 Export
               </a>
               <a className="dropdown-item" href="/notfound">
                 Edit
               </a>
-            </NavDropdown>
+            </NavDropdown> */}
             <NavDropdown name="Events">
               <a className="dropdown-item" href="/notFound">
-                Event Sign Up
+                View My Events
               </a>
             </NavDropdown>
 
