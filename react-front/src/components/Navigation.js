@@ -3,7 +3,7 @@ import * as authService from "../shared/authService";
 
 import "./Navigation.css";
 
-const ADMIN_EMAIL = "london@warhawks.ulm.edu";
+const ADMIN_EMAIL = "lsmith@ulm.edu";
 
 const NavItem = props => {
   const pageURI = window.location.pathname + window.location.search;

@@ -26,7 +26,12 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const resourceId = await repository.addAppointmentEventResource(appointmentEventId);
 
+    //give join permission to the group
     await resourceUsecase.addResourcePermissionToUserGroup({groupId, resourceId, permission: JOIN});
+
+    //give update permission to creator
+    const soloGroup = await repository.getSoloGroupOfUser(appointerId);
+    await resourceUsecase.addResourcePermissionToUserGroup({groupId: soloGroup.id, resourceId, permission: UPDATE});
 
     return appointmentEventId;
   }
@@ -131,9 +136,6 @@ module.exports = function(repository, {resourceUsecase}) {
     const appointmentStart = ae.start.clone().add(startOffset, 'minutes');
     const appointmentEnd = ae.start.clone().add(endOffset, 'minutes');
 
-    //TODO: HACK for demo
-    appointmentStart.add(-6, 'hours'); appointmentEnd.add(-6, 'hours');
-
     setSecondsToZero(appointmentStart); setSecondsToZero(appointmentEnd);
 
     const appointmentId = await repository.addAppointment({
@@ -171,9 +173,6 @@ module.exports = function(repository, {resourceUsecase}) {
 
     const start = appointmentEvent.start.clone().add(startOffset, 'minutes');
     const end = appointmentEvent.start.clone().add(endOffset, 'minutes');
-
-    //TODO: HACK for demo
-    start.add(-6, 'hours'); end.add(-6, 'hours');
 
     setSecondsToZero(start); setSecondsToZero(end);
 

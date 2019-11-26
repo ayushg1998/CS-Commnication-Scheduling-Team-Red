@@ -34,5 +34,5 @@ module.exports = {
     APPOINTMENT: 'APPOINTMENT',
     GROUP: 'GROUP'
   },
-  ADMIN_EMAIL: 'london@warhawks.ulm.edu'
+  ADMIN_EMAIL: 'lsmith@ulm.edu'
 }
