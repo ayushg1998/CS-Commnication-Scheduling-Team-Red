@@ -35,7 +35,7 @@ export default class Login extends Component {
         //TODO: show loading spinner meanwhile
         authService.login({username, password})
             .catch(err => {
-                alert('oops');
+                alert('Username or password invalid. Please check your credentials and try again');
             })
     }
 
