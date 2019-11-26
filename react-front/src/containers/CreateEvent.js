@@ -114,6 +114,7 @@ export default class CreateEvent extends Component {
                     <Form.Control
                         autoFocus
                         type="cwid"
+                        placeholder="Title"
                         value={this.state.title}
                         onChange={this.handleChange}
                     />
@@ -141,6 +142,7 @@ export default class CreateEvent extends Component {
                         timeFormat= "HH:mm"
                         timeIntervals={15}
                         timeCaption="time"
+                        placeholderText=" Start Date and Time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </Form.Group>
@@ -154,6 +156,7 @@ export default class CreateEvent extends Component {
                         timeFormat= "HH:mm"
                         timeIntervals={15}
                         timeCaption="time"
+                        placeholderText=" End Date and Time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
                 </Form.Group>
