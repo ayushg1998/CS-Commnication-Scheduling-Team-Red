@@ -375,7 +375,6 @@ function toDBAppointment(ae) {
 }
 
 function fromDBAppointmentEvent(ae) {
-  console.log(ae.start instanceof Date);
   console.log(moment(ae.start).toISOString());
   return {
     ...ae,

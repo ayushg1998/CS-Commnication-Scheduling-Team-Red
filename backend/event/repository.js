@@ -118,7 +118,7 @@ module.exports = function(mysql, {resourceRepository, userRepository}) {
   function getEvents(ids) {
     if (!ids.length) return Promise.resolve([]);
 
-    const query = `SELECT * FROM Event WHERE id IN ${sqlUtils.sqlValues(ids)}`;
+    const query = `SELECT * FROM Event WHERE id IN ${sqlUtils.sqlValues(ids)};`;
 
     return new Promise(function(resolve, reject){
       mysql.query(query, function(err, rows){

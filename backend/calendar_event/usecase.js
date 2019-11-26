@@ -71,9 +71,9 @@ module.exports = function(repository, {resourceUsecase, eventUsecase, appointmen
     let appointments = await repository.getAppointments(appointmentIds);
     appointments = mapAppointments(appointments, appointmentResources);
 
-    const eventResources = await eventUsecase.getAllVisibleEventsOfUser(userId);
+    const eventResources = await eventUsecase.getAllVisibleEventResourcesOfUser(userId);
     const eventIds = eventResources.map(o => o.eventId);
-    let events = await repository.getEvents(eventIds);
+    let events = await repository.getEvents(eventIds);    
     events = mapEvents(events, eventResources);
 
     return {appointments, events};

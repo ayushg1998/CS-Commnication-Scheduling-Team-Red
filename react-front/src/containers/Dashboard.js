@@ -4,9 +4,13 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Dashboard.css';
 import * as displayEvents from '../shared/api';
+import * as DateUtils from '../shared/dateUtils';
 
 moment.locale('en-GB');
 const localizer = momentLocalizer(moment);
+
+const titlify = e => (e.name || 'N/A') + ' ' +  DateUtils.format_h(e.start) + 
+    ' - ' + DateUtils.format_h(e.end) + ` (${e.permission}) `;
 
 class Dashboard extends Component {
     constructor(props) {
@@ -25,59 +29,52 @@ class Dashboard extends Component {
         return { style};
     }
 
-    componentDidMount(){  
-        
-        let getObject = JSON.parse(localStorage.getItem('user'));
-
-        if(getObject.userType === "faculty" || getObject.userType === "admin")
-        {
+    componentDidMount(){     
         displayEvents.getCalendarEvents()
-            .then(data => {            
-                const events = data.events.map(e => ({
-                    title: (e.name || 'N/A: ') + `(${e.permission})`,
-                    start: new Date(e.start),
-                    end: new Date(e.end),
-                    color: e.color,
-                    type: 'event'
-                }));
+            .then(data => {
+                if (data.type === 'faculty') {
+                    const events = data.events.map(e => ({
+                        title: titlify(e),
+                        start: new Date(e.start),
+                        end: new Date(e.end),
+                        color: e.color,
+                        type: 'event'
+                    }));
+    
+                    const appointmentEvents = data.appointmentEvents.map(ape => ({
+                        title: titlify(ape),
+                        start: new Date(ape.start),
+                        end: new Date(ape.end),
+                        color: ape.color,
+                        type: 'event'
+                    }));
 
-                console.log(data);
+                    const calendarEvents = [...events,...appointmentEvents];
+                    this.setState({events: calendarEvents});
+                } else {
+                    const events = data.events.map(e => ({
+                        title: titlify(e),
+                        start: new Date(e.start),
+                        end: new Date(e.end),
+                        color: e.color,
+                        type: 'event'
+                    }));
 
-                const appointmentEvents = data.appointmentEvents.map(ape => ({
-                    title: (ape.name || 'N/A: ') + `(${ape.permission})`,
-                    start: new Date(ape.start),
-                    end: new Date(ape.end),
-                    color: ape.color,
-                    type: 'event'
-                }));
+                    const appointments = data.appointments.map(ap => ({
+                        title: titlify(ap),
+                        start: new Date(ap.start),
+                        end: new Date(ap.end),
+                        color: ap.color,
+                        type: 'event'
+                    }));
 
-                const calendarEvents = [...events,...appointmentEvents];
-
-                console.log(calendarEvents);
-                
-               this.setState({events: calendarEvents});
+                    const calendarEvents = [...events,...appointments];
+                    this.setState({events: calendarEvents});
+                }
             })
             .catch(error => {
                 alert(error.message);
-            })
-        }
-        if(getObject.userType === "student")
-        {
-            displayEvents.getMyAppointments()
-                .then(data => {                         
-                    console.log(data)     
-                    const event = data.map(e => ({
-                        title: e.appointmentEventId +"Appointment sign up Start: " +new Date(e.start)+" End: "+new Date(e.end),
-                        start: new Date(e.start),
-                        end: new Date(e.end),
-                    }));
-                 this.setState({events: event});
-                   console.log(this.state.events)
-                })
-                .catch(error => {
-                    alert(error.message);
-                })  
-        }       
+            });
     }
 
     render () {

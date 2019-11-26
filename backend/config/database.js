@@ -15,9 +15,9 @@ module.exports=
     'connection':{
         'host':'localhost',
         'user':'root',
-        'password':''
+        'password':'',
+        'timezone': '+00:00'
     },
     'database':'calendar',
-    'user_table':'login',
-    'timezone': '+00:00'
+    'user_table':'login'
 };

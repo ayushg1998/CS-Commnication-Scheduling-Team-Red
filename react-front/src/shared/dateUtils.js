@@ -12,4 +12,10 @@ export function format_h(date) {
   return t.format('hh:mma');
 }
 
+export function format_H(date) {
+  const t = mom(date);
+
+  return t.format('HH:mm');
+}
+
 export const moment = mom;
