@@ -125,7 +125,7 @@ control()
                             className="btn btn-primary" 
                             onClick={() => this.onclick()}
                             style={{ marginTop: 1 + 'em' }}
-                        >Bo Back</a>
+                        >Go Back</a>
                     </div>
                 </div>
             );
