@@ -115,10 +115,10 @@ class EditGroups extends Component {
             console.log(groupId);
             api.addGroupMembers(groupId, cwids)
                 .then(() => {
-                    alert('success');
+                    alert('The members have been successfully added to the selected group.');
                 })
                 .catch(error => {
-                    alert(error.message);
+                    alert("The members could not be added to the selected group. " + error.message);
                 })
                 .finally(() => {
                     this.setState({submitting: false, csvData: []});
@@ -142,10 +142,10 @@ class EditGroups extends Component {
             console.log(groupId);
             api.removeGroupMembers(groupId, cwids)
                 .then(() => {
-                    alert('success');
+                    alert('The members have been successfully removed from the selected group');
                 })
                 .catch(error => {
-                    alert(error.message);
+                    alert("The members could not be removed from the selected group. " + error.message);
                 })
                 .finally(() => {
                     this.setState({submitting: false});

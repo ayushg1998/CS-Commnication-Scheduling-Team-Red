@@ -52,12 +52,12 @@ export default class UploadGroup extends Component {
 
         this.setState({submitting: true}, () => {
             if (selectedGroup === -1) {
-                alert('Please select group'); 
+                alert('Group not selected. Please select a group.'); 
                 this.setState({submitting: false});
                 return;
             }
             if (!csv) {
-                alert('Select csv');
+                alert('File not selected. Please select a csv file.');
                 this.setState({submitting: false});
                 return;
             }
@@ -65,10 +65,10 @@ export default class UploadGroup extends Component {
 
             api.addGroupMembersAsCsv(groupId, csv)
                 .then(() => {
-                    alert('success');
+                    alert('The members were successfully added to the group.');
                 })
                 .catch(error => {
-                    alert(error.message);
+                    alert("The members could not be added to the group. " + error.message);
                 })
                 .finally(() => {
                     this.setState({ submitting: false, csv: null, emails: [] });

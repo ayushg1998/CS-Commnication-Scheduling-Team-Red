@@ -43,8 +43,8 @@ export default class CreateStudent extends Component {
         const { cwid, fname, lname, username, email, password } = this.state;
 
         api.createStudent({cwid, fname, lname, username, email, password})
-            .then(() => { alert('success'); this.resetState(); })
-            .catch(err => { alert(err.message); })
+            .then(() => { alert('The student account has been successfully created.'); this.resetState(); })
+            .catch(err => { alert("The student account could not be created. " + err.message); })
     }
 
     render() {

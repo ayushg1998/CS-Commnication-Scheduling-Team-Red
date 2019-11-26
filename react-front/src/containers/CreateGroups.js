@@ -51,7 +51,7 @@ export default class CreateGroups extends Component {
             return api.addGroupMembers(groupId, cwids)
         })
         .then(() => {
-            alert('groups created and members added');
+            alert('The group has been created and the members have been added.');
             this.resetState();
         });        
   };

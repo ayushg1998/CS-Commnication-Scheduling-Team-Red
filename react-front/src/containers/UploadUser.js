@@ -36,17 +36,17 @@ export default class UploadUser extends Component {
 
         this.setState({submitting: true}, () => {
             if (!csv) {
-                alert('Select csv');
+                alert('File not selected. Please select a csv file.');
                 this.setState({submitting: false});
                 return;
             }
 
             api.createStudentsAsCsv(csv)
                 .then(() => {
-                    alert('success');
+                    alert('The student user accounts have been created.');
                 })
                 .catch(error => {
-                    alert(error.message);
+                    alert("The user accounts could not be created." + error.message);
                 })
                 .finally(() => {
                     this.setState({ submitting: false, csv: null, emails: [] });

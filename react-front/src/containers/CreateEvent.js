@@ -82,11 +82,11 @@ export default class CreateEvent extends Component {
 
         return api.createEvent(eventData)
             .then(() => {
-                alert('success');
+                alert('The event has been successfully created.');
             })
             .catch(err => {
                 console.log(err.message);
-                alert('failed');
+                alert('The event could not be created.');
             });
     }
 

@@ -43,8 +43,8 @@ export default class CreateFaculty extends Component {
         const { cwid, fname, lname, username, email, password } = this.state;
 
         api.createFaculty({cwid, fname, lname, username, email, password})
-            .then(() => { alert('success'); this.resetState(); })
-            .catch(err => { alert(err.message); })
+            .then(() => { alert('The faculty account has been created.'); this.resetState(); })
+            .catch(err => { alert("The faculty account could not be created." ); })
     }
 
     render() {

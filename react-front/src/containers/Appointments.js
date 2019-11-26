@@ -74,7 +74,7 @@ export default class Appointment extends Component {
     handleSubmit = event => {
         event.preventDefault();
         if (!this.validateForm()) {
-            alert('invalid form'); return;
+            alert('Invalid Form'); return;
         }
         
         const {start, slotCount, slotInterval, description, title, color, groupId} = this.state;
@@ -86,11 +86,11 @@ export default class Appointment extends Component {
             color, groupId
         })
             .then(result => {
-                alert('success');
+                alert('The appointment slots have been successfully created');
                 this.resetState();
             })
             .catch(error => {
-                alert(`errored: ${error.message}`);
+                alert(`The appointment slots could not be created. ${error.message}`);
             });        
     }
 
