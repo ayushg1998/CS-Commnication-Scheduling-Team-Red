@@ -207,7 +207,7 @@ class AuthenticatedNavigation extends React.Component {
               </a>
             </NavDropdown> */}
             <NavDropdown name="Events">
-              <a className="dropdown-item" href="/notFound">
+              <a className="dropdown-item" href="/viewEvents">
                 View My Events
               </a>
             </NavDropdown>
