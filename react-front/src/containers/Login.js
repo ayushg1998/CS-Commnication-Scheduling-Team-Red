@@ -48,6 +48,7 @@ export default class Login extends Component {
                             <Form.Control
                                 autoFocus
                                 type="username"
+                                placeholder="Username"
                                 value={this.state.username}
                                 onChange={this.handleChange}
                             />
@@ -57,6 +58,7 @@ export default class Login extends Component {
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
+                                placeholder="Password"
                                 value={this.state.password}
                                 onChange={this.handleChange}
                             />

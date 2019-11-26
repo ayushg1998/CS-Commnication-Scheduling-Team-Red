@@ -97,6 +97,7 @@ export default class CreateGroups extends Component {
             <Form.Label>Group Name:</Form.Label>
             <Form.Control
               autoFocus
+              placeholder="Group Name"
               value={this.state.groupName}
               onChange={this.handleGroupNameChange}
             />

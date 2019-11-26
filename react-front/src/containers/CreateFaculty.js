@@ -57,6 +57,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         type="number"
+                        placeholder="CWID"
                         value={this.state.cwid}
                         onChange={this.handleChange}
                     />
@@ -67,6 +68,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         value={this.state.fname}
+                        placeholder="First Name"
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -76,6 +78,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         value={this.state.lname}
+                        placeholder="Last Name"
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -85,6 +88,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         value={this.state.username}
+                        placeholder="Username"
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -94,6 +98,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         value={this.state.email}
+                        placeholder="Email"
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -103,6 +108,7 @@ export default class CreateFaculty extends Component {
                     <Form.Control
                         autoFocus
                         value={this.state.password}
+                        placeholder="Password"
                         onChange={this.handleChange}
                     />
                 </Form.Group>

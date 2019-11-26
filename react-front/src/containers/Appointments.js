@@ -116,6 +116,7 @@ export default class Appointment extends Component {
                     <input type="text"  
                         id="title" 
                         cols="10"
+                        placeholder="Title"
                         className="form-control"
                         value={this.state.title}
                         onChange={this.handleChange}
@@ -130,6 +131,7 @@ export default class Appointment extends Component {
                         showTimeSelect
                         timeFormat= "HH:mm"
                         timeIntervals={5}
+                        placeholderText=" Start Date and Time"
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                     />
@@ -140,6 +142,7 @@ export default class Appointment extends Component {
                     <Form.Control
                         autoFocus
                         type="number"
+                        placeholder="Duration of each slot"
                         value={this.state.slotInterval}
                         onChange={this.handleSlotIntervalChange}
                     />
@@ -150,6 +153,7 @@ export default class Appointment extends Component {
                         autoFocus
                         type="number"
                         value={this.state.slotCount}
+                        placeholder="Total number of slots"
                         onChange={this.handleSlotCountChange}
                     />
                 </Form.Group>
