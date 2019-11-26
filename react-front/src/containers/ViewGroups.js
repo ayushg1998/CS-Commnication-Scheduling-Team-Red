@@ -114,15 +114,10 @@ control()
                                     style={{ marginTop: 1 + 'em' }}
                                 >View Members</a>
                                 <a 
-                                    href="#" 
+                                    href="EditGroups" 
                                     className="btn btn-primary" 
                                     style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
-                                >Add Members</a>
-                                <a 
-                                    href="#" 
-                                    className="btn btn-primary" 
-                                    style={{ marginTop: 1 + 'em', marginLeft: 0.5 + 'em' }}
-                                >Remove Members</a>
+                                >Edit Members</a>
                             </div>
                         </div>
                 );
