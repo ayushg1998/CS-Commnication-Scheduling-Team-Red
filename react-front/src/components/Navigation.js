@@ -166,7 +166,9 @@ class AuthenticatedNavigation extends React.Component {
               <a className="dropdown-item" href="/shareAppointment">
                 Share Appointment Event
               </a>
-
+              <a className="dropdown-item" href="/viewAppointments">
+                View Current Appointments
+              </a>
             </NavDropdown>
 
             <NavDropdown name="Groups">
@@ -213,11 +215,6 @@ class AuthenticatedNavigation extends React.Component {
               </a>
             </NavDropdown>
 
-            <NavDropdown name="Groups">
-              <a className="dropdown-item" href="/notfound">
-                View Current Groups
-              </a>
-            </NavDropdown>
           </ul>
         </div>
       );

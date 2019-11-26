@@ -22,8 +22,7 @@ class Dashboard extends Component {
         const backgroundColor = '#' + event.color;
         const style = { backgroundColor};
         console.log(style);
-        return { style,
-                };
+        return { style};
     }
 
     componentDidMount(){  
@@ -68,7 +67,7 @@ class Dashboard extends Component {
                 .then(data => {                         
                     console.log(data)     
                     const event = data.map(e => ({
-                        title: e.appointmentEventId +" Start: " +new Date(e.start)+" End: "+new Date(e.end),
+                        title: e.appointmentEventId +"Appointment sign up Start: " +new Date(e.start)+" End: "+new Date(e.end),
                         start: new Date(e.start),
                         end: new Date(e.end),
                     }));
