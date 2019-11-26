@@ -108,7 +108,7 @@ export default class Appointment extends Component {
 
     render() {
         return(
-            <div className="bg">
+            <div>
             <Form onSubmit={this.handleSubmit} className="container panel-default">
                 
                 <Form.Group controlId="startDate">

@@ -78,7 +78,7 @@ class ViewAppointments extends Component {
                       <p className="card-text"><b>Description:</b> {group.description}</p>
                       <p className="card-text"><b>Span:</b> {span(group.start, group.end)}</p>
                       <p className="card-text"><b>Slots:</b> {group.slotCount}</p>
-                      <p className="card-text"><b>Slot Interval:</b>{group.slotInterval}</p>
+                      <p className="card-text"><b>Slot Interval:</b> {group.slotInterval} minutes</p>
                     </li>
                   </ul>
                   <a

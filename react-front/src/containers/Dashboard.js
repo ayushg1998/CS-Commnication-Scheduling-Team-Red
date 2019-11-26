@@ -61,13 +61,13 @@ class Dashboard extends Component {
                     }));
 
                     const appointments = data.appointments.map(ap => ({
-                        title: titlify(ap),
+                        title: "Appointment",
                         start: new Date(ap.start),
                         end: new Date(ap.end),
                         color: ap.color,
                         type: 'event'
                     }));
-
+                    
                     const calendarEvents = [...events,...appointments];
                     this.setState({events: calendarEvents});
                 }

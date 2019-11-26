@@ -103,18 +103,18 @@ export default class CreateGroups extends Component {
             />
           </Form.Group>
 
-          <header className="App-header">
-            <h3 className="App-title">Select email</h3>
-          </header>
-          <Select
-            value={this.state.userSelect}
-            multi
-            options={this.state.userPool}
-            onChange={this.handleUserSelectChange}
-            placeholder="Select users to have em' as members"
-            labelKey="label"
-            valueKey="id"
-          />
+          <Form.Group controlId="members">
+            <Form.Label>Select Members to be Added:</Form.Label>
+            <Select
+              value={this.state.userSelect}
+              multi
+              options={this.state.userPool}
+              onChange={this.handleUserSelectChange}
+              placeholder="Select users to have em' as members"
+              labelKey="label"
+              valueKey="id"
+            />
+          </Form.Group>
 
           <Form.Group controlId="description">
             <Form.Label>Group Description:</Form.Label>
