@@ -26,7 +26,8 @@ class Dashboard extends Component {
                 };
     }
 
-    componentDidMount(){      
+    componentDidMount(){  
+        
         let getObject = JSON.parse(localStorage.getItem('user'));
 
         if(getObject.userType === "faculty" || getObject.userType === "admin")
